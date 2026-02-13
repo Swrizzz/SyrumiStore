@@ -1,1 +1,84 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SyrumiStore | Anime Topup</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/all.min.css">
+</head>
+<body>
 
+    <div id="app-container">
+        
+        <section id="screen-lobby" class="screen active">
+            <div class="text-center mb-8">
+                <div class="glass p-2 inline-block rounded-full mb-4">
+                    <img src="images/logo-syrumi.png" alt="Syrumi Logo" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover;">
+                </div>
+                <h1 style="font-weight: 700; color: #ff85b3; font-size: 24px;">SyrumiStore</h1>
+                <p style="font-size: 12px; color: #888;">Topup Game & Sosmed Tercepat ✨</p>
+            </div>
+
+            <div onclick="openKategori('game')" class="glass menu-item">
+                <img src="images/icon-game.png" alt="Game">
+                <span>Top Up Game</span>
+            </div>
+            <div onclick="openKategori('sosmed')" class="glass menu-item">
+                <img src="images/icon-sosmed.png" alt="Sosmed">
+                <span>Suntik Sosmed</span>
+            </div>
+            <div onclick="openKategori('ppob')" class="glass menu-item">
+                <img src="images/icon-ppob.png" alt="PPOB">
+                <span>Pulsa, Listrik & Air</span>
+            </div>
+
+            <a href="LINK_SALURAN_WA_KAMU" target="_blank" style="text-decoration: none; color: inherit;">
+                <div class="glass menu-item" style="border: 1px dashed #ff85b3;">
+                    <img src="images/icon-testi.png" alt="Testi">
+                    <span>Testimoni Saluran</span>
+                </div>
+            </a>
+        </section>
+
+        <section id="screen-kategori" class="screen">
+            <button class="btn-back" onclick="goToLobby()">
+                <i class="fas fa-arrow-left"></i> Kembali
+            </button>
+            <h2 id="kategori-title" class="mb-4" style="font-size: 18px; color: #ff85b3;">Pilih Layanan</h2>
+            
+            <div id="list-layanan"></div>
+        </section>
+
+        <section id="screen-order" class="screen">
+            <button class="btn-back" onclick="backToKategori()">
+                <i class="fas fa-arrow-left"></i> Ganti Produk
+            </button>
+            
+            <div class="glass p-5">
+                <h2 id="order-title" class="text-center mb-4" style="color: #ff85b3;">Top Up</h2>
+                
+                <div class="mb-4">
+                    <label id="label-input" style="font-size: 11px; font-weight: 600; margin-left: 5px; color: #888;">USER ID & ZONE ID</label>
+                    <input type="text" id="user-id" placeholder="Contoh: 1234567 (1234)">
+                    
+                    <div id="container-cek-id" class="hidden text-right mt-1">
+                        <small id="display-username" style="color: #ff85b3; font-style: italic;"></small>
+                    </div>
+                </div>
+
+                <label style="font-size: 11px; font-weight: 600; margin-left: 5px; color: #888;">PILIH NOMINAL</label>
+                <div id="grid-produk" class="product-grid">
+                    </div>
+
+                <button class="btn-order" onclick="kirimKeWA()">
+                    <i class="fab fa-whatsapp"></i> Pesan Sekarang
+                </button>
+            </div>
+        </section>
+
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
