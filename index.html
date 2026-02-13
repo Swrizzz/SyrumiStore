@@ -56,7 +56,10 @@
             border: 1px solid var(--glass-border);
         }
         .menu-item:hover { transform: scale(1.02); }
-        .menu-item img { width: 40px; height: 40px; border-radius: 10px; margin-right: 15px; object-fit: cover; }
+        .menu-item img { 
+            width: 40px; height: 40px; border-radius: 10px; 
+            margin-right: 15px; object-fit: cover; 
+        }
         .menu-item span { font-weight: 600; font-size: 14px; color: var(--text-dark); }
 
         .product-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 15px; }
@@ -80,7 +83,6 @@
         .btn-back {
             background: none; border: none; color: var(--accent-pink);
             font-weight: 700; cursor: pointer; margin-bottom: 15px;
-            display: flex; align-items: center; gap: 8px; font-size: 14px;
         }
         .text-center { text-align: center; }
         .mb-4 { margin-bottom: 20px; }
@@ -94,7 +96,7 @@
                 <div style="display: inline-block; padding: 5px; background: white; border-radius: 50%; border: 3px solid var(--accent-pink);">
                     <img src="images/syrumi.jpeg" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; aspect-ratio: 1/1; display: block;">
                 </div>
-                <h1 style="color: var(--accent-pink); font-size: 24px; margin-top: 10px;">Syrumi Store</h1>
+                <h1 style="color: var(--accent-pink); font-size: 24px; margin-top: 10px;">SyrumiStore</h1>
                 <p style="font-size: 12px; color: #888;">Topup Game & Sosmed Tercepat ✨</p>
             </div>
 
@@ -115,17 +117,13 @@
         </section>
 
         <section id="screen-kategori" class="screen">
-            <button class="btn-back" onclick="goToLobby()">
-                <i class="fas fa-chevron-left"></i> Kembali
-            </button>
+            <button class="btn-back" onclick="goToLobby()"><i class="fas fa-arrow-left"></i> Kembali</button>
             <h2 id="kategori-title" class="mb-4" style="color: var(--accent-pink);">Pilih Layanan</h2>
             <div id="list-layanan"></div>
         </section>
 
         <section id="screen-order" class="screen">
-            <button class="btn-back" onclick="backToKategori()">
-                <i class="fas fa-chevron-left"></i> Ganti Produk
-            </button>
+            <button class="btn-back" onclick="backToKategori()"><i class="fas fa-arrow-left"></i> Kembali</button>
             <div class="glass">
                 <h2 id="order-title" class="text-center mb-4" style="color: var(--accent-pink);">Order</h2>
                 <input type="text" id="user-id" placeholder="Masukkan ID / Link">
