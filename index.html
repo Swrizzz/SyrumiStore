@@ -83,42 +83,98 @@
         console.log("Script dimuat!"); // Cek di console apakah tulisan ini muncul
 
         // --- DATABASE LAYANAN & HARGA ---
-        const database = {
-            game: [
-                { id: 'ml', name: 'Mobile Legends', icon: 'images/icon-mlbb.png', label: 'USER ID (ZONE ID)' },
-                { id: 'ff', name: 'Free Fire', icon: 'images/icon-ff.png', label: 'PLAYER ID (UID)' }
-            ],
-            sosmed: [
-                { id: 'tk_like', name: 'TikTok Likes', icon: 'images/icon-tiktok.png', label: 'LINK VIDEO TIKTOK' },
-                { id: 'ig_fol', name: 'IG Followers', icon: 'images/icon-ig.png', label: 'LINK PROFIL / USERNAME' }
-            ],
-            ppob: [
-                { id: 'pulsa', name: 'Pulsa Reguler', icon: 'images/icon-ppob.png', label: 'NOMOR HP' }
-            ]
-        };
+        // --- DATABASE LAYANAN (DIPERBARUI) ---
+const database = {
+    game: [
+        { id: 'ml', name: 'Mobile Legends', icon: 'images/icon-mlbb.png', label: 'USER ID (ZONE ID)' },
+        { id: 'ff', name: 'Free Fire', icon: 'images/icon-ff.png', label: 'PLAYER ID (UID)' }
+    ],
+    sosmed: [
+        { id: 'tiktok', name: 'TikTok', icon: 'images/icon-tiktok.png', isAppGroup: true },
+        { id: 'instagram', name: 'Instagram', icon: 'images/icon-ig.png', isAppGroup: true },
+        { id: 'youtube', name: 'YouTube', icon: 'images/icon-yt.png', isAppGroup: true }
+    ],
+    // Sub-menu untuk Sosmed (Akan muncul di Layer 3)
+    sosmed_apps: {
+        tiktok: [
+            { id: 'tk_fol', name: 'TikTok Followers', label: 'LINK PROFIL TIKTOK' },
+            { id: 'tk_like', name: 'TikTok Likes', label: 'LINK VIDEO TIKTOK' },
+            { id: 'tk_view', name: 'TikTok Views', label: 'LINK VIDEO TIKTOK' }
+        ],
+        instagram: [
+            { id: 'ig_fol', name: 'IG Followers', label: 'USERNAME / LINK PROFIL' },
+            { id: 'ig_like', name: 'IG Likes', label: 'LINK POSTINGAN' }
+        ],
+        youtube: [
+            { id: 'yt_sub', name: 'YT Subscribers', label: 'LINK CHANNEL' },
+            { id: 'yt_view', name: 'YT Views', label: 'LINK VIDEO' }
+        ]
+    }
+};
 
-        const pricelist = {
-            ml: [
-                { item: '3 Diamonds', harga: 'Rp1.200', image: 'images/diamond.png', tersedia: true },
-                { item: '12 Diamonds', harga: 'Rp3.500', image: 'images/diamond.png', tersedia: false },
-                { item: 'Weekly Pass', harga: 'Rp28.000', image: 'images/wmp.png', tersedia: true }
-            ],
-            ff: [
-                { item: '70 Diamonds', harga: 'Rp10.000', image: 'images/diamond.png', tersedia: true },
-                { item: '140 Diamonds', harga: 'Rp20.000', image: 'images/diamond.png', tersedia: true }
-            ],
-            tk_like: [
-                { item: '100 Likes', harga: 'Rp1.000', image: 'images/heart.png', tersedia: true },
-                { item: '500 Likes', harga: 'Rp4.500', image: 'images/heart.png', tersedia: true }
-            ],
-            ig_fol: [
-                { item: '1000 Follower', harga: 'Rp15.000', image: 'images/heart.png', tersedia: true }
-            ],
-            pulsa: [
-                { item: '5.000', harga: 'Rp6.500', image: 'images/coin.png', tersedia: true },
-                { item: '10.000', harga: 'Rp11.500', image: 'images/coin.png', tersedia: true }
-            ]
-        };
+// --- PRICELIST (DIPERBARUI) ---
+const pricelist = {
+    ml: [
+        { item: '3 Diamonds', harga: 'Rp1.200', image: 'images/diamond.png', tersedia: true },
+        { item: 'Weekly Pass', harga: 'Rp28.000', image: 'images/wmp.png', tersedia: true }
+    ],
+    // Contoh Harga TikTok Likes
+    tk_like: [
+        { item: '100 Likes', harga: 'Rp1.000', image: 'images/heart.png', tersedia: true },
+        { item: '500 Likes', harga: 'Rp4.500', image: 'images/heart.png', tersedia: true }
+    ],
+    // Tambahkan harga lainnya di bawah ini...
+};
+
+// --- LOGIKA BARU UNTUK SOSMED ---
+function openKategori(cat) {
+    currentCategory = cat;
+    const listDiv = document.getElementById('list-layanan');
+    const title = document.getElementById('kategori-title');
+    
+    title.innerText = "Pilih " + (cat === 'game' ? 'Game' : 'Aplikasi Sosmed');
+    listDiv.innerHTML = "";
+
+    database[cat].forEach(item => {
+        // Jika ini adalah grup aplikasi (seperti TikTok/IG)
+        if (item.isAppGroup) {
+            listDiv.innerHTML += `
+                <div onclick="openSubSosmed('${item.id}', '${item.name}')" class="glass menu-item">
+                    <img src="${item.icon}" onerror="this.src='https://via.placeholder.com/40'">
+                    <span>${item.name}</span>
+                </div>
+            `;
+        } else {
+            // Untuk menu standar (Game/PPOB)
+            listDiv.innerHTML += `
+                <div onclick="openOrder('${item.id}', '${item.name}', '${item.label}')" class="glass menu-item">
+                    <img src="${item.icon}" onerror="this.src='https://via.placeholder.com/40'">
+                    <span>${item.name}</span>
+                </div>
+            `;
+        }
+    });
+    switchScreen('screen-kategori');
+}
+
+// Fungsi untuk membuka Layer "Sub-Layanan" Sosmed (Misal: Follower/Like)
+function openSubSosmed(appId, appName) {
+    const listDiv = document.getElementById('list-layanan');
+    const title = document.getElementById('kategori-title');
+    
+    title.innerText = "Layanan " + appName;
+    listDiv.innerHTML = "";
+
+    database.sosmed_apps[appId].forEach(sub => {
+        listDiv.innerHTML += `
+            <div onclick="openOrder('${sub.id}', '${sub.name}', '${sub.label}')" class="glass menu-item">
+                <i class="fas fa-chevron-right" style="margin-right: 15px; color: #ff85b3;"></i>
+                <span>${sub.name}</span>
+            </div>
+        `;
+    });
+    // Tetap di screen-kategori tapi isinya berubah
+}
 
         // --- STATE MANAGEMENT ---
         let currentCategory = "";
