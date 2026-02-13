@@ -1,12 +1,12 @@
-/* Mengambil Font Poppins agar terlihat modern & imut */
+/* Mengambil Font Poppins */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
 
 :root {
     --primary-pink: #ffdeed;
     --accent-pink: #ff85b3;
     --soft-blue: #b5fffc;
-    --glass-white: rgba(255, 255, 255, 0.4);
-    --glass-border: rgba(255, 255, 255, 0.2);
+    --glass-white: rgba(255, 255, 255, 0.6); /* Lebih tebal agar teks jelas */
+    --glass-border: rgba(255, 255, 255, 0.3);
     --text-dark: #4a4a4a;
 }
 
@@ -18,7 +18,6 @@
 }
 
 body {
-    /* Background Gradient Anime Soft */
     background: linear-gradient(135deg, var(--primary-pink) 0%, var(--soft-blue) 100%);
     background-attachment: fixed;
     min-height: 100vh;
@@ -28,15 +27,12 @@ body {
     overflow-x: hidden;
 }
 
-/* Container Utama */
 #app-container {
     width: 100%;
-    max-width: 450px; /* Ukuran HP */
+    max-width: 450px;
     padding: 20px;
-    position: relative;
 }
 
-/* Sembunyikan Kamar yang tidak aktif */
 .screen {
     display: none;
     animation: fadeIn 0.4s ease-out forwards;
@@ -46,92 +42,43 @@ body {
     display: block;
 }
 
-/* Animasi Perpindahan Kamar */
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
+    from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* Desain Efek Kaca (Glassmorphism) */
+/* Glassmorphism Fix */
 .glass {
     background: var(--glass-white);
     backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
     border: 1px solid var(--glass-border);
-    border-radius: 24px;
+    border-radius: 20px;
     box-shadow: 0 8px 32px rgba(255, 133, 179, 0.1);
-    transition: all 0.3s ease;
+    width: 100%; /* Pastikan tidak melebar keluar */
 }
 
-/* List Menu Layer 1 & 2 */
-.menu-item {
-    display: flex;
-    align-items: center;
-    padding: 15px;
-    margin-bottom: 12px;
-    cursor: pointer;
+/* Form Styling */
+.order-box {
+    padding: 20px;
 }
 
-.menu-item:hover {
-    background: rgba(255, 255, 255, 0.6);
-    transform: scale(1.02);
-}
-
-.menu-item img {
-    width: 40px;
-    height: 40px;
-    border-radius: 12px;
-    margin-right: 15px;
-    object-fit: cover;
-}
-
-.menu-item span {
-    font-weight: 600;
-    font-size: 14px;
-}
-
-/* Grid Produk Ala MobaPay (Layer 3) */
-.product-grid {
+/* Kolom Input Double (ID & Zone) */
+.input-row {
     display: grid;
-    grid-template-columns: repeat(2, 1fr); /* 2 Kolom */
-    gap: 12px;
-    margin-top: 15px;
+    grid-template-columns: 2fr 1fr; /* ID lebih lebar dari Zone */
+    gap: 10px;
+    margin-top: 8px;
 }
 
-.product-card {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 15px;
-    text-align: center;
-    border: 2px solid transparent;
-    cursor: pointer;
-}
-
-.product-card img {
-    width: 35px;
-    height: 35px;
-    margin-bottom: 8px;
-}
-
-.product-card.selected {
-    border-color: var(--accent-pink);
-    background: rgba(255, 133, 179, 0.1);
-}
-
-.item-name { font-size: 11px; color: #666; }
-.item-price { font-weight: 700; color: var(--accent-pink); font-size: 13px; }
-
-/* Input Styling */
 input {
     width: 100%;
-    padding: 15px;
-    border-radius: 16px;
+    padding: 12px 15px;
+    border-radius: 12px;
     border: 1px solid var(--glass-border);
-    background: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.7);
     outline: none;
-    margin-top: 8px;
+    font-size: 14px;
     transition: 0.3s;
 }
 
@@ -140,32 +87,74 @@ input:focus {
     background: white;
 }
 
-/* Tombol Pesan Pink */
+/* Grid Produk Perbaikan */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Tetap 2 kolom */
+    gap: 12px;
+    margin: 15px 0;
+}
+
+.product-card {
+    background: rgba(255, 255, 255, 0.4);
+    border: 2px solid transparent;
+    border-radius: 15px;
+    padding: 15px 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: 0.2s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 110px; /* Tinggi seragam */
+}
+
+.product-card.selected {
+    border-color: var(--accent-pink);
+    background: rgba(255, 133, 179, 0.1);
+    transform: translateY(-3px);
+}
+
+.item-name { 
+    font-size: 11px; 
+    font-weight: 600;
+    color: #555;
+    margin-bottom: 4px;
+    display: block;
+}
+
+.item-price { 
+    font-weight: 700; 
+    color: var(--accent-pink); 
+    font-size: 13px; 
+}
+
+/* Typography & Buttons */
+.mb-4 { margin-bottom: 20px; }
+.text-center { text-align: center; }
+
 .btn-order {
     width: 100%;
     background: var(--accent-pink);
     color: white;
-    padding: 16px;
-    border-radius: 18px;
+    padding: 15px;
+    border-radius: 15px;
     border: none;
-    font-weight: bold;
+    font-weight: 700;
     font-size: 16px;
-    margin-top: 20px;
     cursor: pointer;
-    box-shadow: 0 4px 15px rgba(255, 133, 179, 0.4);
+    box-shadow: 0 4px 15px rgba(255, 133, 179, 0.3);
 }
 
-.btn-order:active { transform: scale(0.96); }
-
-/* Tombol Kembali */
 .btn-back {
     background: none;
     border: none;
     color: var(--accent-pink);
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    font-weight: 700;
     cursor: pointer;
     margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
 }
