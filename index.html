@@ -59,8 +59,12 @@
                 <h2 id="order-title" class="text-center mb-4" style="color: #ff85b3;">Top Up</h2>
                 
                 <div class="mb-4">
-                    <label id="label-input" style="font-size: 11px; font-weight: 600; margin-left: 5px; color: #888;">USER ID & ZONE ID</label>
-                    <input type="text" id="user-id" placeholder="Contoh: 1234567 (1234)">
+    <label style="font-size: 11px; font-weight: 600; color: #888; margin-left: 5px;">DATA PEMESANAN</label>
+    <div class="input-row">
+        <input type="number" id="user-id" placeholder="Masukkan ID">
+        <input type="number" id="zone-id" placeholder="Zone">
+    </div>
+</div>
                     
                     <div id="container-cek-id" class="hidden text-right mt-1">
                         <small id="display-username" style="color: #ff85b3; font-style: italic;"></small>
@@ -265,8 +269,29 @@ function openSubSosmed(appId, appName) {
         function backToKategori() { switchScreen('screen-kategori'); }
 
         function kirimKeWA() {
-            const userInput = document.getElementById('user-id').value;
-            const gameName = document.getElementById('order-title').innerText;
+    const userId = document.getElementById('user-id').value;
+    const zoneId = document.getElementById('zone-id').value;
+    
+    // Jika ada Zone ID (seperti ML), formatnya jadi ID (Zone), jika tidak (seperti FF/Sosmed) cuma ID aja.
+    const targetPesan = zoneId ? `${userId} (${zoneId})` : userId;
+
+    if (!userId) return alert("Isi ID dulu ya Kak! ✨");
+    if (!selectedProduct) return alert("Pilih produknya dulu dong! 💖");
+
+    const nomorWA = "6289507913948";
+    const pesan = window.encodeURIComponent(
+        `*ORDER SYRUMISTORE*\n` +
+        `--------------------------\n` +
+        `Produk: ${document.getElementById('order-title').innerText}\n` +
+        `Target: ${targetPesan}\n` +
+        `Item: ${selectedProduct}\n` +
+        `Harga: ${selectedPrice}\n` +
+        `--------------------------\n` +
+        `Mohon instruksi bayarnya min! ✨`
+    );
+
+    window.location.href = `https://wa.me/${nomorWA}?text=${pesan}`;
+}
 
             if (!userInput) return alert("Isi Data Link/ID dulu ya Kak! ✨");
             if (!selectedProduct) return alert("Pilih produknya dulu dong! 💖");
