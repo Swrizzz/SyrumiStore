@@ -1,1 +1,171 @@
+/* Mengambil Font Poppins agar terlihat modern & imut */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
 
+:root {
+    --primary-pink: #ffdeed;
+    --accent-pink: #ff85b3;
+    --soft-blue: #b5fffc;
+    --glass-white: rgba(255, 255, 255, 0.4);
+    --glass-border: rgba(255, 255, 255, 0.2);
+    --text-dark: #4a4a4a;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    /* Background Gradient Anime Soft */
+    background: linear-gradient(135deg, var(--primary-pink) 0%, var(--soft-blue) 100%);
+    background-attachment: fixed;
+    min-height: 100vh;
+    color: var(--text-dark);
+    display: flex;
+    justify-content: center;
+    overflow-x: hidden;
+}
+
+/* Container Utama */
+#app-container {
+    width: 100%;
+    max-width: 450px; /* Ukuran HP */
+    padding: 20px;
+    position: relative;
+}
+
+/* Sembunyikan Kamar yang tidak aktif */
+.screen {
+    display: none;
+    animation: fadeIn 0.4s ease-out forwards;
+}
+
+.screen.active {
+    display: block;
+}
+
+/* Animasi Perpindahan Kamar */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Desain Efek Kaca (Glassmorphism) */
+.glass {
+    background: var(--glass-white);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid var(--glass-border);
+    border-radius: 24px;
+    box-shadow: 0 8px 32px rgba(255, 133, 179, 0.1);
+    transition: all 0.3s ease;
+}
+
+/* List Menu Layer 1 & 2 */
+.menu-item {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    margin-bottom: 12px;
+    cursor: pointer;
+}
+
+.menu-item:hover {
+    background: rgba(255, 255, 255, 0.6);
+    transform: scale(1.02);
+}
+
+.menu-item img {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    margin-right: 15px;
+    object-fit: cover;
+}
+
+.menu-item span {
+    font-weight: 600;
+    font-size: 14px;
+}
+
+/* Grid Produk Ala MobaPay (Layer 3) */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 2 Kolom */
+    gap: 12px;
+    margin-top: 15px;
+}
+
+.product-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+    text-align: center;
+    border: 2px solid transparent;
+    cursor: pointer;
+}
+
+.product-card img {
+    width: 35px;
+    height: 35px;
+    margin-bottom: 8px;
+}
+
+.product-card.selected {
+    border-color: var(--accent-pink);
+    background: rgba(255, 133, 179, 0.1);
+}
+
+.item-name { font-size: 11px; color: #666; }
+.item-price { font-weight: 700; color: var(--accent-pink); font-size: 13px; }
+
+/* Input Styling */
+input {
+    width: 100%;
+    padding: 15px;
+    border-radius: 16px;
+    border: 1px solid var(--glass-border);
+    background: rgba(255, 255, 255, 0.5);
+    outline: none;
+    margin-top: 8px;
+    transition: 0.3s;
+}
+
+input:focus {
+    border-color: var(--accent-pink);
+    background: white;
+}
+
+/* Tombol Pesan Pink */
+.btn-order {
+    width: 100%;
+    background: var(--accent-pink);
+    color: white;
+    padding: 16px;
+    border-radius: 18px;
+    border: none;
+    font-weight: bold;
+    font-size: 16px;
+    margin-top: 20px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(255, 133, 179, 0.4);
+}
+
+.btn-order:active { transform: scale(0.96); }
+
+/* Tombol Kembali */
+.btn-back {
+    background: none;
+    border: none;
+    color: var(--accent-pink);
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    margin-bottom: 15px;
+}
