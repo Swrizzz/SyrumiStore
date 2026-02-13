@@ -4,38 +4,157 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Syrumi Store</title>
-    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+        :root {
+            --primary-pink: #ffdeed;
+            --accent-pink: #ff85b3;
+            --soft-blue: #b5fffc;
+            --glass-white: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.4);
+            --text-dark: #4a4a4a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--primary-pink) 0%, var(--soft-blue) 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            padding: 20px 15px;
+        }
+
+        #app-container {
+            width: 100%;
+            max-width: 450px;
+        }
+
+        .glass {
+            background: var(--glass-white);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 25px;
+            padding: 20px;
+            box-shadow: 0 10px 25px rgba(255, 133, 179, 0.1);
+        }
+
+        .screen { display: none; animation: fadeIn 0.3s ease forwards; }
+        .screen.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background: white;
+            border-radius: 20px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: 0.2s;
+            border: 1px solid var(--glass-border);
+        }
+        .menu-item:hover { transform: scale(1.02); background: #fff; }
+        .menu-item img { width: 40px; height: 40px; border-radius: 10px; margin-right: 15px; object-fit: cover; }
+        .menu-item span { font-weight: 600; font-size: 14px; color: var(--text-dark); }
+
+        .input-row { display: flex; gap: 10px; margin-top: 5px; }
+        input {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 12px;
+            border: 1px solid #ddd;
+            outline: none;
+            font-size: 14px;
+        }
+        input:focus { border-color: var(--accent-pink); }
+        #zone-id { flex: 0 0 100px; }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-top: 15px;
+        }
+        .product-card {
+            background: white;
+            border: 2px solid transparent;
+            border-radius: 18px;
+            padding: 15px 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 110px;
+            justify-content: center;
+        }
+        .product-card.selected { border-color: var(--accent-pink); background: #fffafa; }
+        .item-name { font-size: 11px; font-weight: 600; color: #777; margin-bottom: 5px; }
+        .item-price { font-weight: 700; color: var(--accent-pink); font-size: 13px; }
+
+        .btn-order {
+            width: 100%;
+            background: var(--accent-pink);
+            color: white;
+            padding: 16px;
+            border-radius: 18px;
+            border: none;
+            font-weight: 700;
+            font-size: 16px;
+            margin-top: 20px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(255, 133, 179, 0.3);
+        }
+        .btn-back {
+            background: none; border: none; color: var(--accent-pink);
+            font-weight: 700; cursor: pointer; margin-bottom: 15px;
+            display: flex; align-items: center; gap: 8px;
+        }
+        
+        .stok-kosong { opacity: 0.5; filter: grayscale(1); cursor: not-allowed; }
+        .text-center { text-align: center; }
+        .mb-4 { margin-bottom: 20px; }
+        .hidden { display: none; }
+    </style>
 </head>
 <body>
 
     <div id="app-container">
-        
         <section id="screen-lobby" class="screen active">
-            <div class="text-center mb-8">
-                <div class="glass p-2 inline-block rounded-full mb-4">
-                    <img src="images/syrumi.jpeg" onerror="this.src='https://via.placeholder.com/100?text=Logo'" alt="Syrumi Logo" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover;">
+            <div class="text-center mb-4">
+                <div style="display: inline-block; padding: 5px; background: white; border-radius: 50%; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+                    <img src="images/syrumi.jpeg" onerror="this.src='https://via.placeholder.com/100'" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover;">
                 </div>
-                <h1 style="font-weight: 700; color: #ff85b3; font-size: 24px;">SyrumiStore</h1>
+                <h1 style="color: #ff85b3; font-size: 24px; margin-top: 10px;">SyrumiStore</h1>
                 <p style="font-size: 12px; color: #888;">Topup Game & Sosmed Tercepat ✨</p>
             </div>
 
             <div onclick="openKategori('game')" class="glass menu-item">
-                <img src="images/icon-game.png" onerror="this.src='https://via.placeholder.com/40?text=G'" alt="Game">
+                <img src="images/icon-game.png" onerror="this.src='https://via.placeholder.com/40?text=G'">
                 <span>Top Up Game</span>
             </div>
             <div onclick="openKategori('sosmed')" class="glass menu-item">
-                <img src="images/icon-sosmed.png" onerror="this.src='https://via.placeholder.com/40?text=S'" alt="Sosmed">
+                <img src="images/icon-sosmed.png" onerror="this.src='https://via.placeholder.com/40?text=S'">
                 <span>Suntik Sosmed</span>
             </div>
             <div onclick="openKategori('ppob')" class="glass menu-item">
-                <img src="images/icon-ppob.png" onerror="this.src='https://via.placeholder.com/40?text=P'" alt="PPOB">
+                <img src="images/icon-ppob.png" onerror="this.src='https://via.placeholder.com/40?text=P'">
                 <span>Pulsa, Listrik & Air</span>
             </div>
-
-            <a href="LINK_SALURAN_WA_KAMU" target="_blank" style="text-decoration: none; color: inherit;">
+            <a href="https://wa.me/6289507913948" target="_blank" style="text-decoration: none;">
                 <div class="glass menu-item" style="border: 1px dashed #ff85b3;">
-                    <img src="images/icon-testi.png" onerror="this.src='https://via.placeholder.com/40?text=T'" alt="Testi">
+                    <img src="images/icon-testi.png" onerror="this.src='https://via.placeholder.com/40?text=T'">
                     <span>Testimoni Saluran</span>
                 </div>
             </a>
@@ -45,8 +164,7 @@
             <button class="btn-back" onclick="goToLobby()">
                 <i class="fas fa-arrow-left"></i> Kembali
             </button>
-            <h2 id="kategori-title" class="mb-4" style="font-size: 18px; color: #ff85b3;">Pilih Layanan</h2>
-            
+            <h2 id="kategori-title" class="mb-4" style="color: #ff85b3;">Pilih Layanan</h2>
             <div id="list-layanan"></div>
         </section>
 
@@ -54,211 +172,69 @@
             <button class="btn-back" onclick="backToKategori()">
                 <i class="fas fa-arrow-left"></i> Ganti Produk
             </button>
-            
-            <div class="glass p-5">
+            <div class="glass">
                 <h2 id="order-title" class="text-center mb-4" style="color: #ff85b3;">Top Up</h2>
                 
                 <div class="mb-4">
-    <label style="font-size: 11px; font-weight: 600; color: #888; margin-left: 5px;">DATA PEMESANAN</label>
-    <div class="input-row">
-        <input type="number" id="user-id" placeholder="Masukkan ID">
-        <input type="number" id="zone-id" placeholder="Zone">
-    </div>
-</div>
-                    
-                    <div id="container-cek-id" class="hidden text-right mt-1">
-                        <small id="display-username" style="color: #ff85b3; font-style: italic;"></small>
+                    <label id="label-input" style="font-size: 11px; font-weight: 600; color: #888; margin-left: 5px;">DATA PEMESANAN</label>
+                    <div class="input-row">
+                        <input type="text" id="user-id" placeholder="Masukkan ID">
+                        <input type="text" id="zone-id" placeholder="Zone">
                     </div>
                 </div>
 
-                <label style="font-size: 11px; font-weight: 600; margin-left: 5px; color: #888;">PILIH NOMINAL</label>
-                <div id="grid-produk" class="product-grid">
-                    </div>
+                <label style="font-size: 11px; font-weight: 600; color: #888; margin-left: 5px;">PILIH NOMINAL</label>
+                <div id="grid-produk" class="product-grid"></div>
 
                 <button class="btn-order" onclick="kirimKeWA()">
                     <i class="fab fa-whatsapp"></i> Pesan Sekarang
                 </button>
             </div>
         </section>
-
     </div>
 
     <script>
-        console.log("Script dimuat!"); // Cek di console apakah tulisan ini muncul
+        // --- DATABASE ---
+        const database = {
+            game: [
+                { id: 'ml', name: 'Mobile Legends', icon: 'images/icon-mlbb.png', label: 'USER ID & ZONE' },
+                { id: 'ff', name: 'Free Fire', icon: 'images/icon-ff.png', label: 'PLAYER ID (UID)' }
+            ],
+            sosmed: [
+                { id: 'tiktok', name: 'TikTok', icon: 'images/icon-tiktok.png', isAppGroup: true },
+                { id: 'instagram', name: 'Instagram', icon: 'images/icon-ig.png', isAppGroup: true },
+                { id: 'youtube', name: 'YouTube', icon: 'images/icon-yt.png', isAppGroup: true }
+            ],
+            sosmed_apps: {
+                tiktok: [
+                    { id: 'tk_fol', name: 'TikTok Followers', label: 'LINK PROFIL' },
+                    { id: 'tk_like', name: 'TikTok Likes', label: 'LINK VIDEO' }
+                ],
+                instagram: [
+                    { id: 'ig_fol', name: 'IG Followers', label: 'USERNAME' },
+                    { id: 'ig_like', name: 'IG Likes', label: 'LINK POST' }
+                ],
+                youtube: [
+                    { id: 'yt_sub', name: 'YT Subscribers', label: 'LINK CHANNEL' }
+                ]
+            }
+        };
 
-        // --- DATABASE LAYANAN & HARGA ---
-        // --- DATABASE LAYANAN (DIPERBARUI) ---
-const database = {
-    game: [
-        { id: 'ml', name: 'Mobile Legends', icon: 'images/icon-mlbb.png', label: 'USER ID (ZONE ID)' },
-        { id: 'ff', name: 'Free Fire', icon: 'images/icon-ff.png', label: 'PLAYER ID (UID)' }
-    ],
-    sosmed: [
-        { id: 'tiktok', name: 'TikTok', icon: 'images/icon-tiktok.png', isAppGroup: true },
-        { id: 'instagram', name: 'Instagram', icon: 'images/icon-ig.png', isAppGroup: true },
-        { id: 'youtube', name: 'YouTube', icon: 'images/icon-yt.png', isAppGroup: true }
-    ],
-    // Sub-menu untuk Sosmed (Akan muncul di Layer 3)
-    sosmed_apps: {
-        tiktok: [
-            { id: 'tk_fol', name: 'TikTok Followers', label: 'LINK PROFIL TIKTOK' },
-            { id: 'tk_like', name: 'TikTok Likes', label: 'LINK VIDEO TIKTOK' },
-            { id: 'tk_view', name: 'TikTok Views', label: 'LINK VIDEO TIKTOK' }
-        ],
-        instagram: [
-            { id: 'ig_fol', name: 'IG Followers', label: 'USERNAME / LINK PROFIL' },
-            { id: 'ig_like', name: 'IG Likes', label: 'LINK POSTINGAN' }
-        ],
-        youtube: [
-            { id: 'yt_sub', name: 'YT Subscribers', label: 'LINK CHANNEL' },
-            { id: 'yt_view', name: 'YT Views', label: 'LINK VIDEO' }
-        ]
-    }
-};
+        const pricelist = {
+            ml: [
+                { item: '3 Diamonds', harga: 'Rp1.200', image: 'images/diamond.png', tersedia: true },
+                { item: 'Weekly Pass', harga: 'Rp28.000', image: 'images/wmp.png', tersedia: true }
+            ],
+            tk_like: [
+                { item: '100 Likes', harga: 'Rp1.000', image: 'images/heart.png', tersedia: true },
+                { item: '500 Likes', harga: 'Rp4.500', image: 'images/heart.png', tersedia: true }
+            ]
+        };
 
-// --- PRICELIST (DIPERBARUI) ---
-const pricelist = {
-    ml: [
-        { item: '3 Diamonds', harga: 'Rp1.200', image: 'images/diamond.png', tersedia: true },
-        { item: 'Weekly Pass', harga: 'Rp28.000', image: 'images/wmp.png', tersedia: true }
-    ],
-    // Contoh Harga TikTok Likes
-    tk_like: [
-        { item: '100 Likes', harga: 'Rp1.000', image: 'images/heart.png', tersedia: true },
-        { item: '500 Likes', harga: 'Rp4.500', image: 'images/heart.png', tersedia: true }
-    ],
-    // Tambahkan harga lainnya di bawah ini...
-};
-
-// --- LOGIKA BARU UNTUK SOSMED ---
-function openKategori(cat) {
-    currentCategory = cat;
-    const listDiv = document.getElementById('list-layanan');
-    const title = document.getElementById('kategori-title');
-    
-    title.innerText = "Pilih " + (cat === 'game' ? 'Game' : 'Aplikasi Sosmed');
-    listDiv.innerHTML = "";
-
-    database[cat].forEach(item => {
-        // Jika ini adalah grup aplikasi (seperti TikTok/IG)
-        if (item.isAppGroup) {
-            listDiv.innerHTML += `
-                <div onclick="openSubSosmed('${item.id}', '${item.name}')" class="glass menu-item">
-                    <img src="${item.icon}" onerror="this.src='https://via.placeholder.com/40'">
-                    <span>${item.name}</span>
-                </div>
-            `;
-        } else {
-            // Untuk menu standar (Game/PPOB)
-            listDiv.innerHTML += `
-                <div onclick="openOrder('${item.id}', '${item.name}', '${item.label}')" class="glass menu-item">
-                    <img src="${item.icon}" onerror="this.src='https://via.placeholder.com/40'">
-                    <span>${item.name}</span>
-                </div>
-            `;
-        }
-    });
-    switchScreen('screen-kategori');
-}
-
-// Fungsi untuk membuka Layer "Sub-Layanan" Sosmed (Misal: Follower/Like)
-function openSubSosmed(appId, appName) {
-    const listDiv = document.getElementById('list-layanan');
-    const title = document.getElementById('kategori-title');
-    
-    title.innerText = "Layanan " + appName;
-    listDiv.innerHTML = "";
-
-    database.sosmed_apps[appId].forEach(sub => {
-        listDiv.innerHTML += `
-            <div onclick="openOrder('${sub.id}', '${sub.name}', '${sub.label}')" class="glass menu-item">
-                <i class="fas fa-chevron-right" style="margin-right: 15px; color: #ff85b3;"></i>
-                <span>${sub.name}</span>
-            </div>
-        `;
-    });
-    // Tetap di screen-kategori tapi isinya berubah
-}
-
-        // --- STATE MANAGEMENT ---
-        let currentCategory = "";
         let selectedProduct = "";
         let selectedPrice = "";
-        let currentID = "";
 
-        // --- FUNGSI NAVIGASI (KAMAR) ---
-        function openKategori(cat) {
-            console.log("Membuka kategori:", cat); 
-            currentCategory = cat;
-            const listDiv = document.getElementById('list-layanan');
-            const title = document.getElementById('kategori-title');
-            
-            title.innerText = "Pilih " + (cat === 'game' ? 'Game' : cat === 'sosmed' ? 'Sosmed' : 'Layanan');
-            listDiv.innerHTML = "";
-
-            if (database[cat]) {
-                database[cat].forEach(item => {
-                    listDiv.innerHTML += `
-                        <div onclick="openOrder('${item.id}', '${item.name}', '${item.label}')" class="glass menu-item">
-                            <img src="${item.icon}" onerror="this.src='https://via.placeholder.com/40'">
-                            <span>${item.name}</span>
-                        </div>
-                    `;
-                });
-                switchScreen('screen-kategori');
-            } else {
-                alert("Kategori belum ada isinya kak!");
-            }
-        }
-
-        function openOrder(id, name, label) {
-            currentID = id;
-            document.getElementById('order-title').innerText = name;
-            document.getElementById('label-input').innerText = label;
-            document.getElementById('user-id').value = ""; 
-            
-            if(id === 'ml') {
-                document.getElementById('container-cek-id').classList.remove('hidden');
-            } else {
-                document.getElementById('container-cek-id').classList.add('hidden');
-            }
-
-            renderProducts(id);
-            switchScreen('screen-order');
-        }
-
-        function renderProducts(id) {
-            const grid = document.getElementById('grid-produk');
-            grid.innerHTML = "";
-            selectedProduct = ""; 
-
-            if (!pricelist[id]) {
-                grid.innerHTML = "<p style='grid-column: span 2; text-align:center; font-size:12px; color:red;'>Produk belum tersedia.</p>";
-                return;
-            }
-
-            pricelist[id].forEach(p => {
-                const isStok = p.tersedia;
-                grid.innerHTML += `
-                    <div onclick="${isStok ? `selectItem('${p.item}', '${p.harga}', this)` : ''}" 
-                         class="glass product-card ${!isStok ? 'stok-kosong' : ''}">
-                        <img src="${p.image}" onerror="this.src='https://via.placeholder.com/35'">
-                        <span class="item-name">${p.item}</span>
-                        <span class="item-price">${isStok ? p.harga : 'GANGGUAN'}</span>
-                    </div>
-                `;
-            });
-        }
-
-        function selectItem(item, harga, element) {
-            selectedProduct = item;
-            selectedPrice = harga;
-            
-            document.querySelectorAll('.product-card').forEach(card => card.classList.remove('selected'));
-            element.classList.add('selected');
-        }
-
-        // --- FUNGSI SISTEM ---
+        // --- NAVIGASI ---
         function switchScreen(id) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById(id).classList.add('active');
@@ -268,56 +244,106 @@ function openSubSosmed(appId, appName) {
         function goToLobby() { switchScreen('screen-lobby'); }
         function backToKategori() { switchScreen('screen-kategori'); }
 
-        function kirimKeWA() {
-    const userId = document.getElementById('user-id').value;
-    const zoneId = document.getElementById('zone-id').value;
-    
-    // Jika ada Zone ID (seperti ML), formatnya jadi ID (Zone), jika tidak (seperti FF/Sosmed) cuma ID aja.
-    const targetPesan = zoneId ? `${userId} (${zoneId})` : userId;
+        function openKategori(cat) {
+            const listDiv = document.getElementById('list-layanan');
+            const title = document.getElementById('kategori-title');
+            title.innerText = "Pilih " + (cat === 'game' ? 'Game' : 'Aplikasi Sosmed');
+            listDiv.innerHTML = "";
 
-    if (!userId) return alert("Isi ID dulu ya Kak! ✨");
-    if (!selectedProduct) return alert("Pilih produknya dulu dong! 💖");
-
-    const nomorWA = "6289507913948";
-    const pesan = window.encodeURIComponent(
-        `*ORDER SYRUMISTORE*\n` +
-        `--------------------------\n` +
-        `Produk: ${document.getElementById('order-title').innerText}\n` +
-        `Target: ${targetPesan}\n` +
-        `Item: ${selectedProduct}\n` +
-        `Harga: ${selectedPrice}\n` +
-        `--------------------------\n` +
-        `Mohon instruksi bayarnya min! ✨`
-    );
-
-    window.location.href = `https://wa.me/${nomorWA}?text=${pesan}`;
-}
-
-            if (!userInput) return alert("Isi Data Link/ID dulu ya Kak! ✨");
-            if (!selectedProduct) return alert("Pilih produknya dulu dong! 💖");
-
-            const nomorWA = "6289507913948";
-            const pesan = window.encodeURIComponent(
-                `*ORDER SYRUMISTORE*\n` +
-                `--------------------------\n` +
-                `Produk: ${gameName}\n` +
-                `Target: ${userInput}\n` +
-                `Item: ${selectedProduct}\n` +
-                `Harga: ${selectedPrice}\n` +
-                `--------------------------\n` +
-                `Mohon instruksi bayarnya min! ✨`
-            );
-
-            window.location.href = `https://wa.me/${nomorWA}?text=${pesan}`;
+            if (database[cat]) {
+                database[cat].forEach(item => {
+                    if (item.isAppGroup) {
+                        listDiv.innerHTML += `
+                            <div onclick="openSubSosmed('${item.id}', '${item.name}')" class="glass menu-item">
+                                <img src="${item.icon}" onerror="this.src='https://via.placeholder.com/40'">
+                                <span>${item.name}</span>
+                            </div>`;
+                    } else {
+                        listDiv.innerHTML += `
+                            <div onclick="openOrder('${item.id}', '${item.name}', '${item.label}')" class="glass menu-item">
+                                <img src="${item.icon}" onerror="this.src='https://via.placeholder.com/40'">
+                                <span>${item.name}</span>
+                            </div>`;
+                    }
+                });
+                switchScreen('screen-kategori');
+            }
         }
 
-        // Tambahkan CSS dinamis untuk stok kosong
-        const style = document.createElement('style');
-        style.innerHTML = `
-            .stok-kosong { opacity: 0.5; filter: grayscale(1); cursor: not-allowed !important; }
-            .hidden { display: none; }
-        `;
-        document.head.appendChild(style);
+        function openSubSosmed(appId, appName) {
+            const listDiv = document.getElementById('list-layanan');
+            document.getElementById('kategori-title').innerText = "Layanan " + appName;
+            listDiv.innerHTML = "";
+
+            database.sosmed_apps[appId].forEach(sub => {
+                listDiv.innerHTML += `
+                    <div onclick="openOrder('${sub.id}', '${sub.name}', '${sub.label}')" class="glass menu-item">
+                        <i class="fas fa-chevron-right" style="margin-right: 15px; color: #ff85b3;"></i>
+                        <span>${sub.name}</span>
+                    </div>`;
+            });
+        }
+
+        function openOrder(id, name, label) {
+            document.getElementById('order-title').innerText = name;
+            document.getElementById('label-input').innerText = label;
+            
+            // Tampilkan zone-id hanya untuk ML
+            const zoneInput = document.getElementById('zone-id');
+            if (id === 'ml') {
+                zoneInput.style.display = "block";
+                zoneInput.placeholder = "Zone";
+            } else {
+                zoneInput.style.display = "none";
+                zoneInput.value = "";
+            }
+
+            renderProducts(id);
+            switchScreen('screen-order');
+        }
+
+        function renderProducts(id) {
+            const grid = document.getElementById('grid-produk');
+            grid.innerHTML = "";
+            if (!pricelist[id]) {
+                grid.innerHTML = "<p style='grid-column: span 2; text-align:center; color:red;'>Segera Hadir!</p>";
+                return;
+            }
+            pricelist[id].forEach(p => {
+                grid.innerHTML += `
+                    <div onclick="selectItem('${p.item}', '${p.harga}', this)" class="product-card">
+                        <img src="${p.image}" onerror="this.src='https://via.placeholder.com/35'">
+                        <span class="item-name">${p.item}</span>
+                        <span class="item-price">${p.harga}</span>
+                    </div>`;
+            });
+        }
+
+        function selectItem(item, harga, element) {
+            selectedProduct = item;
+            selectedPrice = harga;
+            document.querySelectorAll('.product-card').forEach(c => c.classList.remove('selected'));
+            element.classList.add('selected');
+        }
+
+        function kirimKeWA() {
+            const userId = document.getElementById('user-id').value;
+            const zoneId = document.getElementById('zone-id').value;
+            const target = zoneId ? `${userId} (${zoneId})` : userId;
+
+            if (!userId) return alert("Isi ID/Link dulu ya!");
+            if (!selectedProduct) return alert("Pilih itemnya dulu!");
+
+            const pesan = window.encodeURIComponent(
+                `*ORDER SYRUMISTORE*\n` +
+                `Produk: ${document.getElementById('order-title').innerText}\n` +
+                `ID/Link: ${target}\n` +
+                `Item: ${selectedProduct}\n` +
+                `Harga: ${selectedPrice}\n` +
+                `Mohon instruksinya admin! ✨`
+            );
+            window.location.href = `https://wa.me/6289507913948?text=${pesan}`;
+        }
     </script>
 </body>
 </html>
