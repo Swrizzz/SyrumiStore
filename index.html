@@ -207,4 +207,141 @@
                 { id: 'ff', name: 'Free Fire', icon: 'images/icon-ff.png', label: 'PLAYER ID (UID)' }
             ],
             sosmed: [
-                { id: 'tiktok', name: 'TikTok', icon: 'images/icon-tiktok.png',
+                { id: 'tiktok', name: 'TikTok', icon: 'images/icon-tiktok.png', isAppGroup: true },
+                { id: 'instagram', name: 'Instagram', icon: 'images/icon-ig.png', isAppGroup: true },
+                { id: 'youtube', name: 'YouTube', icon: 'images/icon-yt.png', isAppGroup: true }
+            ],
+            sosmed_apps: {
+                tiktok: [
+                    { id: 'tk_fol', name: 'TikTok Followers', label: 'LINK PROFIL' },
+                    { id: 'tk_like', name: 'TikTok Likes', label: 'LINK VIDEO' }
+                ],
+                instagram: [
+                    { id: 'ig_fol', name: 'IG Followers', label: 'USERNAME' },
+                    { id: 'ig_like', name: 'IG Likes', label: 'LINK POST' }
+                ],
+                youtube: [
+                    { id: 'yt_sub', name: 'YT Subscribers', label: 'LINK CHANNEL' }
+                ]
+            }
+        };
+
+        const pricelist = {
+            ml: [
+                { item: '3 Diamonds', harga: 'Rp1.200', image: 'images/diamond.png' },
+                { item: 'Weekly Pass', harga: 'Rp28.000', image: 'images/wmp.png' }
+            ],
+            tk_like: [
+                { item: '100 Likes', harga: 'Rp1.000', image: 'images/heart.png' },
+                { item: '500 Likes', harga: 'Rp4.500', image: 'images/heart.png' }
+            ]
+        };
+
+        let selectedProduct = "";
+        let selectedPrice = "";
+
+        // --- NAVIGASI ---
+        function switchScreen(id) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            window.scrollTo(0,0);
+        }
+
+        function goToLobby() { switchScreen('screen-lobby'); }
+        function backToKategori() { switchScreen('screen-kategori'); }
+
+        function openKategori(cat) {
+            const listDiv = document.getElementById('list-layanan');
+            const title = document.getElementById('kategori-title');
+            title.innerText = "Pilih " + (cat === 'game' ? 'Game' : 'Aplikasi Sosmed');
+            listDiv.innerHTML = "";
+
+            if (database[cat]) {
+                database[cat].forEach(item => {
+                    const func = item.isAppGroup ? `openSubSosmed('${item.id}', '${item.name}')` : `openOrder('${item.id}', '${item.name}', '${item.label}')`;
+                    listDiv.innerHTML += `
+                        <div onclick="${func}" class="glass menu-item">
+                            <img src="${item.icon}">
+                            <span>${item.name}</span>
+                        </div>`;
+                });
+                switchScreen('screen-kategori');
+            }
+        }
+
+        function openSubSosmed(appId, appName) {
+            const listDiv = document.getElementById('list-layanan');
+            document.getElementById('kategori-title').innerText = "Layanan " + appName;
+            listDiv.innerHTML = "";
+
+            database.sosmed_apps[appId].forEach(sub => {
+                listDiv.innerHTML += `
+                    <div onclick="openOrder('${sub.id}', '${sub.name}', '${sub.label}')" class="glass menu-item">
+                        <i class="fas fa-chevron-right" style="margin-right: 15px; color: #ff85b3;"></i>
+                        <span>${sub.name}</span>
+                    </div>`;
+            });
+        }
+
+        function openOrder(id, name, label) {
+            document.getElementById('order-title').innerText = name;
+            document.getElementById('label-input').innerText = label;
+            
+            const zoneInput = document.getElementById('zone-id');
+            if (id === 'ml') {
+                zoneInput.style.display = "block";
+                zoneInput.placeholder = "Zone";
+            } else {
+                zoneInput.style.display = "none";
+                zoneInput.value = "";
+            }
+
+            renderProducts(id);
+            switchScreen('screen-order');
+        }
+
+        function renderProducts(id) {
+            const grid = document.getElementById('grid-produk');
+            grid.innerHTML = "";
+            if (!pricelist[id]) {
+                grid.innerHTML = "<p style='grid-column: span 2; text-align:center; color:red;'>Segera Hadir!</p>";
+                return;
+            }
+            pricelist[id].forEach(p => {
+                grid.innerHTML += `
+                    <div onclick="selectItem('${p.item}', '${p.harga}', this)" class="product-card">
+                        <img src="${p.image}" style="width:35px; aspect-ratio:1/1; object-fit:contain;">
+                        <span class="item-name">${p.item}</span>
+                        <span class="item-price">${p.harga}</span>
+                    </div>`;
+            });
+        }
+
+        function selectItem(item, harga, element) {
+            selectedProduct = item;
+            selectedPrice = harga;
+            document.querySelectorAll('.product-card').forEach(c => c.classList.remove('selected'));
+            element.classList.add('selected');
+        }
+
+        function kirimKeWA() {
+            const userId = document.getElementById('user-id').value;
+            const zoneId = document.getElementById('zone-id').value;
+            const target = zoneId ? `${userId} (${zoneId})` : userId;
+
+            if (!userId) return alert("Isi ID/Link dulu ya!");
+            if (!selectedProduct) return alert("Pilih itemnya dulu!");
+
+            const pesan = window.encodeURIComponent(
+                `*ORDER SYRUMISTORE*\n` +
+                `Produk: ${document.getElementById('order-title').innerText}\n` +
+                `ID/Link: ${target}\n` +
+                `Item: ${selectedProduct}\n` +
+                `Harga: ${selectedPrice}\n` +
+                `Mohon instruksinya admin! ✨`
+            );
+            window.location.href = `https://wa.me/6289507913948?text=${pesan}`;
+        }
+    </script>
+</body>
+</html>
