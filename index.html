@@ -1,172 +1,167 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Syrumi Store</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/all.min.css">
-    <link rel="stylesheet" href="style.css">
-    <script src="data-pesanan.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Syrumi Store</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="data-pesanan.js"></script>
 </head>
 <body>
 
-    <div id="alert-overlay" class="overlay">
-        <div class="modal-box">
-            <div id="alert-icon" style="font-size: 50px; margin-bottom: 10px;">⚠️</div>
-            <h2 id="alert-title">Pemberitahuan</h2>
-            <p id="alert-message">Pesan di sini...</p>
-            <button class="btn-confirm" onclick="tutupAlert()">Oke, Paham</button>
-        </div>
-    </div>
+    <div id="alert-overlay" class="overlay">
+        <div class="modal-box">
+            <div id="alert-icon" style="font-size: 50px; margin-bottom: 10px;">⚠️</div>
+            <h2 id="alert-title">Pemberitahuan</h2>
+            <p id="alert-message">Pesan di sini...</p>
+            <button class="btn-confirm" onclick="tutupAlert()">Oke, Paham</button>
+        </div>
+    </div>
 
-    <div id="confirm-overlay" class="overlay">
-        <div class="modal-box">
-            <div style="font-size: 50px;">📲</div>
-            <h2>Konfirmasi Pesanan</h2>
-            <p style="font-size: 13px; color: #666; margin-bottom: 10px;">Silakan lanjutkan ke WhatsApp admin.</p>
-            <div class="id-badge-container">
-                <span style="font-size: 10px; font-weight: bold; color: #ff85b3;">ID PESANAN ANDA:</span>
-                <h3 id="generated-id">SYR-XXXX</h3>
-            </div>
-            <button class="btn-confirm" onclick="prosesKeWA()">Lanjutkan</button>
-            <button class="btn-cancel" onclick="tutupKonfirmasi()">Batal</button>
-        </div>
-    </div>
+    <div id="confirm-overlay" class="overlay">
+        <div class="modal-box">
+            <div style="font-size: 50px;">📲</div>
+            <h2>Konfirmasi Pesanan</h2>
+            <p style="font-size: 13px; color: #666; margin-bottom: 10px;">Silakan lanjutkan ke WhatsApp admin.</p>
+            <div style="background: #fff0f6; border: 2px dashed #ff85b3; padding: 15px; border-radius: 15px; margin: 15px 0;">
+                <span style="font-size: 10px; font-weight: bold; color: #ff85b3;">ID PESANAN ANDA:</span>
+                <h3 id="generated-id" style="font-family: monospace; font-size: 22px;">SYR-XXXX</h3>
+            </div>
+            <button class="btn-confirm" onclick="prosesKeWA()">Lanjutkan</button>
+            <button class="btn-cancel" onclick="tutupKonfirmasi()">Batal</button>
+        </div>
+    </div>
 
-    <div id="testi-overlay" class="overlay">
-        <div class="modal-box">
-            <div style="font-size: 50px;">⭐</div>
-            <h2>Lihat Testimoni</h2>
-            <p>Kamu akan dialihkan ke Saluran WhatsApp kami.</p>
-            <button class="btn-confirm" onclick="bukaSaluran()">Buka Saluran</button>
-            <button class="btn-cancel" onclick="tutupTesti()">Batal</button>
-        </div>
-    </div>
+    <div id="testi-overlay" class="overlay">
+        <div class="modal-box">
+            <div style="font-size: 50px;">⭐</div>
+            <h2>Lihat Testimoni</h2>
+            <p>Kamu akan dialihkan ke Saluran WhatsApp kami.</p>
+            <button class="btn-confirm" onclick="bukaSaluran()">Buka Saluran</button>
+            <button class="btn-cancel" onclick="tutupTesti()">Batal</button>
+        </div>
+    </div>
 
-    <div id="app-container">
-        <section id="screen-lobby" class="screen active">
-            <div class="text-center mb-4">
-                <div class="logo-wrapper"><img src="images/syrumi.jpeg" class="profile-img"></div>
-                <h1 class="brand-name">Syrumi Store</h1>
-                <p class="brand-tagline">Topup Game & Sosmed Tercepat ✨</p>
-            </div>
-            <div onclick="openKategori('game')" class="glass menu-item">
-                <img src="images/game.jfif" onerror="this.src='https://cdn-icons-png.flaticon.com/512/686/686589.png'">
-                <span>Top Up Game</span>
-            </div>
-            <div onclick="openKategori('sosmed')" class="glass menu-item">
-                <img src="images/suntik.jfif" onerror="this.src='https://cdn-icons-png.flaticon.com/512/174/174876.png'">
-                <span>Suntik Sosmed</span>
-            </div>
-            <div onclick="openKategori('ppob')" class="glass menu-item">
-                <img src="https://cdn-icons-png.flaticon.com/512/3059/3059502.png">
-                <span>Pulsa & Tagihan</span>
-            </div>
-            <div onclick="switchScreen('screen-status')" class="glass menu-item" style="border: 1px solid #b5fffc;">
-                <img src="https://cdn-icons-png.flaticon.com/512/833/833593.png">
-                <span>Cek Status Pesanan</span>
-            </div>
-            <div onclick="tampilkanKonfirmasiSaluran()" class="glass menu-item highlight">
-                <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png">
-                <span>Testimoni Saluran</span>
-            </div>
-        </section>
+    <div id="app-container">
+        <section id="screen-lobby" class="screen active">
+            <div class="text-center">
+                <div class="logo-wrapper"><img src="images/syrumi.jpeg" class="profile-img"></div>
+                <h1 class="brand-name">Syrumi Store</h1>
+                <p class="brand-tagline">Topup Game & Sosmed Tercepat ✨</p>
+            </div>
+            <div onclick="openKategori('game')" class="glass menu-item">
+                <img src="images/game.jfif" onerror="this.src='https://cdn-icons-png.flaticon.com/512/686/686589.png'">
+                <span>Top Up Game</span>
+            </div>
+            <div onclick="openKategori('sosmed')" class="glass menu-item">
+                <img src="images/suntik.jfif" onerror="this.src='https://cdn-icons-png.flaticon.com/512/174/174876.png'">
+                <span>Suntik Sosmed</span>
+            </div>
+            <div onclick="openKategori('ppob')" class="glass menu-item">
+                <img src="https://cdn-icons-png.flaticon.com/512/3059/3059502.png">
+                <span>Pulsa & Tagihan</span>
+            </div>
+            <div onclick="switchScreen('screen-status')" class="glass menu-item" style="border: 1px solid #b5fffc;">
+                <img src="https://cdn-icons-png.flaticon.com/512/833/833593.png">
+                <span>Cek Status Pesanan</span>
+            </div>
+            <div onclick="tampilkanKonfirmasiSaluran()" class="glass menu-item highlight">
+                <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png">
+                <span>Testimoni Saluran</span>
+            </div>
+        </section>
 
-        <section id="screen-status" class="screen">
-            <button class="btn-back" onclick="goToLobby()"><i class="fas fa-arrow-left"></i> Kembali</button>
-            <div class="glass text-center">
-                <h2 class="section-title">Lacak Pesanan</h2>
-                <input type="text" id="input-resi" placeholder="Contoh: SYR-1402-2015" style="text-align:center; text-transform: uppercase;">
-                <button class="btn-order" onclick="cekResi()" style="margin-top:10px;">Cek Progres</button>
-                <div id="status-result-box" style="display:none; margin-top:20px; padding:20px; border-radius:20px; background:white;">
-                    <div id="st-icon" style="font-size: 40px;"></div>
-                    <div id="st-label" style="font-weight: 700; font-size: 18px; margin: 5px 0;"></div>
-                    <p id="st-desc" style="font-size: 13px; color: #777;"></p>
-                    <div id="st-action"></div>
-                </div>
-            </div>
-        </section>
+        <section id="screen-status" class="screen">
+            <button class="btn-back" onclick="goToLobby()"><i class="fas fa-arrow-left"></i> Kembali</button>
+            <div class="glass text-center">
+                <h2 style="margin-bottom: 20px; color: #ff85b3;">Lacak Pesanan</h2>
+                <input type="text" id="input-resi" placeholder="Contoh: SYR-1402-2015" style="text-align:center; text-transform: uppercase;">
+                <button class="btn-order" onclick="cekResi()">Cek Progres</button>
+                <div id="status-result-box" style="display:none; margin-top:20px; padding:20px; border-radius:20px; background:white;">
+                    <div id="st-icon" style="font-size: 40px;"></div>
+                    <div id="st-label" style="font-weight: 700; font-size: 18px; margin: 5px 0;"></div>
+                    <p id="st-desc" style="font-size: 13px; color: #777;"></p>
+                    <div id="st-action"></div>
+                </div>
+            </div>
+        </section>
 
-        <section id="screen-kategori" class="screen">
-            <button class="btn-back" onclick="goToLobby()"><i class="fas fa-arrow-left"></i> Kembali</button>
-            <h2 id="kategori-title" class="section-title">Pilih Layanan</h2>
-            <div id="list-layanan"></div>
-        </section>
+        <section id="screen-kategori" class="screen">
+            <button class="btn-back" onclick="goToLobby()"><i class="fas fa-arrow-left"></i> Kembali</button>
+            <div class="glass">
+                <h2 id="kategori-title" style="text-align: center; margin-bottom: 20px; color: #ff85b3;">Pilih Layanan</h2>
+                <div id="list-layanan"></div>
+            </div>
+        </section>
 
-        <section id="screen-order" class="screen">
-            <button class="btn-back" onclick="backToKategori()"><i class="fas fa-arrow-left"></i> Kembali</button>
-            <div class="glass">
-                <h2 id="order-title" class="text-center mb-4 main-title">Top Up</h2>
-                <div class="mb-4">
-                    <label id="label-input" class="input-label">DATA PEMESANAN</label>
-                    <div class="input-row">
-                        <input type="text" id="user-id" placeholder="Masukkan Link/ID">
-                        <input type="text" id="zone-id" placeholder="Zone" style="display: none;">
-                    </div>
-                </div>
+        <section id="screen-order" class="screen">
+            <button class="btn-back" onclick="backToKategori()"><i class="fas fa-arrow-left"></i> Kembali</button>
+            <div class="glass">
+                <h2 id="order-title" class="text-center mb-4" style="color: #ff85b3;">Top Up</h2>
+                
+                <label id="label-input" class="input-label">DATA PEMESANAN</label>
+                <div style="display: flex; gap: 10px;">
+                    <input type="text" id="user-id" placeholder="Masukkan Link/ID">
+                    <input type="text" id="zone-id" placeholder="Zone" style="display: none; width: 100px;">
+                </div>
 
-                <div id="wrapper-manual" style="display:none; margin-bottom:20px;">
-                    <div class="manual-input-row">
-                        <div class="input-group">
-                            <label>Jumlah</label>
-                            <div class="input-with-unit">
-                                <input type="number" id="jumlah-manual" placeholder="0" oninput="hitungHargaManual()">
-                                <span class="unit-text" id="unit-label-text">Pcs</span>
-                            </div>
-                        </div>
-                        <div class="input-group">
-                            <label>Harga</label>
-                            <div class="input-with-unit">
-                                <input type="text" id="harga-manual" placeholder="0" readonly>
-                                <span class="unit-text">Rp</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <div id="wrapper-manual" style="display:none; margin-bottom:20px;">
+                    <div style="display: flex; gap: 10px;">
+                        <div style="flex: 1;">
+                            <label class="input-label">Jumlah</label>
+                            <input type="number" id="jumlah-manual" placeholder="0" oninput="hitungHargaManual()">
+                        </div>
+                        <div style="flex: 1;">
+                            <label class="input-label">Harga (Rp)</label>
+                            <input type="text" id="harga-manual" placeholder="0" readonly>
+                        </div>
+                    </div>
+                </div>
 
-                <div id="wrapper-grid">
-                    <label class="input-label">PILIH NOMINAL</label>
-                    <div id="grid-produk" class="product-grid"></div>
-                </div>
+                <div id="wrapper-grid">
+                    <label class="input-label">PILIH NOMINAL</label>
+                    <div id="grid-produk" class="product-grid"></div>
+                </div>
 
-                <button class="btn-order" onclick="tampilkanKonfirmasi()">
-                    <i class="fab fa-whatsapp"></i> Pesan Sekarang
-                </button>
-            </div>
-        </section>
+                <button class="btn-order" onclick="tampilkanKonfirmasi()">
+                    <i class="fab fa-whatsapp"></i> Pesan Sekarang
+                </button>
+            </div>
+        </section>
 
-        <div class="copyright">
-            &copy; 2026 <strong>Syrumi Store</strong>. All Rights Reserved.<br><br>
-            Topup Aman, Murah, dan Terpercaya ✨
-        </div>
-    </div>
+        <div class="copyright">
+            &copy; 2026 <strong>Syrumi Store</strong>. All Rights Reserved.<br>
+            Topup Aman, Murah, dan Terpercaya ✨
+        </div>
+    </div>
 
-    <script>
-    const hargaTiktokFollowers = 50, hargaTiktokLikes = 10, hargaTiktokViews = 1;
-    const hargaIgFollowers = 50, hargaIgLikes = 20;
+    <script>
+    const hargaTiktokFollowers = 50, hargaTiktokLikes = 10;
+    const hargaIgFollowers = 50;
 
-    const database = {
-        game: [
-            { id: 'ml', name: 'Mobile Legends', icon: 'images/logo-ml.jfif', label: 'USER ID & ZONE' },
-            { id: 'ff', name: 'Free Fire', icon: 'images/ff.jfif', label: 'PLAYER ID (UID)' }
-        ],
-        sosmed: [
-            { id: 'tiktok', name: 'TikTok', icon: 'https://cdn-icons-png.flaticon.com/512/3046/3046121.png', isAppGroup: true },
-            { id: 'instagram', name: 'Instagram', icon: 'https://cdn-icons-png.flaticon.com/512/174/174855.png', isAppGroup: true }
-        ],
-        ppob: [{ id: 'pulsa', name: 'Pulsa & Data', icon: 'https://cdn-icons-png.flaticon.com/512/3059/3059502.png', label: 'NOMOR HP' }],
-        sosmed_apps: {
-            tiktok: [
-                { id: 'tk_fol', name: 'TikTok Followers', label: 'USERNAME TIKTOK', isManual: true, unit: 'Fol' },
-                { id: 'tk_like', name: 'TikTok Likes', label: 'LINK VIDEO', isManual: true, unit: 'Likes' }
-            ],
-            instagram: [
-                { id: 'ig_fol', name: 'IG Followers', label: 'USERNAME INSTAGRAM', isManual: true, unit: 'Fol' }
-            ]
-        }
-    };
+    const database = {
+        game: [
+            { id: 'ml', name: 'Mobile Legends', icon: 'images/logo-ml.jfif', label: 'USER ID & ZONE' },
+            { id: 'ff', name: 'Free Fire', icon: 'images/ff.jfif', label: 'PLAYER ID (UID)' }
+        ],
+        sosmed: [
+            { id: 'tiktok', name: 'TikTok', icon: 'https://cdn-icons-png.flaticon.com/512/3046/3046121.png', isAppGroup: true },
+            { id: 'instagram', name: 'Instagram', icon: 'https://cdn-icons-png.flaticon.com/512/174/174855.png', isAppGroup: true }
+        ],
+        ppob: [{ id: 'pulsa', name: 'Pulsa & Data', icon: 'https://cdn-icons-png.flaticon.com/512/3059/3059502.png', label: 'NOMOR HP' }],
+        sosmed_apps: {
+            tiktok: [
+                { id: 'tk_fol', name: 'TikTok Followers', label: 'USERNAME TIKTOK', isManual: true, unit: 'Fol' },
+                { id: 'tk_like', name: 'TikTok Likes', label: 'LINK VIDEO', isManual: true, unit: 'Likes' }
+            ],
+            instagram: [
+                { id: 'ig_fol', name: 'IG Followers', label: 'USERNAME INSTAGRAM', isManual: true, unit: 'Fol' }
+            ]
+        }
+    };
 
-    const pricelist = {
+    const pricelist = {
         ml: [
             { item: '5 Diamonds', harga: 'Rp1.560' },
             { item: '17 Diamonds', harga: 'Rp4.900' },
@@ -186,162 +181,142 @@
         ff: [{ item: '5 Diamonds', harga: 'Rp1.000' }]
     };
       
-    let selectedProduct = "", selectedPrice = "", isManualMode = false, currentServiceId = "", currentUnitName = "Pcs", activeOrderID = "";
+    let selectedProduct = "", selectedPrice = "", currentServiceId = "", currentUnitName = "Pcs", activeOrderID = "";
 
-    function kustomAlert(title, message, icon = "⚠️") {
-        document.getElementById('alert-icon').innerText = icon;
-        document.getElementById('alert-title').innerText = title;
-        document.getElementById('alert-message').innerText = message;
-        document.getElementById('alert-overlay').style.display = 'flex';
-    }
-    function tutupAlert() { document.getElementById('alert-overlay').style.display = 'none'; }
+    function kustomAlert(title, message, icon = "⚠️") {
+        document.getElementById('alert-icon').innerText = icon;
+        document.getElementById('alert-title').innerText = title;
+        document.getElementById('alert-message').innerText = message;
+        document.getElementById('alert-overlay').style.display = 'flex';
+    }
+    function tutupAlert() { document.getElementById('alert-overlay').style.display = 'none'; }
 
-    // SWITCH SCREEN DENGAN ANIMASI FADE
-    function switchScreen(id) {
-    // Sembunyikan semua screen dan hapus class active
-    document.querySelectorAll('.screen').forEach(s => {
-        s.classList.remove('active');
-        s.style.display = 'none';
-    });
+    function switchScreen(id) {
+        document.querySelectorAll('.screen').forEach(s => {
+            s.classList.remove('active');
+            s.style.display = 'none';
+        });
+        const target = document.getElementById(id);
+        target.style.display = 'block';
+        setTimeout(() => { target.classList.add('active'); }, 10);
+        window.scrollTo(0, 0);
+    }
 
-    // Tampilkan screen target
-    const target = document.getElementById(id);
-    target.style.display = 'block';
-    
-    // Beri jeda sedikit agar browser sempat mendeteksi display:block sebelum animasi jalan
-    setTimeout(() => {
-        target.classList.add('active');
-    }, 10);
-    
-    window.scrollTo(0, 0);
-}
+    function openKategori(cat) {
+        const listDiv = document.getElementById('list-layanan');
+        listDiv.innerHTML = "";
+        database[cat].forEach(item => {
+            const func = item.isAppGroup ? `openSubSosmed('${item.id}')` : `openOrder('${item.id}', '${item.name}', '${item.label}', false)`;
+            listDiv.innerHTML += `<div onclick="${func}" class="glass menu-item"><img src="${item.icon}"><span>${item.name}</span></div>`;
+        });
+        switchScreen('screen-kategori');
+    }
 
-    function openKategori(cat) {
-        const listDiv = document.getElementById('list-layanan');
-        listDiv.innerHTML = "";
-        database[cat].forEach(item => {
-            const func = item.isAppGroup ? `openSubSosmed('${item.id}')` : `openOrder('${item.id}', '${item.name}', '${item.label}', false)`;
-            listDiv.innerHTML += `<div onclick="${func}" class="glass menu-item"><img src="${item.icon}"><span>${item.name}</span></div>`;
-        });
-        switchScreen('screen-kategori');
-    }
+    function openSubSosmed(appId) {
+        const listDiv = document.getElementById('list-layanan');
+        listDiv.innerHTML = "";
+        database.sosmed_apps[appId].forEach(sub => {
+            listDiv.innerHTML += `<div onclick="openOrder('${sub.id}', '${sub.name}', '${sub.label}', true, '${sub.unit}')" class="glass menu-item"><i class="fas fa-chevron-right" style="margin-right:15px; color:#ff85b3;"></i><span>${sub.name}</span></div>`;
+        });
+    }
 
-    function openSubSosmed(appId) {
-        const listDiv = document.getElementById('list-layanan');
-        listDiv.innerHTML = "";
-        database.sosmed_apps[appId].forEach(sub => {
-            listDiv.innerHTML += `<div onclick="openOrder('${sub.id}', '${sub.name}', '${sub.label}', true, '${sub.unit}')" class="glass menu-item"><i class="fas fa-chevron-right" style="margin-right:15px; color:#ff85b3;"></i><span>${sub.name}</span></div>`;
-        });
-    }
+    function openOrder(id, name, label, manual, unitName = "Pcs") {
+        currentServiceId = id; currentUnitName = unitName;
+        selectedProduct = ""; selectedPrice = "";
+        document.getElementById('order-title').innerText = name;
+        document.getElementById('label-input').innerText = label;
+        document.getElementById('user-id').value = "";
+        document.getElementById('zone-id').style.display = (id === 'ml') ? 'block' : 'none';
+        document.getElementById('wrapper-manual').style.display = manual ? 'block' : 'none';
+        document.getElementById('wrapper-grid').style.display = manual ? 'none' : 'block';
+        renderProducts(id);
+        switchScreen('screen-order');
+    }
 
-    function openOrder(id, name, label, manual, unitName = "Pcs") {
-        isManualMode = manual; currentServiceId = id; currentUnitName = unitName;
-        selectedProduct = ""; selectedPrice = "";
-        document.getElementById('order-title').innerText = name;
-        document.getElementById('label-input').innerText = label;
-        document.getElementById('user-id').value = "";
-        document.getElementById('unit-label-text').innerText = unitName;
-        document.getElementById('zone-id').style.display = (id === 'ml') ? 'block' : 'none';
-        
-        document.getElementById('wrapper-manual').style.display = manual ? 'block' : 'none';
-        document.getElementById('wrapper-grid').style.display = manual ? 'none' : 'block';
-        
-        renderProducts(id, manual);
-        switchScreen('screen-order');
-    }
+    function renderProducts(id) {
+        const grid = document.getElementById('grid-produk');
+        grid.innerHTML = pricelist[id] ? "" : "<p style='text-align:center; font-size:12px; color:#aaa; padding:20px;'>Paket segera hadir...</p>";
+        if(pricelist[id]) {
+            pricelist[id].forEach(p => {
+                grid.innerHTML += `<div onclick="selectItem('${p.item}', '${p.harga}', this)" class="product-card"><span class="item-name">${p.item}</span><span class="item-price">${p.harga}</span></div>`;
+            });
+        }
+    }
 
-    function renderProducts(id, isManual) {
-        const grid = document.getElementById('grid-produk');
-        grid.innerHTML = pricelist[id] ? "" : "<p style='text-align:center; font-size:12px; color:#aaa; padding:20px;'>Paket segera hadir...</p>";
-        if(pricelist[id]) {
-            pricelist[id].forEach(p => {
-                grid.innerHTML += `<div onclick="selectItem('${p.item}', '${p.harga}', this)" class="product-card"><span class="item-name">${p.item}</span><span class="item-price">${p.harga}</span></div>`;
-            });
-        }
-    }
+    function selectItem(item, harga, el) {
+        selectedProduct = item; selectedPrice = harga;
+        document.querySelectorAll('.product-card').forEach(c => c.classList.remove('selected'));
+        el.classList.add('selected');
+    }
 
-    function selectItem(item, harga, el) {
-        selectedProduct = item; selectedPrice = harga;
-        document.querySelectorAll('.product-card').forEach(c => c.classList.remove('selected'));
-        el.classList.add('selected');
-    }
+    function hitungHargaManual() {
+        const qty = parseInt(document.getElementById('jumlah-manual').value) || 0;
+        const inputHarga = document.getElementById('harga-manual');
+        let hrg = 0;
+        if(currentServiceId === 'tk_fol') hrg = hargaTiktokFollowers;
+        else if(currentServiceId === 'tk_like') hrg = hargaTiktokLikes;
+        else if(currentServiceId === 'ig_fol') hrg = hargaIgFollowers;
 
-    function hitungHargaManual() {
-        const qty = parseInt(document.getElementById('jumlah-manual').value) || 0;
-        const inputHarga = document.getElementById('harga-manual');
-        let hrg = 0;
-        if(currentServiceId === 'tk_fol') hrg = hargaTiktokFollowers;
-        else if(currentServiceId === 'tk_like') hrg = hargaTiktokLikes;
-        else if(currentServiceId === 'ig_fol') hrg = hargaIgFollowers;
+        if(qty >= 50) {
+            const total = qty * hrg;
+            selectedProduct = qty + " " + currentUnitName;
+            selectedPrice = "Rp" + total.toLocaleString('id-ID');
+            inputHarga.value = total.toLocaleString('id-ID');
+        } else {
+            inputHarga.value = ""; selectedProduct = ""; selectedPrice = "";
+        }
+    }
 
-        if(qty >= 50) {
-            const total = qty * hrg;
-            selectedProduct = qty + " " + currentUnitName;
-            selectedPrice = "Rp" + total.toLocaleString('id-ID');
-            inputHarga.value = total.toLocaleString('id-ID');
-        } else {
-            inputHarga.value = ""; selectedProduct = ""; selectedPrice = "";
-        }
-    }
+    function tampilkanKonfirmasi() {
+        if(!document.getElementById('user-id').value) return kustomAlert("Data Kosong", "Isi Link/ID tujuan!", "❌");
+        if(!selectedProduct) return kustomAlert("Pilihan Kosong", "Pilih nominal dulu!", "🛒");
 
-    function tampilkanKonfirmasi() {
-        if(!document.getElementById('user-id').value) return kustomAlert("Data Kosong", "Isi Link/ID tujuan!", "❌");
-        if(!selectedProduct) return kustomAlert("Pilihan Kosong", "Pilih nominal dulu!", "🛒");
+        const d = new Date();
+        const tglBln = String(d.getDate()).padStart(2, '0') + String(d.getMonth() + 1).padStart(2, '0');
+        const jamMnt = String(d.getHours()).padStart(2, '0') + String(d.getMinutes()).padStart(2, '0');
+        activeOrderID = `SYR-${tglBln}-${jamMnt}`;
+        document.getElementById('generated-id').innerText = activeOrderID;
+        document.getElementById('confirm-overlay').style.display = 'flex';
+    }
 
-        const d = new Date();
-        const tglBln = String(d.getDate()).padStart(2, '0') + String(d.getMonth() + 1).padStart(2, '0');
-        const jamMnt = String(d.getHours()).padStart(2, '0') + String(d.getMinutes()).padStart(2, '0');
-        activeOrderID = `SYR-${tglBln}-${jamMnt}`;
-        
-        document.getElementById('generated-id').innerText = activeOrderID;
-        document.getElementById('confirm-overlay').style.display = 'flex';
-    }
+    function prosesKeWA() {
+        let val = document.getElementById('user-id').value.trim();
+        const zone = document.getElementById('zone-id').value;
+        const namaProduk = document.getElementById('order-title').innerText;
+        let tujuan = zone ? `${val} (${zone})` : val;
 
-    function prosesKeWA() {
-        let val = document.getElementById('user-id').value.trim().replace('@', '');
-        const zone = document.getElementById('zone-id').value;
-        const namaProduk = document.getElementById('order-title').innerText;
-        let tujuan = val;
+        const pesan = window.encodeURIComponent(
+            `*ORDER BARU SYRUMISTORE*\n\n` +
+            `ID: ${activeOrderID}\n` +
+            `Barang: ${selectedProduct} ${namaProduk}\n` +
+            `Tujuan: ${tujuan}\n` +
+            `Total: ${selectedPrice}\n\n` +
+            `_Halo admin, silakan proses pesanan saya_`
+        );
+        window.location.href = `https://wa.me/6289507913948?text=${pesan}`;
+    }
 
-        if (namaProduk.toLowerCase().includes("tiktok")) tujuan = `https://tiktok.com/@${val}`;
-        else if (namaProduk.toLowerCase().includes("instagram") || namaProduk.toLowerCase().includes("ig")) tujuan = `https://instagram.com/${val}`;
-        if (zone) tujuan = `${val} (${zone})`;
+    function cekResi() {
+        const idInput = document.getElementById('input-resi').value.trim().toUpperCase();
+        const box = document.getElementById('status-result-box');
+        if(typeof databaseStatus !== 'undefined' && databaseStatus[idInput]) {
+            const data = databaseStatus[idInput];
+            box.style.display = 'block';
+            document.getElementById('st-icon').innerText = data.icon;
+            document.getElementById('st-label').innerText = data.status;
+            document.getElementById('st-desc').innerText = data.desc;
+            document.getElementById('st-action').innerHTML = data.link ? `<button onclick="window.open('${data.link}')" class="btn-confirm">Lihat Bukti</button>` : "";
+        } else {
+            kustomAlert("Tidak Ditemukan", "ID belum terdaftar.", "🔍");
+        }
+    }
 
-        const pesan = window.encodeURIComponent(
-            `*ORDER BARU SYRUMISTORE*\n\n` +
-            `ID: ${activeOrderID}\n` +
-            `Barang: ${selectedProduct} ${namaProduk}\n` +
-            `Tujuan: ${tujuan}\n` +
-            `Metode: Web\n\n` +
-            `*Total:* ${selectedPrice}\n` +
-            `----------------------------\n` +
-            `_Halo admin, silakan proses pesanan saya_`
-        );
-        window.location.href = `https://wa.me/6289507913948?text=${pesan}`;
-    }
-
-    function cekResi() {
-        const idInput = document.getElementById('input-resi').value.trim().toUpperCase();
-        const box = document.getElementById('status-result-box');
-        const data = databaseStatus[idInput];
-        if(data) {
-            box.style.display = 'block';
-            document.getElementById('st-icon').innerText = data.icon;
-            document.getElementById('st-label').innerText = data.status;
-            document.getElementById('st-desc').innerText = data.desc;
-            document.getElementById('st-action').innerHTML = data.link !== "" ? `<button onclick="window.open('${data.link}')" class="btn-proof">Lihat Bukti</button>` : "";
-        } else {
-            kustomAlert("Tidak Ditemukan", "ID belum terdaftar.", "🔍");
-            box.style.display = 'none';
-        }
-    }
-
-    function goToLobby() { switchScreen('screen-lobby'); }
-    function backToKategori() { switchScreen('screen-kategori'); }
-    function tutupKonfirmasi() { document.getElementById('confirm-overlay').style.display = 'none'; }
-    function tampilkanKonfirmasiSaluran() { document.getElementById('testi-overlay').style.display = 'flex'; }
-    function tutupTesti() { document.getElementById('testi-overlay').style.display = 'none'; }
-    function bukaSaluran() { window.open("https://whatsapp.com/channel/0029VbB9bWGLNSa9K95BId3P", "_blank"); tutupTesti(); }
-    </script>
+    function goToLobby() { switchScreen('screen-lobby'); }
+    function backToKategori() { switchScreen('screen-kategori'); }
+    function tutupKonfirmasi() { document.getElementById('confirm-overlay').style.display = 'none'; }
+    function tampilkanKonfirmasiSaluran() { document.getElementById('testi-overlay').style.display = 'flex'; }
+    function tutupTesti() { document.getElementById('testi-overlay').style.display = 'none'; }
+    function bukaSaluran() { window.open("https://whatsapp.com/channel/0029VbB9bWGLNSa9K95BId3P", "_blank"); tutupTesti(); }
+    </script>
 </body>
 </html>
