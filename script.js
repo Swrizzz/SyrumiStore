@@ -6,6 +6,7 @@ function kustomAlert(title, message, icon = "⚠️") {
     document.getElementById('alert-message').innerText = message;
     document.getElementById('alert-overlay').style.display = 'flex';
 }
+
 function tutupAlert() { document.getElementById('alert-overlay').style.display = 'none'; }
 
 function switchScreen(id) {
@@ -43,14 +44,26 @@ function openOrder(id, name, label, manual, unitName = "Pcs") {
     document.getElementById('order-title').innerText = name;
     document.getElementById('label-input').innerText = label;
     document.getElementById('user-id').value = "";
+    
+    // Reset Display
     document.getElementById('zone-id').style.display = (id === 'ml') ? 'block' : 'none';
     document.getElementById('wrapper-manual').style.display = manual ? 'block' : 'none';
     document.getElementById('wrapper-grid').style.display = manual ? 'none' : 'block';
-    renderProducts(id);
+    
+    // Kosongkan grid sebelum render
+    document.getElementById('grid-produk').innerHTML = "";
+
+    // Jika id adalah 'pulsa', kita jangan render dulu sampai user ngetik nomor
+    if (id !== 'pulsa') {
+        renderProducts(id);
+    }
+    
     switchScreen('screen-order');
 }
 
+// LOGIKA DETEKSI OPERATOR PULSA
 function deteksiOperator(nomor) {
+    if (nomor.length < 4) return null;
     const prefix = nomor.slice(0, 4);
     if (/^0811|0812|0813|0821|0822|0823|0851|0852|0853$/.test(prefix)) return "telkomsel";
     if (/^0814|0815|0816|0855|0856|0857|0858$/.test(prefix)) return "indosat";
@@ -60,11 +73,15 @@ function deteksiOperator(nomor) {
     return null;
 }
 
-// Tambahkan event listener pada input nomor HP di HTML
-document.getElementById('input-nomor').addEventListener('keyup', function() {
-    const provider = deteksiOperator(this.value);
-    if (provider) {
-        renderProductsPulsa(provider); // Fungsi untuk munculkan grid harga pulsa
+// Pantau input nomor HP (gunakan ID 'user-id' karena itu input utama kamu)
+document.addEventListener('keyup', function(e) {
+    if (e.target && e.target.id === 'user-id' && currentServiceId === 'pulsa') {
+        const provider = deteksiOperator(e.target.value);
+        if (provider) {
+            renderProductsPulsa(provider);
+        } else {
+            document.getElementById('grid-produk').innerHTML = "<p style='text-align:center; font-size:12px; color:#aaa; padding:20px;'>Menunggu operator...</p>";
+        }
     }
 });
 
@@ -82,6 +99,22 @@ function renderProducts(id) {
         });
     }
 }
+
+// Fungsi Khusus Render Pulsa
+function renderProductsPulsa(provider) {
+    const grid = document.getElementById('grid-produk');
+    if (pricelist.pulsa && pricelist.pulsa[provider]) {
+        grid.innerHTML = "";
+        pricelist.pulsa[provider].forEach(p => {
+            grid.innerHTML += `
+                <div onclick="selectItem('${p.item}', '${p.harga}', this)" class="product-card">
+                    <span class="item-name">${p.item}</span>
+                    <span class="item-price">${p.harga}</span>
+                </div>`;
+        });
+    }
+}
+
 function selectItem(item, harga, el) {
     selectedProduct = item; selectedPrice = harga;
     document.querySelectorAll('.product-card').forEach(c => c.classList.remove('selected'));
