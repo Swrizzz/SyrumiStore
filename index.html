@@ -306,7 +306,7 @@
         if(!val) return alert("Harap isi data tujuan!");
 
         // --- LINK GUARD ---
-        const needsLink = currentServiceId.includes('like') || currentServiceId.includes('view') || currentServiceId.includes('yt') || currentServiceId.includes('fb');
+        const needsLink = currentServiceId.includes('tiktok') || currentServiceId.includes('youtu.be') || currentServiceId.includes('instagram') || currentServiceId.includes('youtube') || currentServiceId.includes('facebook');
         if(needsLink && !val.includes('http')) {
             return alert("Gagal! Layanan ini membutuhkan Link (URL) yang valid.");
         }
