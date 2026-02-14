@@ -31,56 +31,30 @@
         #app-container { width: 100%; max-width: 450px; position: relative; min-height: 90vh; }
 
         .logo-wrapper {
-            display: inline-block;
-            padding: 5px;
-            background: white;
-            border-radius: 50%;
-            box-shadow: 0 4px 15px rgba(255, 133, 179, 0.2);
-            border: 2px solid var(--accent-pink);
-            width: 110px;
-            height: 110px;
-            overflow: hidden;
-            margin-bottom: 10px;
+            display: inline-block; padding: 5px; background: white; border-radius: 50%;
+            box-shadow: 0 4px 15px rgba(255, 133, 179, 0.2); border: 2px solid var(--accent-pink);
+            width: 110px; height: 110px; overflow: hidden; margin-bottom: 10px;
         }
 
-        .profile-img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
+        .profile-img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
         .overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.75);
-            backdrop-filter: blur(8px);
-            z-index: 9999;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(8px); z-index: 9999;
+            justify-content: center; align-items: center; padding: 20px;
         }
 
         .modal-box {
-            background: white;
-            padding: 30px 20px;
-            border-radius: 30px;
-            text-align: center;
-            max-width: 350px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            animation: fadeIn 0.3s ease;
+            background: white; padding: 30px 20px; border-radius: 30px; text-align: center;
+            max-width: 350px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); animation: fadeIn 0.3s ease;
         }
 
         .btn-confirm { background: var(--accent-pink); color: white; border: none; padding: 12px 25px; border-radius: 15px; font-weight: 700; cursor: pointer; margin: 5px; }
         .btn-cancel { background: #eee; color: #777; border: none; padding: 12px 25px; border-radius: 15px; font-weight: 700; cursor: pointer; margin: 5px; }
 
         .glass {
-            background: var(--glass-white);
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--glass-border);
-            border-radius: 25px;
-            padding: 20px;
+            background: var(--glass-white); backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border); border-radius: 25px; padding: 20px;
             box-shadow: 0 10px 25px rgba(255, 133, 179, 0.1);
         }
 
@@ -88,22 +62,14 @@
         .screen.active { display: block; }
 
         .menu-item {
-            display: flex; align-items: center; padding: 15px;
-            background: white; border-radius: 20px; margin-bottom: 12px;
-            cursor: pointer; transition: 0.2s; border: 1px solid var(--glass-border);
+            display: flex; align-items: center; padding: 15px; background: white;
+            border-radius: 20px; margin-bottom: 12px; cursor: pointer; transition: 0.2s;
+            border: 1px solid var(--glass-border);
         }
         .menu-item:hover { transform: scale(1.02); }
         .menu-item img { width: 40px; height: 40px; border-radius: 10px; margin-right: 15px; object-fit: cover; }
-        
-        /* Copyright Style */
-        .copyright {
-            text-align: center;
-            margin-top: 30px;
-            padding: 20px 0;
-            font-size: 11px;
-            color: #888;
-            line-height: 1.6;
-        }
+
+        .copyright { text-align: center; margin-top: 30px; padding: 20px 0; font-size: 11px; color: #888; line-height: 1.6; }
 
         .product-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 15px; }
         .product-card {
@@ -155,13 +121,10 @@
     <div id="app-container">
         <section id="screen-lobby" class="screen active">
             <div class="text-center mb-4">
-                <div class="logo-wrapper">
-                    <img src="images/syrumi.jpeg" class="profile-img" alt="Logo">
-                </div>
+                <div class="logo-wrapper"><img src="images/syrumi.jpeg" class="profile-img"></div>
                 <h1 style="color: #ff85b3; font-size: 24px;">Syrumi Store</h1>
                 <p style="font-size: 12px; color: #888;">Topup Game & Sosmed Tercepat ✨</p>
             </div>
-
             <div onclick="openKategori('game')" class="glass menu-item">
                 <img src="images/game.jfif" onerror="this.src='https://cdn-icons-png.flaticon.com/512/686/686589.png'">
                 <span>Top Up Game</span>
@@ -175,7 +138,7 @@
                 <span>Pulsa, Listrik & Air</span>
             </div>
             <div onclick="tampilkanKonfirmasiSaluran()" class="glass menu-item" style="border: 1px dashed #ff85b3;">
-                <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="Testimoni">
+                <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png">
                 <span>Testimoni Saluran</span>
             </div>
         </section>
@@ -193,12 +156,22 @@
                 <div class="mb-4">
                     <label id="label-input" style="font-size: 11px; font-weight: 600; color: #888;">DATA PEMESANAN</label>
                     <div style="display: flex; gap: 10px;">
-                        <input type="text" id="user-id" placeholder="Masukkan ID">
+                        <input type="text" id="user-id" placeholder="Masukkan Link/ID">
                         <input type="text" id="zone-id" placeholder="Zone" style="flex: 0 0 100px;">
                     </div>
                 </div>
-                <label style="font-size: 11px; font-weight: 600; color: #888;">PILIH NOMINAL</label>
-                <div id="grid-produk" class="product-grid"></div>
+
+                <div id="wrapper-manual" style="display:none; margin-bottom:20px;">
+                    <label style="font-size: 11px; font-weight: 600; color: #888;">JUMLAH PESANAN</label>
+                    <input type="number" id="jumlah-manual" placeholder="Minimal 100" oninput="hitungHargaManual()">
+                    <p id="info-harga" style="font-size: 12px; color: var(--accent-pink); font-weight: 700; margin-top: 5px;"></p>
+                </div>
+
+                <div id="wrapper-grid">
+                    <label style="font-size: 11px; font-weight: 600; color: #888;">PILIH NOMINAL</label>
+                    <div id="grid-produk" class="product-grid"></div>
+                </div>
+
                 <button class="btn-order" onclick="tampilkanKonfirmasi()">
                     <i class="fab fa-whatsapp"></i> Pesan Sekarang
                 </button>
@@ -212,15 +185,8 @@
     </div>
 
     <script>
-        // --- STATUS TOKO ---
-        const isManualClosed = false;
-        function checkStoreStatus() {
-            const jam = new Date().getHours();
-            document.getElementById('closed-overlay').style.display = (isManualClosed || jam < 7 || jam >= 21) ? 'flex' : 'none';
-        }
-        checkStoreStatus();
-
-        // --- DATABASE ---
+        // --- CONFIG & DATABASE ---
+        const hargasatuan = 50; // Harga default per 1 pcs (Rp50)
         const database = {
             game: [
                 { id: 'ml', name: 'Mobile Legends', icon: 'images/logo-ml.jfif', label: 'USER ID & ZONE' },
@@ -232,95 +198,84 @@
             ],
             ppob: [
                 { id: 'pulsa', name: 'Pulsa & Data', icon: 'https://cdn-icons-png.flaticon.com/512/3059/3059502.png', label: 'NOMOR HP' },
-                { id: 'listrik', name: 'Token Listrik', icon: 'https://cdn-icons-png.flaticon.com/512/3105/3105807.png', label: 'ID PELANGGAN' },
-                { id: 'ewallet', name: 'Topup E-Wallet', icon: 'https://cdn-icons-png.flaticon.com/512/10149/10149458.png', label: 'NOMOR HP (DANA/OVO/DLL)' }
+                { id: 'listrik', name: 'Token Listrik', icon: 'https://cdn-icons-png.flaticon.com/512/3105/3105807.png', label: 'ID PELANGGAN' }
             ],
             sosmed_apps: {
-                tiktok: [{ id: 'tk_like', name: 'TikTok Likes', label: 'LINK VIDEO' }],
-                instagram: [{ id: 'ig_fol', name: 'IG Followers', label: 'USERNAME' }]
+                tiktok: [
+                    { id: 'tk_fol', name: 'TikTok Followers', label: 'LINK AKUN / PROFIL', isManual: true },
+                    { id: 'tk_like', name: 'TikTok Likes', label: 'LINK VIDEO', isManual: true },
+                    { id: 'tk_view', name: 'TikTok Views', label: 'LINK VIDEO', isManual: true },
+                    { id: 'tk_share', name: 'TikTok Share', label: 'LINK VIDEO', isManual: true }
+                ],
+                instagram: [
+                    { id: 'ig_fol', name: 'IG Followers', label: 'USERNAME/LINK AKUN', isManual: true }
+                ]
             }
         };
 
         const pricelist = {
             ml: [{ item: '3 Diamonds', harga: 'Rp1.200', image: 'https://cdn-icons-png.flaticon.com/512/3037/3037156.png' }],
-            tk_like: [{ item: '100 Likes', harga: 'Rp1.000', image: 'https://cdn-icons-png.flaticon.com/512/833/833472.png' }],
-            pulsa: [
-                { item: 'Pulsa 5k', harga: 'Rp7.000', image: 'https://cdn-icons-png.flaticon.com/512/3059/3059502.png' },
-                { item: 'Pulsa 10k', harga: 'Rp12.000', image: 'https://cdn-icons-png.flaticon.com/512/3059/3059502.png' }
-            ],
-            listrik: [
-                { item: 'Token 20rb', harga: 'Rp22.000', image: 'https://cdn-icons-png.flaticon.com/512/3105/3105807.png' },
-                { item: 'Token 50rb', harga: 'Rp52.000', image: 'https://cdn-icons-png.flaticon.com/512/3105/3105807.png' }
-            ],
-            ewallet: [
-                { item: 'Dana 10k', harga: 'Rp12.500', image: 'https://cdn-icons-png.flaticon.com/512/10149/10149458.png' },
-                { item: 'Ovo 10k', harga: 'Rp12.500', image: 'https://cdn-icons-png.flaticon.com/512/10149/10149458.png' }
-            ]
+            ff: [{ item: '5 Diamonds', harga: 'Rp1.000', image: 'https://cdn-icons-png.flaticon.com/512/597/597081.png' }],
+            pulsa: [{ item: 'Pulsa 5k', harga: 'Rp7.200', image: 'https://cdn-icons-png.flaticon.com/512/3059/3059502.png' }]
         };
 
         let selectedProduct = "";
         let selectedPrice = "";
+        let isManualMode = false;
 
-        // --- NAVIGATION ---
+        // --- CORE FUNCTIONS ---
         function switchScreen(id) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById(id).classList.add('active');
             window.scrollTo(0,0);
         }
 
-        function goToLobby() { switchScreen('screen-lobby'); }
-        function backToKategori() { switchScreen('screen-kategori'); }
-
         function openKategori(cat) {
             const listDiv = document.getElementById('list-layanan');
-            const titleMap = { 'game': 'Game', 'sosmed': 'Sosmed', 'ppob': 'PPOB & Pulsa' };
-            document.getElementById('kategori-title').innerText = "Pilih " + (titleMap[cat] || 'Layanan');
-            
+            document.getElementById('kategori-title').innerText = "Pilih Layanan";
             listDiv.innerHTML = "";
-            if(database[cat]) {
-                database[cat].forEach(item => {
-                    const func = item.isAppGroup ? `openSubSosmed('${item.id}', '${item.name}')` : `openOrder('${item.id}', '${item.name}', '${item.label}')`;
-                    listDiv.innerHTML += `
-                        <div onclick="${func}" class="glass menu-item">
-                            <img src="${item.icon}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/686/686589.png'">
-                            <span>${item.name}</span>
-                        </div>`;
-                });
-                switchScreen('screen-kategori');
-            }
+            database[cat].forEach(item => {
+                const func = item.isAppGroup ? `openSubSosmed('${item.id}')` : `openOrder('${item.id}', '${item.name}', '${item.label}', false)`;
+                listDiv.innerHTML += `<div onclick="${func}" class="glass menu-item"><img src="${item.icon}"><span>${item.name}</span></div>`;
+            });
+            switchScreen('screen-kategori');
         }
 
-        function openSubSosmed(appId, appName) {
+        function openSubSosmed(appId) {
             const listDiv = document.getElementById('list-layanan');
             listDiv.innerHTML = "";
             database.sosmed_apps[appId].forEach(sub => {
-                listDiv.innerHTML += `
-                    <div onclick="openOrder('${sub.id}', '${sub.name}', '${sub.label}')" class="glass menu-item">
-                        <i class="fas fa-chevron-right"></i>
-                        <span>${sub.name}</span>
-                    </div>`;
+                listDiv.innerHTML += `<div onclick="openOrder('${sub.id}', '${sub.name}', '${sub.label}', true)" class="glass menu-item"><i class="fas fa-chevron-right" style="margin-right:15px; color:#ff85b3;"></i><span>${sub.name}</span></div>`;
             });
         }
 
-        function openOrder(id, name, label) {
+        function openOrder(id, name, label, manual) {
+            isManualMode = manual;
+            selectedProduct = ""; selectedPrice = "";
             document.getElementById('order-title').innerText = name;
             document.getElementById('label-input').innerText = label;
+            document.getElementById('user-id').placeholder = (id === 'tk_fol') ? "https://www.tiktok.com/@user" : "Masukkan Link/ID";
             document.getElementById('zone-id').style.display = (id === 'ml') ? 'block' : 'none';
-            renderProducts(id);
+            
+            if(manual) {
+                document.getElementById('wrapper-manual').style.display = 'block';
+                document.getElementById('wrapper-grid').style.display = 'none';
+                document.getElementById('jumlah-manual').value = "";
+                document.getElementById('info-harga').innerText = "";
+            } else {
+                document.getElementById('wrapper-manual').style.display = 'none';
+                document.getElementById('wrapper-grid').style.display = 'block';
+                renderProducts(id);
+            }
             switchScreen('screen-order');
         }
 
         function renderProducts(id) {
             const grid = document.getElementById('grid-produk');
-            grid.innerHTML = pricelist[id] ? "" : "<p style='grid-column: span 2; text-align:center;'>Segera Hadir!</p>";
+            grid.innerHTML = pricelist[id] ? "" : "<p>Segera Hadir!</p>";
             if(pricelist[id]) {
                 pricelist[id].forEach(p => {
-                    grid.innerHTML += `
-                        <div onclick="selectItem('${p.item}', '${p.harga}', this)" class="product-card">
-                            <img src="${p.image}" style="width:35px;margin-bottom:5px;">
-                            <span class="item-name" style="font-size:13px; font-weight:600;">${p.item}</span>
-                            <span class="item-price" style="font-size:11px; color:var(--accent-pink);">${p.harga}</span>
-                        </div>`;
+                    grid.innerHTML += `<div onclick="selectItem('${p.item}', '${p.harga}', this)" class="product-card"><img src="${p.image}" style="width:30px; margin-bottom:5px;"><span>${p.item}</span><small>${p.harga}</small></div>`;
                 });
             }
         }
@@ -331,33 +286,41 @@
             el.classList.add('selected');
         }
 
-        // --- KONFIRMASI SALURAN ---
-        function tampilkanKonfirmasiSaluran() {
-            document.getElementById('testi-overlay').style.display = 'flex';
-        }
-        function tutupTesti() {
-            document.getElementById('testi-overlay').style.display = 'none';
-        }
-        function bukaSaluran() {
-            window.open("https://whatsapp.com/channel/0029VbB9bWGLNSa9K95BId3P", "_blank");
-            tutupTesti();
+        function hitungHargaManual() {
+            const qty = document.getElementById('jumlah-manual').value;
+            const total = qty * hargasatuan;
+            if(qty >= 100) {
+                selectedProduct = qty + " Pcs";
+                selectedPrice = "Rp" + total.toLocaleString('id-ID');
+                document.getElementById('info-harga').innerText = "Estimasi Harga: " + selectedPrice;
+            } else {
+                document.getElementById('info-harga').innerText = "Minimal 100!";
+            }
         }
 
-        // --- KONFIRMASI ORDER ---
         function tampilkanKonfirmasi() {
-            if (!document.getElementById('user-id').value || !selectedProduct) return alert("Isi Data & Pilih Produk!");
+            const idInput = document.getElementById('user-id').value;
+            if(!idInput) return alert("Harap isi link/ID tujuan!");
+            if(isManualMode && document.getElementById('jumlah-manual').value < 100) return alert("Minimal order 100!");
+            if(!isManualMode && !selectedProduct) return alert("Pilih nominal produk!");
             document.getElementById('confirm-overlay').style.display = 'flex';
         }
 
-        function tutupKonfirmasi() { document.getElementById('confirm-overlay').style.display = 'none'; }
-
         function prosesKeWA() {
-            const userId = document.getElementById('user-id').value;
-            const zoneId = document.getElementById('zone-id').value;
-            const target = (zoneId && zoneId.trim() !== "") ? `${userId} (${zoneId})` : userId;
-            const pesan = window.encodeURIComponent(`*ORDER SYRUMISTORE*\nProduk: ${document.getElementById('order-title').innerText}\nID/Tujuan: ${target}\nItem: ${selectedProduct}\nHarga: ${selectedPrice}`);
+            const idInput = document.getElementById('user-id').value;
+            const zone = document.getElementById('zone-id').value;
+            const tujuan = zone ? `${idInput} (${zone})` : idInput;
+            const pesan = window.encodeURIComponent(`*ORDER SYRUMISTORE*\nProduk: ${document.getElementById('order-title').innerText}\nTujuan: ${tujuan}\nItem: ${selectedProduct}\nHarga: ${selectedPrice}`);
             window.location.href = `https://wa.me/6289507913948?text=${pesan}`;
         }
+
+        // --- UI HELPERS ---
+        function goToLobby() { switchScreen('screen-lobby'); }
+        function backToKategori() { switchScreen('screen-kategori'); }
+        function tutupKonfirmasi() { document.getElementById('confirm-overlay').style.display = 'none'; }
+        function tampilkanKonfirmasiSaluran() { document.getElementById('testi-overlay').style.display = 'flex'; }
+        function tutupTesti() { document.getElementById('testi-overlay').style.display = 'none'; }
+        function bukaSaluran() { window.open("https://whatsapp.com/channel/0029VbB9bWGLNSa9K95BId3P", "_blank"); tutupTesti(); }
     </script>
 </body>
 </html>
