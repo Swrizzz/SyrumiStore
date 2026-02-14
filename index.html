@@ -6,8 +6,7 @@
     <title>Syrumi Store</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/all.min.css">
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="style.css">
-<script src="data-pesanan.js"></script>
+    <script src="data-pesanan.js"></script>
 </head>
 <body>
 
@@ -108,19 +107,19 @@
                 </div>
 
                 <div id="wrapper-manual" style="display:none; margin-bottom:20px;">
-                    <div class="manual-input-container">
-                        <div class="input-box-wrapper">
+                    <div class="manual-input-row">
+                        <div class="input-group">
                             <label>Jumlah</label>
-                            <div class="input-relative">
+                            <div class="input-with-unit">
                                 <input type="number" id="jumlah-manual" placeholder="0" oninput="hitungHargaManual()">
-                                <span class="unit-label">Pcs</span>
+                                <span class="unit-text" id="unit-label-text">Pcs</span>
                             </div>
                         </div>
-                        <div class="input-box-wrapper">
+                        <div class="input-group">
                             <label>Harga</label>
-                            <div class="input-relative">
+                            <div class="input-with-unit">
                                 <input type="text" id="harga-manual" placeholder="0" readonly>
-                                <span class="unit-label">Rp</span>
+                                <span class="unit-text">Rp</span>
                             </div>
                         </div>
                     </div>
@@ -145,10 +144,11 @@
     </div>
 
     <script>
+    // Harga per item
     const hargaTiktokFollowers = 50, hargaTiktokLikes = 10, hargaTiktokViews = 1;
-    const hargaIgFollowers = 50, hargaIgLikes = 20, hargaIgViews = 5;
-    const hargaYoutubeSub = 500, hargaYoutubeViews = 150, hargaYoutubeLikes = 150;
-    const hargaFbFollowers = 100, hargaFbLikes = 50;
+    const hargaIgFollowers = 50, hargaIgLikes = 20;
+    const hargaYoutubeSub = 500;
+    const hargaFbFollowers = 100;
 
     const database = {
         game: [
@@ -167,19 +167,19 @@
         ],
         sosmed_apps: {
             tiktok: [
-                { id: 'tk_fol', name: 'TikTok Followers', label: 'USERNAME TIKTOK', isManual: true, unit: 'Followers' },
+                { id: 'tk_fol', name: 'TikTok Followers', label: 'USERNAME TIKTOK', isManual: true, unit: 'Fol' },
                 { id: 'tk_like', name: 'TikTok Likes', label: 'LINK VIDEO', isManual: true, unit: 'Likes' },
                 { id: 'tk_view', name: 'TikTok Views', label: 'LINK VIDEO', isManual: true, unit: 'Views' }
             ],
             instagram: [
-                { id: 'ig_fol', name: 'IG Followers', label: 'USERNAME INSTAGRAM', isManual: true, unit: 'Followers' },
+                { id: 'ig_fol', name: 'IG Followers', label: 'USERNAME INSTAGRAM', isManual: true, unit: 'Fol' },
                 { id: 'ig_like', name: 'IG Likes', label: 'LINK POSTINGAN', isManual: true, unit: 'Likes' }
             ],
             youtube: [
-                { id: 'yt_sub', name: 'YouTube Subscribers', label: 'LINK CHANNEL', isManual: true, unit: 'Subscribers' }
+                { id: 'yt_sub', name: 'YouTube Subscribers', label: 'LINK CHANNEL', isManual: true, unit: 'Sub' }
             ],
             facebook: [
-                { id: 'fb_fol', name: 'FB Followers', label: 'LINK PROFIL/FP', isManual: true, unit: 'Followers' }
+                { id: 'fb_fol', name: 'FB Followers', label: 'LINK PROFIL/FP', isManual: true, unit: 'Fol' }
             ]
         }
     };
@@ -231,10 +231,14 @@
         document.getElementById('order-title').innerText = name;
         document.getElementById('label-input').innerText = label;
         document.getElementById('user-id').value = "";
+        document.getElementById('unit-label-text').innerText = unitName;
         document.getElementById('zone-id').style.display = (id === 'ml') ? 'block' : 'none';
+        
         if(manual) {
             document.getElementById('wrapper-manual').style.display = 'block';
             document.getElementById('wrapper-grid').style.display = 'none';
+            document.getElementById('jumlah-manual').value = "";
+            document.getElementById('harga-manual').value = "";
         } else {
             document.getElementById('wrapper-manual').style.display = 'none';
             document.getElementById('wrapper-grid').style.display = 'block';
@@ -257,14 +261,10 @@
         selectedProduct = item; selectedPrice = harga;
         document.querySelectorAll('.product-card').forEach(c => c.classList.remove('selected'));
         el.classList.add('selected');
-        if (isManualMode) {
-            document.getElementById('jumlah-manual').value = item.replace(/\D/g, "");
-            document.getElementById('harga-manual').value = harga.replace(/[^\d]/g, "").toLocaleString('id-ID');
-        }
     }
 
     function hitungHargaManual() {
-        const qty = document.getElementById('jumlah-manual').value;
+        const qty = parseInt(document.getElementById('jumlah-manual').value) || 0;
         const inputHarga = document.getElementById('harga-manual');
         let hrg = 0;
         if(currentServiceId === 'tk_fol') hrg = hargaTiktokFollowers;
@@ -272,12 +272,8 @@
         else if(currentServiceId === 'tk_view') hrg = hargaTiktokViews;
         else if(currentServiceId === 'ig_fol') hrg = hargaIgFollowers;
         else if(currentServiceId === 'ig_like') hrg = hargaIgLikes;
-        else if(currentServiceId === 'ig_view') hrg = hargaIgViews;
         else if(currentServiceId === 'yt_sub') hrg = hargaYoutubeSub;
-        else if(currentServiceId === 'yt_view') hrg = hargaYoutubeViews;
-        else if(currentServiceId === 'yt_like') hrg = hargaYoutubeLikes;
         else if(currentServiceId === 'fb_fol') hrg = hargaFbFollowers;
-        else if(currentServiceId === 'fb_like') hrg = hargaFbLikes;
 
         if(qty >= 50) {
             const total = qty * hrg;
@@ -285,7 +281,7 @@
             selectedPrice = "Rp" + total.toLocaleString('id-ID');
             inputHarga.value = total.toLocaleString('id-ID');
         } else {
-            inputHarga.value = qty !== "" ? "Min. 50" : "";
+            inputHarga.value = qty > 0 ? "Min. 50" : "";
             selectedProduct = ""; selectedPrice = "";
         }
     }
@@ -312,18 +308,13 @@
         const idInput = document.getElementById('input-resi').value.trim().toUpperCase();
         const box = document.getElementById('status-result-box');
         const data = databaseStatus[idInput];
-
         if(data) {
             box.style.display = 'block';
             document.getElementById('st-icon').innerText = data.icon;
             document.getElementById('st-label').innerText = data.status;
             document.getElementById('st-desc').innerText = data.desc;
-            
             const actionDiv = document.getElementById('st-action');
-            actionDiv.innerHTML = "";
-            if(data.link !== "") {
-                actionDiv.innerHTML = `<button onclick="window.open('${data.link}')" class="btn-proof">Lihat Bukti Saluran</button>`;
-            }
+            actionDiv.innerHTML = data.link !== "" ? `<button onclick="window.open('${data.link}')" class="btn-proof">Lihat Bukti Saluran</button>` : "";
         } else {
             kustomAlert("Tidak Ditemukan", "ID belum terdaftar di sistem.", "🔍");
             box.style.display = 'none';
