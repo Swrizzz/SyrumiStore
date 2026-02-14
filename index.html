@@ -296,23 +296,34 @@
     }
 
     function prosesKeWA() {
-        let val = document.getElementById('user-id').value.trim();
+        let val = document.getElementById('user-id').value.trim().replace('@', '');
         const zone = document.getElementById('zone-id').value;
-        const produk = document.getElementById('order-title').innerText;
+        const produk = document.getElementById('order-title').innerText.toLowerCase();
         let tujuan = val;
-        let linkProfil = "";
 
-        // Logika membuat link otomatis berdasarkan produk
-        if (produk.toLowerCase().includes("instagram")) {
-            linkProfil = `\nLink Profil: https://instagram.com/${val.replace('@', '')}`;
-        } else if (produk.toLowerCase().includes("tiktok")) {
-            linkProfil = `\nLink Profil: https://tiktok.com/@${val.replace('@', '')}`;
-        } else if (produk.toLowerCase().includes("facebook")) {
-            // Jika FB biasanya pembeli langsung input link, tapi kita rapikan jika hanya username
-            if (!val.includes("facebook.com")) {
-                linkProfil = `\nLink Profil: https://facebook.com/${val}`;
-            }
+        // Cek produk dan ubah input jadi link otomatis
+        if (produk.includes("tiktok")) {
+            tujuan = `https://tiktok.com/@${val}`;
+        } else if (produk.includes("instagram") || produk.includes("ig")) {
+            tujuan = `https://instagram.com/${val}`;
+        } else if (produk.includes("facebook") || produk.includes("fb")) {
+            if (!val.includes("http")) tujuan = `https://facebook.com/${val}`;
         }
+
+        // Kalau ada Zone (buat Game), formatnya tetap ID (Zone)
+        if (zone) tujuan = `${val} (${zone})`;
+
+        const pesan = window.encodeURIComponent(
+            `*ORDER SYRUMISTORE*\n` +
+            `ID PESANAN: ${activeOrderID}\n` +
+            `Produk: ${document.getElementById('order-title').innerText}\n` +
+            `Tujuan: ${tujuan}\n` +
+            `Item: ${selectedProduct}\n` +
+            `Harga: ${selectedPrice}`
+        );
+        
+        window.location.href = `https://wa.me/6289507913948?text=${pesan}`;
+    }
 
         if(zone) tujuan += ` (${zone})`;
 
