@@ -46,29 +46,37 @@ function openOrder(id, name, label, manual, unitName = "Pcs") {
     
     document.getElementById('order-title').innerText = name;
     document.getElementById('label-input').innerText = label;
-    document.getElementById('user-id').value = "";
     
-    // Sembunyikan Zone ID kecuali untuk ML
+    const inputTujuan = document.getElementById('user-id');
+    inputTujuan.value = "";
+    document.getElementById('operator-logo-container').style.display = 'none';
+
+    // Pengaturan Placeholder & Filter Input
+    if (id === 'pulsa') {
+        inputTujuan.placeholder = "Contoh: 08123456789";
+        inputTujuan.oninput = function() { this.value = this.value.replace(/[^0-9]/g, ''); };
+    } else if (id === 'ml' || id === 'ff') {
+        inputTujuan.placeholder = "Masukkan ID";
+        inputTujuan.oninput = function() { this.value = this.value.replace(/[^0-9]/g, ''); };
+    } else {
+        inputTujuan.placeholder = "Masukkan Link / Username";
+        inputTujuan.oninput = null; 
+    }
+    
     document.getElementById('zone-id').style.display = (id === 'ml') ? 'block' : 'none';
-    
-    // Atur tampilan manual (Sosmed) atau grid (Game/Pulsa)
     document.getElementById('wrapper-manual').style.display = manual ? 'block' : 'none';
     document.getElementById('wrapper-grid').style.display = manual ? 'none' : 'block';
     
     const grid = document.getElementById('grid-produk');
-    
     if (id === 'pulsa') {
-        // Jika Pulsa, kosongkan grid dan beri instruksi
         grid.innerHTML = "<p style='text-align:center; font-size:12px; color:#aaa; padding:20px;'>Masukkan nomor HP untuk melihat harga...</p>";
     } else {
-        // Jika Game, langsung render harganya
         renderProducts(id);
     }
     
     switchScreen('screen-order');
 }
 
-// LOGIKA DETEKSI OPERATOR PULSA
 function deteksiOperator(nomor) {
     if (nomor.length < 4) return null;
     const prefix = nomor.slice(0, 4);
@@ -80,13 +88,19 @@ function deteksiOperator(nomor) {
     return null;
 }
 
-// Pantau input nomor HP (gunakan ID 'user-id' karena itu input utama kamu)
+// Pantau Ketikan User
 document.addEventListener('keyup', function(e) {
     if (e.target && e.target.id === 'user-id' && currentServiceId === 'pulsa') {
         const provider = deteksiOperator(e.target.value);
+        const logoCont = document.getElementById('operator-logo-container');
+        const logoImg = document.getElementById('operator-logo');
+
         if (provider) {
             renderProductsPulsa(provider);
+            logoCont.style.display = 'block';
+            logoImg.src = `images/logo-${provider}.png`; // Pastikan file gambar ada
         } else {
+            logoCont.style.display = 'none';
             document.getElementById('grid-produk').innerHTML = "<p style='text-align:center; font-size:12px; color:#aaa; padding:20px;'>Menunggu operator...</p>";
         }
     }
@@ -107,7 +121,6 @@ function renderProducts(id) {
     }
 }
 
-// Fungsi Khusus Render Pulsa
 function renderProductsPulsa(provider) {
     const grid = document.getElementById('grid-produk');
     if (pricelist.pulsa && pricelist.pulsa[provider]) {
@@ -128,26 +141,9 @@ function selectItem(item, harga, el) {
     el.classList.add('selected');
 }
 
-function hitungHargaManual() {
-    const qty = parseInt(document.getElementById('jumlah-manual').value) || 0;
-    const inputHarga = document.getElementById('harga-manual');
-    let hrg = 0;
-    if(currentServiceId === 'tk_fol') hrg = hargaKonstanta.tiktokFollowers;
-    else if(currentServiceId === 'tk_like') hrg = hargaKonstanta.tiktokLikes;
-    else if(currentServiceId === 'ig_fol') hrg = hargaKonstanta.igFollowers;
-
-    if(qty >= 50) {
-        const total = qty * hrg;
-        selectedProduct = qty + " " + currentUnitName;
-        selectedPrice = "Rp" + total.toLocaleString('id-ID');
-        inputHarga.value = total.toLocaleString('id-ID');
-    } else {
-        inputHarga.value = ""; selectedProduct = ""; selectedPrice = "";
-    }
-}
-
 function tampilkanKonfirmasi() {
-    if(!document.getElementById('user-id').value) return kustomAlert("Data Kosong", "Isi Link/ID tujuan!", "❌");
+    const val = document.getElementById('user-id').value;
+    if(!val) return kustomAlert("Data Kosong", "Isi nomor/ID tujuan!", "❌");
     if(!selectedProduct) return kustomAlert("Pilihan Kosong", "Pilih nominal dulu!", "🛒");
 
     const d = new Date();
@@ -162,7 +158,7 @@ function prosesKeWA() {
     let val = document.getElementById('user-id').value.trim();
     const zone = document.getElementById('zone-id').value;
     const namaProduk = document.getElementById('order-title').innerText;
-    let tujuan = zone ? `${val} (${zone})` : val;
+    let tujuan = (currentServiceId === 'ml' && zone) ? `${val} (${zone})` : val;
 
     const pesan = window.encodeURIComponent(
         `*ORDER BARU SYRUMISTORE*\n\n` +
@@ -175,24 +171,6 @@ function prosesKeWA() {
     window.location.href = `https://wa.me/6289507913948?text=${pesan}`;
 }
 
-function cekResi() {
-    const idInput = document.getElementById('input-resi').value.trim().toUpperCase();
-    const box = document.getElementById('status-result-box');
-    if(typeof databaseStatus !== 'undefined' && databaseStatus[idInput]) {
-        const data = databaseStatus[idInput];
-        box.style.display = 'block';
-        document.getElementById('st-icon').innerText = data.icon;
-        document.getElementById('st-label').innerText = data.status;
-        document.getElementById('st-desc').innerText = data.desc;
-        document.getElementById('st-action').innerHTML = data.link ? `<button onclick="window.open('${data.link}')" class="btn-confirm">Lihat Bukti</button>` : "";
-    } else {
-        kustomAlert("Tidak Ditemukan", "ID belum terdaftar.", "🔍");
-    }
-}
-
 function goToLobby() { switchScreen('screen-lobby'); }
 function backToKategori() { switchScreen('screen-kategori'); }
 function tutupKonfirmasi() { document.getElementById('confirm-overlay').style.display = 'none'; }
-function tampilkanKonfirmasiSaluran() { document.getElementById('testi-overlay').style.display = 'flex'; }
-function tutupTesti() { document.getElementById('testi-overlay').style.display = 'none'; }
-function bukaSaluran() { window.open("https://whatsapp.com/channel/0029VbB9bWGLNSa9K95BId3P", "_blank"); tutupTesti(); }
