@@ -49,6 +49,8 @@ function openOrder(id, name, label, manual, unitName = "Pcs") {
     
     const inputTujuan = document.getElementById('user-id');
     inputTujuan.value = "";
+    
+    // Reset Logo saat ganti layanan
     document.getElementById('operator-logo-container').style.display = 'none';
 
     // Pengaturan Placeholder & Filter Input
@@ -88,17 +90,26 @@ function deteksiOperator(nomor) {
     return null;
 }
 
-// Pantau Ketikan User
+// --- BAGIAN UPDATE LOGO OPERATOR DENGAN LINK MANUAL ---
 document.addEventListener('keyup', function(e) {
     if (e.target && e.target.id === 'user-id' && currentServiceId === 'pulsa') {
         const provider = deteksiOperator(e.target.value);
         const logoCont = document.getElementById('operator-logo-container');
         const logoImg = document.getElementById('operator-logo');
 
+        // MASUKKAN LINK GAMBAR/HREF KAMU DI SINI
+        const daftarLogo = {
+            "telkomsel": "images/telkomsel.png", // Ganti dengan link/nama filemu
+            "indosat":   "images/indosat.png",
+            "xl_axis":   "images/xl.png",
+            "three":     "images/three.png",
+            "smartfren": "images/smartfren.png"
+        };
+
         if (provider) {
             renderProductsPulsa(provider);
+            logoImg.src = daftarLogo[provider]; 
             logoCont.style.display = 'block';
-            logoImg.src = `images/logo-${provider}.png`; // Pastikan file gambar ada
         } else {
             logoCont.style.display = 'none';
             document.getElementById('grid-produk').innerHTML = "<p style='text-align:center; font-size:12px; color:#aaa; padding:20px;'>Menunggu operator...</p>";
