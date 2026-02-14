@@ -39,22 +39,29 @@ function openSubSosmed(appId) {
 }
 
 function openOrder(id, name, label, manual, unitName = "Pcs") {
-    currentServiceId = id; currentUnitName = unitName;
-    selectedProduct = ""; selectedPrice = "";
+    currentServiceId = id; 
+    currentUnitName = unitName;
+    selectedProduct = ""; 
+    selectedPrice = "";
+    
     document.getElementById('order-title').innerText = name;
     document.getElementById('label-input').innerText = label;
     document.getElementById('user-id').value = "";
     
-    // Reset Display
+    // Sembunyikan Zone ID kecuali untuk ML
     document.getElementById('zone-id').style.display = (id === 'ml') ? 'block' : 'none';
+    
+    // Atur tampilan manual (Sosmed) atau grid (Game/Pulsa)
     document.getElementById('wrapper-manual').style.display = manual ? 'block' : 'none';
     document.getElementById('wrapper-grid').style.display = manual ? 'none' : 'block';
     
-    // Kosongkan grid sebelum render
-    document.getElementById('grid-produk').innerHTML = "";
-
-    // Jika id adalah 'pulsa', kita jangan render dulu sampai user ngetik nomor
-    if (id !== 'pulsa') {
+    const grid = document.getElementById('grid-produk');
+    
+    if (id === 'pulsa') {
+        // Jika Pulsa, kosongkan grid dan beri instruksi
+        grid.innerHTML = "<p style='text-align:center; font-size:12px; color:#aaa; padding:20px;'>Masukkan nomor HP untuk melihat harga...</p>";
+    } else {
+        // Jika Game, langsung render harganya
         renderProducts(id);
     }
     
