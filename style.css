@@ -19,14 +19,14 @@ body {
     padding: 20px;
 }
 
-/* --- CONTAINER UTAMA (LEBAR SEPERTI FOTO 1-2) --- */
+/* --- CONTAINER UTAMA --- */
 #app-container { 
     width: 100%; 
     max-width: 800px; 
     position: relative;
 }
 
-/* --- ANIMASI TRANSISI ANTAR LAYAR --- */
+/* --- ANIMASI --- */
 @keyframes slideFade {
     from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
@@ -42,7 +42,7 @@ body {
     animation: slideFade 0.4s ease-out forwards;
 }
 
-/* --- HEADER & LOGO --- */
+/* --- HEADER --- */
 .text-center { text-align: center; margin-bottom: 25px; }
 
 .logo-wrapper {
@@ -60,7 +60,7 @@ body {
 .brand-name { color: #ff85b3; font-size: 28px; font-weight: 700; }
 .brand-tagline { font-size: 14px; color: #777; margin-bottom: 30px; }
 
-/* --- CARD & MENU --- */
+/* --- GLASS EFFECT & MENU --- */
 .glass {
     background: var(--glass-white);
     backdrop-filter: blur(15px);
@@ -92,32 +92,53 @@ body {
 .menu-item img { width: 45px; height: 45px; border-radius: 12px; margin-right: 20px; object-fit: cover; }
 .menu-item span { font-weight: 600; color: #444; font-size: 16px; }
 
-/* --- GRID PRODUK --- */
+/* --- PERUBAHAN GRID DIAMOND (TABEL 3 KOLOM) --- */
 .product-grid { 
     display: grid; 
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); 
-    gap: 15px; 
+    /* Default untuk layar besar: 3 atau 4 kolom */
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); 
+    gap: 10px; 
     margin-top: 15px; 
 }
 
 .product-card {
     background: white; 
     border: 2px solid #f0f0f0; 
-    border-radius: 18px;
-    padding: 20px 10px; 
+    border-radius: 15px;
+    padding: 15px 5px; 
     text-align: center; 
     cursor: pointer; 
     transition: 0.3s;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 85px;
 }
 
 .product-card.selected { 
     border-color: var(--accent-pink); 
-    background: #fffafa; 
-    transform: translateY(-5px);
+    background: #fff0f6; 
+    transform: scale(1.05);
 }
 
-.item-name { display: block; font-size: 13px; font-weight: 600; color: #555; }
-.item-price { font-weight: 700; color: var(--accent-pink); font-size: 15px; }
+.item-name { display: block; font-size: 12px; font-weight: 600; color: #555; margin-bottom: 3px; }
+.item-price { font-weight: 700; color: var(--accent-pink); font-size: 13px; }
+
+/* --- KHUSUS TAMPILAN HP (3 KOLOM BERSEBELAHAN) --- */
+@media (max-width: 480px) {
+    .product-grid {
+        grid-template-columns: repeat(3, 1fr); /* Paksa 3 kolom ke samping */
+        gap: 8px;
+    }
+    
+    .product-card {
+        padding: 10px 4px;
+        min-height: 75px;
+    }
+
+    .item-name { font-size: 10px; }
+    .item-price { font-size: 10px; }
+}
 
 /* --- TOMBOL --- */
 .btn-order {
@@ -149,7 +170,7 @@ body {
     box-shadow: 0 4px 10px rgba(0,0,0,0.05);
 }
 
-/* --- OVERLAY MODAL (FIXED AGAR TIDAK RUSAK) --- */
+/* --- MODAL --- */
 .overlay {
     display: none; 
     position: fixed; 
