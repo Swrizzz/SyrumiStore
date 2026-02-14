@@ -38,8 +38,8 @@
             border-radius: 50%;
             box-shadow: 0 4px 15px rgba(255, 133, 179, 0.2);
             border: 2px solid var(--accent-pink);
-            width: 110px;  /* Ukuran tetap */
-            height: 110px; /* Ukuran tetap */
+            width: 110px;
+            height: 110px;
             overflow: hidden;
             margin-bottom: 10px;
         }
@@ -47,7 +47,7 @@
         .profile-img {
             width: 100%;
             height: 100%;
-            object-fit: cover; /* Memotong gambar secara proporsional */
+            object-fit: cover;
             display: block;
         }
 
@@ -96,7 +96,8 @@
             cursor: pointer; transition: 0.2s; border: 1px solid var(--glass-border);
         }
         .menu-item:hover { transform: scale(1.02); }
-        .menu-item img, .menu-item i { width: 40px; height: 40px; border-radius: 10px; margin-right: 15px; object-fit: cover; display: flex; align-items: center; justify-content: center; }
+        .menu-item img { width: 40px; height: 40px; border-radius: 10px; margin-right: 15px; object-fit: cover; }
+        .menu-item i { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; margin-right: 15px; font-size: 20px; color: var(--accent-pink); }
 
         .product-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 15px; }
         .product-card {
@@ -154,12 +155,12 @@
                 <span>Suntik Sosmed</span>
             </div>
             <div onclick="openKategori('ppob')" class="glass menu-item">
-                <i class="fas fa-wallet" style="color: #ff85b3; font-size: 24px;"></i>
+                <img src="https://cdn-icons-png.flaticon.com/512/3059/3059502.png">
                 <span>Pulsa, Listrik & Air</span>
             </div>
-            <a href="https://whatsapp.com/channel/0029VbB9bWGLNSa9K95BId3P" target="_blank" style="text-decoration: none;">
+            <a href="https://whatsapp.com/channel/0029VbB9bWGLNSa9K95BId3P" target="_blank" style="text-decoration: none; color: inherit;">
                 <div class="glass menu-item" style="border: 1px dashed #ff85b3;">
-                    <i class="fas fa-star" style="color: #ff85b3; font-size: 24px;"></i>
+                    <i class="fas fa-star"></i>
                     <span>Testimoni Saluran</span>
                 </div>
             </a>
@@ -200,7 +201,7 @@
         }
         checkStoreStatus();
 
-        // --- DATA ---
+        // --- DATABASE ---
         const database = {
             game: [
                 { id: 'ml', name: 'Mobile Legends', icon: 'images/logo-ml.jfif', label: 'USER ID & ZONE' },
@@ -210,7 +211,6 @@
                 { id: 'tiktok', name: 'TikTok', icon: 'images/tt.jfif', isAppGroup: true },
                 { id: 'instagram', name: 'Instagram', icon: 'images/ig.jfif', isAppGroup: true }
             ],
-            // TAMBAHKAN KATEGORI PPOB DI SINI
             ppob: [
                 { id: 'pulsa', name: 'Pulsa & Data', icon: 'https://cdn-icons-png.flaticon.com/512/3059/3059502.png', label: 'NOMOR HP' },
                 { id: 'listrik', name: 'Token Listrik', icon: 'https://cdn-icons-png.flaticon.com/512/3105/3105807.png', label: 'ID PELANGGAN' },
@@ -225,7 +225,6 @@
         const pricelist = {
             ml: [{ item: '3 Diamonds', harga: 'Rp1.200', image: 'https://cdn-icons-png.flaticon.com/512/3037/3037156.png' }],
             tk_like: [{ item: '100 Likes', harga: 'Rp1.000', image: 'https://cdn-icons-png.flaticon.com/512/833/833472.png' }],
-            // DAFTAR HARGA UNTUK PPOB
             pulsa: [
                 { item: 'Pulsa 5k', harga: 'Rp7.000', image: 'https://cdn-icons-png.flaticon.com/512/3059/3059502.png' },
                 { item: 'Pulsa 10k', harga: 'Rp12.000', image: 'https://cdn-icons-png.flaticon.com/512/3059/3059502.png' }
@@ -239,6 +238,10 @@
                 { item: 'Ovo 10k', harga: 'Rp12.500', image: 'https://cdn-icons-png.flaticon.com/512/10149/10149458.png' }
             ]
         };
+
+        let selectedProduct = "";
+        let selectedPrice = "";
+
         // --- NAVIGATION ---
         function switchScreen(id) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
@@ -251,12 +254,18 @@
 
         function openKategori(cat) {
             const listDiv = document.getElementById('list-layanan');
-            document.getElementById('kategori-title').innerText = "Pilih " + (cat === 'game' ? 'Game' : 'Sosmed');
+            const titleMap = { 'game': 'Game', 'sosmed': 'Sosmed', 'ppob': 'PPOB & Pulsa' };
+            document.getElementById('kategori-title').innerText = "Pilih " + (titleMap[cat] || 'Layanan');
+            
             listDiv.innerHTML = "";
             if(database[cat]) {
                 database[cat].forEach(item => {
                     const func = item.isAppGroup ? `openSubSosmed('${item.id}', '${item.name}')` : `openOrder('${item.id}', '${item.name}', '${item.label}')`;
-                    listDiv.innerHTML += `<div onclick="${func}" class="glass menu-item"><img src="${item.icon}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/686/686589.png'"><span>${item.name}</span></div>`;
+                    listDiv.innerHTML += `
+                        <div onclick="${func}" class="glass menu-item">
+                            <img src="${item.icon}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/686/686589.png'">
+                            <span>${item.name}</span>
+                        </div>`;
                 });
                 switchScreen('screen-kategori');
             }
@@ -266,7 +275,11 @@
             const listDiv = document.getElementById('list-layanan');
             listDiv.innerHTML = "";
             database.sosmed_apps[appId].forEach(sub => {
-                listDiv.innerHTML += `<div onclick="openOrder('${sub.id}', '${sub.name}', '${sub.label}')" class="glass menu-item"><i class="fas fa-chevron-right" style="margin-right:15px;color:#ff85b3"></i><span>${sub.name}</span></div>`;
+                listDiv.innerHTML += `
+                    <div onclick="openOrder('${sub.id}', '${sub.name}', '${sub.label}')" class="glass menu-item">
+                        <i class="fas fa-chevron-right"></i>
+                        <span>${sub.name}</span>
+                    </div>`;
             });
         }
 
@@ -280,10 +293,15 @@
 
         function renderProducts(id) {
             const grid = document.getElementById('grid-produk');
-            grid.innerHTML = pricelist[id] ? "" : "<p style='grid-column: span 2;'>Segera Hadir!</p>";
+            grid.innerHTML = pricelist[id] ? "" : "<p style='grid-column: span 2; text-align:center;'>Segera Hadir!</p>";
             if(pricelist[id]) {
                 pricelist[id].forEach(p => {
-                    grid.innerHTML += `<div onclick="selectItem('${p.item}', '${p.harga}', this)" class="product-card"><img src="${p.image}" style="width:35px;margin-bottom:5px;"><span class="item-name">${p.item}</span><span class="item-price">${p.harga}</span></div>`;
+                    grid.innerHTML += `
+                        <div onclick="selectItem('${p.item}', '${p.harga}', this)" class="product-card">
+                            <img src="${p.image}" style="width:35px;margin-bottom:5px;">
+                            <span class="item-name" style="font-size:13px; font-weight:600;">${p.item}</span>
+                            <span class="item-price" style="font-size:11px; color:var(--accent-pink);">${p.harga}</span>
+                        </div>`;
                 });
             }
         }
@@ -294,7 +312,6 @@
             el.classList.add('selected');
         }
 
-        // --- KONFIRMASI & WA ---
         function tampilkanKonfirmasi() {
             if (!document.getElementById('user-id').value || !selectedProduct) return alert("Isi Data & Pilih Produk!");
             document.getElementById('confirm-overlay').style.display = 'flex';
@@ -305,8 +322,8 @@
         function prosesKeWA() {
             const userId = document.getElementById('user-id').value;
             const zoneId = document.getElementById('zone-id').value;
-            const target = zoneId ? `${userId} (${zoneId})` : userId;
-            const pesan = window.encodeURIComponent(`*ORDER SYRUMISTORE*\nProduk: ${document.getElementById('order-title').innerText}\nID: ${target}\nItem: ${selectedProduct}\nHarga: ${selectedPrice}`);
+            const target = (zoneId && zoneId.trim() !== "") ? `${userId} (${zoneId})` : userId;
+            const pesan = window.encodeURIComponent(`*ORDER SYRUMISTORE*\nProduk: ${document.getElementById('order-title').innerText}\nID/Tujuan: ${target}\nItem: ${selectedProduct}\nHarga: ${selectedPrice}`);
             window.location.href = `https://wa.me/6289507913948?text=${pesan}`;
         }
     </script>
