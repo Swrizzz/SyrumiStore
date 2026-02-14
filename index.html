@@ -17,12 +17,7 @@
             --text-dark: #4a4a4a;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
 
         body {
             background: linear-gradient(135deg, var(--primary-pink) 0%, var(--soft-blue) 100%);
@@ -33,13 +28,10 @@
             padding: 20px 15px;
         }
 
-        #app-container {
-            width: 100%;
-            max-width: 450px;
-        }
+        #app-container { width: 100%; max-width: 450px; }
 
-        /* --- STYLE OVERLAY TUTUP --- */
-        #closed-overlay {
+        /* --- STYLE OVERLAY (TUTUP & KONFIRMASI) --- */
+        .overlay {
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -51,22 +43,36 @@
             padding: 20px;
         }
 
-        .closed-box {
+        .modal-box {
             background: white;
-            padding: 40px 20px;
+            padding: 30px 20px;
             border-radius: 30px;
             text-align: center;
             max-width: 350px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            animation: fadeIn 0.3s ease;
         }
 
-        .closed-box h2 { color: var(--accent-pink); margin-bottom: 15px; }
-        /* --------------------------- */
+        .modal-box h2 { color: var(--accent-pink); margin-bottom: 10px; }
+        .modal-box p { color: #666; font-size: 14px; margin-bottom: 20px; }
 
+        .btn-confirm {
+            background: var(--accent-pink);
+            color: white; border: none; padding: 12px 25px;
+            border-radius: 15px; font-weight: 700; cursor: pointer;
+            margin: 5px;
+        }
+        .btn-cancel {
+            background: #eee;
+            color: #777; border: none; padding: 12px 25px;
+            border-radius: 15px; font-weight: 700; cursor: pointer;
+            margin: 5px;
+        }
+
+        /* --- UI UTAMA --- */
         .glass {
             background: var(--glass-white);
             backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
             border: 1px solid var(--glass-border);
             border-radius: 25px;
             padding: 20px;
@@ -78,190 +84,102 @@
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         .menu-item {
-            display: flex;
-            align-items: center;
-            padding: 15px;
-            background: white;
-            border-radius: 20px;
-            margin-bottom: 12px;
-            cursor: pointer;
-            transition: 0.2s;
-            border: 1px solid var(--glass-border);
+            display: flex; align-items: center; padding: 15px;
+            background: white; border-radius: 20px; margin-bottom: 12px;
+            cursor: pointer; transition: 0.2s; border: 1px solid var(--glass-border);
         }
-        .menu-item:hover { transform: scale(1.02); background: #fff; }
-        .menu-item img { 
-            width: 40px; 
-            height: 40px; 
-            border-radius: 10px; 
-            margin-right: 15px; 
-            object-fit: cover; 
-            aspect-ratio: 1/1;
-        }
-        .menu-item span { font-weight: 600; font-size: 14px; color: var(--text-dark); }
+        .menu-item img { width: 40px; height: 40px; border-radius: 10px; margin-right: 15px; object-fit: cover; }
 
-        .input-row { display: flex; gap: 10px; margin-top: 5px; }
-        input {
-            width: 100%;
-            padding: 12px 15px;
-            border-radius: 12px;
-            border: 1px solid #ddd;
-            outline: none;
-            font-size: 14px;
-        }
-        input:focus { border-color: var(--accent-pink); }
-        #zone-id { flex: 0 0 100px; }
-
-        .product-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            margin-top: 15px;
-        }
+        .product-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 15px; }
         .product-card {
-            background: white;
-            border: 2px solid transparent;
-            border-radius: 18px;
-            padding: 15px 10px;
-            text-align: center;
-            cursor: pointer;
-            transition: 0.2s;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 110px;
-            justify-content: center;
+            background: white; border: 2px solid transparent; border-radius: 18px;
+            padding: 15px 10px; text-align: center; cursor: pointer;
+            display: flex; flex-direction: column; align-items: center; min-height: 110px; justify-content: center;
         }
         .product-card.selected { border-color: var(--accent-pink); background: #fffafa; }
-        .item-name { font-size: 11px; font-weight: 600; color: #777; margin-bottom: 5px; }
         .item-price { font-weight: 700; color: var(--accent-pink); font-size: 13px; }
 
         .btn-order {
-            width: 100%;
-            background: var(--accent-pink);
-            color: white;
-            padding: 16px;
-            border-radius: 18px;
-            border: none;
-            font-weight: 700;
-            font-size: 16px;
-            margin-top: 20px;
-            cursor: pointer;
-            box-shadow: 0 5px 15px rgba(255, 133, 179, 0.3);
+            width: 100%; background: var(--accent-pink); color: white; padding: 16px;
+            border-radius: 18px; border: none; font-weight: 700; font-size: 16px; margin-top: 20px; cursor: pointer;
         }
-        .btn-back {
-            background: none; border: none; color: var(--accent-pink);
-            font-weight: 700; cursor: pointer; margin-bottom: 15px;
-            display: flex; align-items: center; gap: 8px;
-        }
-        
+        .btn-back { background: none; border: none; color: var(--accent-pink); font-weight: 700; cursor: pointer; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
         .text-center { text-align: center; }
         .mb-4 { margin-bottom: 20px; }
+        input { width: 100%; padding: 12px 15px; border-radius: 12px; border: 1px solid #ddd; outline: none; }
     </style>
 </head>
 <body>
 
-    <div id="closed-overlay">
-        <div class="closed-box">
+    <div id="closed-overlay" class="overlay">
+        <div class="modal-box">
             <div style="font-size: 50px; margin-bottom: 15px;">🕒</div>
             <h2>MOHON MAAF</h2>
-            <p style="color: #666; font-size: 14px; line-height: 1.6;">
-                Syrumi Store sedang tutup.<br>
-                Kami melayani pada jam operasional:<br>
-                <strong>07:00 - 21:00 WIB</strong>
-            </p>
+            <p>Syrumi Store sedang tutup.<br>Jam operasional: <strong>07:00 - 21:00 WIB</strong></p>
+        </div>
+    </div>
+
+    <div id="confirm-overlay" class="overlay">
+        <div class="modal-box">
+            <div style="font-size: 50px; margin-bottom: 15px;">📲</div>
+            <h2>Konfirmasi</h2>
+            <p>Kamu akan diarahkan ke WhatsApp admin untuk konfirmasi pembelian dan pembayaran.</p>
+            <button class="btn-confirm" onclick="prosesKeWA()">Lanjutkan</button>
+            <button class="btn-cancel" onclick="tutupKonfirmasi()">Batal</button>
         </div>
     </div>
 
     <div id="app-container">
         <section id="screen-lobby" class="screen active">
             <div class="text-center mb-4">
-                <div style="display: inline-block; padding: 5px; background: white; border-radius: 50%; box-shadow: 0 4px 15px rgba(255, 133, 179, 0.2); border: 2px solid var(--accent-pink);">
-                    <img src="images/syrumi.jpeg" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; aspect-ratio: 1/1; display: block;">
+                <div style="display: inline-block; padding: 5px; background: white; border-radius: 50%; border: 2px solid var(--accent-pink);">
+                    <img src="images/syrumi.jpeg" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover;">
                 </div>
-                <h1 style="color: #ff85b3; font-size: 24px; margin-top: 10px; font-weight: 700;">Syrumi Store</h1>
+                <h1 style="color: #ff85b3; font-size: 24px; margin-top: 10px;">Syrumi Store</h1>
                 <p style="font-size: 12px; color: #888;">Topup Game & Sosmed Tercepat ✨</p>
             </div>
-
-            <div onclick="openKategori('game')" class="glass menu-item">
-                <img src="images/game.jfif">
-                <span>Top Up Game</span>
-            </div>
-            <div onclick="openKategori('sosmed')" class="glass menu-item">
-                <img src="images/suntik.jfif">
-                <span>Suntik Sosmed</span>
-            </div>
-            <div onclick="openKategori('ppob')" class="glass menu-item">
-                <img src="images/icon-ppob.png">
-                <span>Pulsa, Listrik & Air</span>
-            </div>
-
+            <div onclick="openKategori('game')" class="glass menu-item"><img src="images/game.jfif"><span>Top Up Game</span></div>
+            <div onclick="openKategori('sosmed')" class="glass menu-item"><img src="images/suntik.jfif"><span>Suntik Sosmed</span></div>
+            <div onclick="openKategori('ppob')" class="glass menu-item"><img src="images/icon-ppob.png"><span>Pulsa, Listrik & Air</span></div>
             <a href="https://whatsapp.com/channel/0029VbB9bWGLNSa9K95BId3P" target="_blank" style="text-decoration: none;">
-                <div class="glass menu-item" style="border: 1px dashed #ff85b3;">
-                    <img src="images/icon-testi.png">
-                    <span>Testimoni Saluran</span>
-                </div>
+                <div class="glass menu-item" style="border: 1px dashed #ff85b3;"><img src="images/icon-testi.png"><span>Testimoni Saluran</span></div>
             </a>
         </section>
 
         <section id="screen-kategori" class="screen">
-            <button class="btn-back" onclick="goToLobby()">
-                <i class="fas fa-arrow-left"></i> Kembali
-            </button>
+            <button class="btn-back" onclick="goToLobby()"><i class="fas fa-arrow-left"></i> Kembali</button>
             <h2 id="kategori-title" class="mb-4" style="color: #ff85b3;">Pilih Layanan</h2>
             <div id="list-layanan"></div>
         </section>
 
         <section id="screen-order" class="screen">
-            <button class="btn-back" onclick="backToKategori()">
-                <i class="fas fa-arrow-left"></i> Ganti Produk
-            </button>
+            <button class="btn-back" onclick="backToKategori()"><i class="fas fa-arrow-left"></i> Ganti Produk</button>
             <div class="glass">
                 <h2 id="order-title" class="text-center mb-4" style="color: #ff85b3;">Top Up</h2>
-                
                 <div class="mb-4">
-                    <label id="label-input" style="font-size: 11px; font-weight: 600; color: #888; margin-left: 5px;">DATA PEMESANAN</label>
-                    <div class="input-row">
+                    <label id="label-input" style="font-size: 11px; font-weight: 600; color: #888;">DATA PEMESANAN</label>
+                    <div style="display: flex; gap: 10px; margin-top: 5px;">
                         <input type="text" id="user-id" placeholder="Masukkan ID">
-                        <input type="text" id="zone-id" placeholder="Zone">
+                        <input type="text" id="zone-id" placeholder="Zone" style="flex: 0 0 100px;">
                     </div>
                 </div>
-
-                <label style="font-size: 11px; font-weight: 600; color: #888; margin-left: 5px;">PILIH NOMINAL</label>
+                <label style="font-size: 11px; font-weight: 600; color: #888;">PILIH NOMINAL</label>
                 <div id="grid-produk" class="product-grid"></div>
-
-                <button class="btn-order" onclick="kirimKeWA()">
-                    <i class="fab fa-whatsapp"></i> Pesan Sekarang
-                </button>
+                <button class="btn-order" onclick="tampilkanKonfirmasi()"><i class="fab fa-whatsapp"></i> Pesan Sekarang</button>
             </div>
         </section>
     </div>
 
     <script>
-        // ==========================================
-        // KONFIGURASI BUKA TUTUP (MANUAL & OTOMATIS)
-        // ==========================================
-        const isManualClosed = true; // Ganti ke 'true' jika ingin tutup manual (misal: libur)
-        const jamBuka = 7;
-        const jamTutup = 21;
-
+        // --- KONFIGURASI TUTUP ---
+        const isManualClosed = false; // Ubah ke true jika ingin tutup paksa
         function checkStoreStatus() {
             const now = new Date();
-            const jamSekarang = now.getHours();
-            const overlay = document.getElementById('closed-overlay');
-
-            if (isManualClosed || jamSekarang < jamBuka || jamSekarang >= jamTutup) {
-                overlay.style.display = 'flex';
-            } else {
-                overlay.style.display = 'none';
-            }
+            const jam = now.getHours();
+            document.getElementById('closed-overlay').style.display = (isManualClosed || jam < 7 || jam >= 21) ? 'flex' : 'none';
         }
-        
-        // Cek status saat baru buka
         checkStoreStatus();
-        // Cek ulang setiap 30 detik
         setInterval(checkStoreStatus, 30000);
-        // ==========================================
-
 
         // --- DATABASE ---
         const database = {
@@ -271,33 +189,17 @@
             ],
             sosmed: [
                 { id: 'tiktok', name: 'TikTok', icon: 'images/tt.jfif', isAppGroup: true },
-                { id: 'instagram', name: 'Instagram', icon: 'images/ig.jfif', isAppGroup: true },
-                { id: 'youtube', name: 'YouTube', icon: 'images/yt.jfif', isAppGroup: true }
+                { id: 'instagram', name: 'Instagram', icon: 'images/ig.jfif', isAppGroup: true }
             ],
             sosmed_apps: {
-                tiktok: [
-                    { id: 'tk_fol', name: 'TikTok Followers', label: 'LINK PROFIL' },
-                    { id: 'tk_like', name: 'TikTok Likes', label: 'LINK VIDEO' }
-                ],
-                instagram: [
-                    { id: 'ig_fol', name: 'IG Followers', label: 'USERNAME' },
-                    { id: 'ig_like', name: 'IG Likes', label: 'LINK POST' }
-                ],
-                youtube: [
-                    { id: 'yt_sub', name: 'YT Subscribers', label: 'LINK CHANNEL' }
-                ]
+                tiktok: [{ id: 'tk_like', name: 'TikTok Likes', label: 'LINK VIDEO' }],
+                instagram: [{ id: 'ig_fol', name: 'IG Followers', label: 'USERNAME' }]
             }
         };
 
         const pricelist = {
-            ml: [
-                { item: '3 Diamonds', harga: 'Rp1.200', image: 'images/diamond.png' },
-                { item: 'Weekly Pass', harga: 'Rp28.000', image: 'images/wmp.png' }
-            ],
-            tk_like: [
-                { item: '100 Likes', harga: 'Rp1.000', image: 'images/heart.png' },
-                { item: '500 Likes', harga: 'Rp4.500', image: 'images/heart.png' }
-            ]
+            ml: [{ item: '3 Diamonds', harga: 'Rp1.200', image: 'images/diamond.png' }],
+            tk_like: [{ item: '100 Likes', harga: 'Rp1.000', image: 'images/heart.png' }]
         };
 
         let selectedProduct = "";
@@ -306,102 +208,69 @@
         function switchScreen(id) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById(id).classList.add('active');
-            window.scrollTo(0,0);
         }
-
         function goToLobby() { switchScreen('screen-lobby'); }
         function backToKategori() { switchScreen('screen-kategori'); }
 
         function openKategori(cat) {
             const listDiv = document.getElementById('list-layanan');
-            const title = document.getElementById('kategori-title');
-            title.innerText = "Pilih " + (cat === 'game' ? 'Game' : 'Aplikasi Sosmed');
+            document.getElementById('kategori-title').innerText = "Pilih " + cat;
             listDiv.innerHTML = "";
-
-            if (database[cat]) {
-                database[cat].forEach(item => {
-                    const func = item.isAppGroup ? `openSubSosmed('${item.id}', '${item.name}')` : `openOrder('${item.id}', '${item.name}', '${item.label}')`;
-                    listDiv.innerHTML += `
-                        <div onclick="${func}" class="glass menu-item">
-                            <img src="${item.icon}">
-                            <span>${item.name}</span>
-                        </div>`;
-                });
-                switchScreen('screen-kategori');
-            }
+            database[cat].forEach(item => {
+                const func = item.isAppGroup ? `openSubSosmed('${item.id}', '${item.name}')` : `openOrder('${item.id}', '${item.name}', '${item.label}')`;
+                listDiv.innerHTML += `<div onclick="${func}" class="glass menu-item"><img src="${item.icon}"><span>${item.name}</span></div>`;
+            });
+            switchScreen('screen-kategori');
         }
 
         function openSubSosmed(appId, appName) {
             const listDiv = document.getElementById('list-layanan');
-            document.getElementById('kategori-title').innerText = "Layanan " + appName;
             listDiv.innerHTML = "";
-
             database.sosmed_apps[appId].forEach(sub => {
-                listDiv.innerHTML += `
-                    <div onclick="openOrder('${sub.id}', '${sub.name}', '${sub.label}')" class="glass menu-item">
-                        <i class="fas fa-chevron-right" style="margin-right: 15px; color: #ff85b3;"></i>
-                        <span>${sub.name}</span>
-                    </div>`;
+                listDiv.innerHTML += `<div onclick="openOrder('${sub.id}', '${sub.name}', '${sub.label}')" class="glass menu-item"><i class="fas fa-chevron-right" style="margin-right:15px;color:#ff85b3"></i><span>${sub.name}</span></div>`;
             });
         }
 
         function openOrder(id, name, label) {
             document.getElementById('order-title').innerText = name;
             document.getElementById('label-input').innerText = label;
-            
-            const zoneInput = document.getElementById('zone-id');
-            if (id === 'ml') {
-                zoneInput.style.display = "block";
-                zoneInput.placeholder = "Zone";
-            } else {
-                zoneInput.style.display = "none";
-                zoneInput.value = "";
-            }
-
+            document.getElementById('zone-id').style.display = (id === 'ml') ? 'block' : 'none';
             renderProducts(id);
             switchScreen('screen-order');
         }
 
         function renderProducts(id) {
             const grid = document.getElementById('grid-produk');
-            grid.innerHTML = "";
-            if (!pricelist[id]) {
-                grid.innerHTML = "<p style='grid-column: span 2; text-align:center; color:red;'>Segera Hadir!</p>";
-                return;
+            grid.innerHTML = pricelist[id] ? "" : "Segera Hadir";
+            if(pricelist[id]) {
+                pricelist[id].forEach(p => {
+                    grid.innerHTML += `<div onclick="selectItem('${p.item}', '${p.harga}', this)" class="product-card"><img src="${p.image}" style="width:35px"><span class="item-name">${p.item}</span><span class="item-price">${p.harga}</span></div>`;
+                });
             }
-            pricelist[id].forEach(p => {
-                grid.innerHTML += `
-                    <div onclick="selectItem('${p.item}', '${p.harga}', this)" class="product-card">
-                        <img src="${p.image}" style="width:35px; aspect-ratio:1/1; object-fit:contain;">
-                        <span class="item-name">${p.item}</span>
-                        <span class="item-price">${p.harga}</span>
-                    </div>`;
-            });
         }
 
-        function selectItem(item, harga, element) {
-            selectedProduct = item;
-            selectedPrice = harga;
+        function selectItem(item, harga, el) {
+            selectedProduct = item; selectedPrice = harga;
             document.querySelectorAll('.product-card').forEach(c => c.classList.remove('selected'));
-            element.classList.add('selected');
+            el.classList.add('selected');
         }
 
-        function kirimKeWA() {
+        // --- LOGIC KONFIRMASI ---
+        function tampilkanKonfirmasi() {
+            const userId = document.getElementById('user-id').value;
+            if (!userId || !selectedProduct) return alert("Lengkapi data dan pilih produk!");
+            document.getElementById('confirm-overlay').style.display = 'flex';
+        }
+
+        function tutupKonfirmasi() {
+            document.getElementById('confirm-overlay').style.display = 'none';
+        }
+
+        function prosesKeWA() {
             const userId = document.getElementById('user-id').value;
             const zoneId = document.getElementById('zone-id').value;
             const target = zoneId ? `${userId} (${zoneId})` : userId;
-
-            if (!userId) return alert("Isi ID/Link dulu ya!");
-            if (!selectedProduct) return alert("Pilih itemnya dulu!");
-
-            const pesan = window.encodeURIComponent(
-                `*ORDER SYRUMISTORE*\n` +
-                `Produk: ${document.getElementById('order-title').innerText}\n` +
-                `ID/Link: ${target}\n` +
-                `Item: ${selectedProduct}\n` +
-                `Harga: ${selectedPrice}\n` +
-                `Mohon instruksinya admin! ✨`
-            );
+            const pesan = window.encodeURIComponent(`*ORDER SYRUMISTORE*\nProduk: ${document.getElementById('order-title').innerText}\nID/Link: ${target}\nItem: ${selectedProduct}\nHarga: ${selectedPrice}`);
             window.location.href = `https://wa.me/6289507913948?text=${pesan}`;
         }
     </script>
