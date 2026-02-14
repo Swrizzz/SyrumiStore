@@ -138,7 +138,7 @@
         </section>
 
         <div class="copyright">
-            &copy; 2026 <strong>Syrumi Store</strong>. All Rights Reserved.<br>
+            &copy; 2026 <strong>Syrumi Store</strong>. All Rights Reserved.<br><br>
             Topup Aman, Murah, dan Terpercaya ✨
         </div>
     </div>
@@ -290,7 +290,13 @@
         if(!document.getElementById('user-id').value) return kustomAlert("Data Kosong", "Isi Link/ID tujuan!", "❌");
         if(!selectedProduct) return kustomAlert("Pilihan Kosong", "Pilih nominal dulu!", "🛒");
 
-        activeOrderID = "SYR-" + Math.floor(1000 + Math.random() * 9000);
+        // FORMAT ID: SYR-TGLBLN-JAMMENIT (Contoh: SYR-1402-2015)
+        const d = new Date();
+        const tglBln = String(d.getDate()).padStart(2, '0') + String(d.getMonth() + 1).padStart(2, '0');
+        const jamMnt = String(d.getHours()).padStart(2, '0') + String(d.getMinutes()).padStart(2, '0');
+        
+        activeOrderID = `SYR-${tglBln}-${jamMnt}`;
+        
         document.getElementById('generated-id').innerText = activeOrderID;
         document.getElementById('confirm-overlay').style.display = 'flex';
     }
@@ -298,42 +304,30 @@
     function prosesKeWA() {
         let val = document.getElementById('user-id').value.trim().replace('@', '');
         const zone = document.getElementById('zone-id').value;
-        const produk = document.getElementById('order-title').innerText.toLowerCase();
+        const namaProduk = document.getElementById('order-title').innerText;
         let tujuan = val;
 
-        // Cek produk dan ubah input jadi link otomatis
-        if (produk.includes("tiktok")) {
+        // Link Otomatis
+        if (namaProduk.toLowerCase().includes("tiktok")) {
             tujuan = `https://tiktok.com/@${val}`;
-        } else if (produk.includes("instagram") || produk.includes("ig")) {
+        } else if (namaProduk.toLowerCase().includes("instagram") || namaProduk.toLowerCase().includes("ig")) {
             tujuan = `https://instagram.com/${val}`;
-        } else if (produk.includes("facebook") || produk.includes("fb")) {
+        } else if (namaProduk.toLowerCase().includes("facebook") || namaProduk.toLowerCase().includes("fb")) {
             if (!val.includes("http")) tujuan = `https://facebook.com/${val}`;
         }
 
-        // Kalau ada Zone (buat Game), formatnya tetap ID (Zone)
         if (zone) tujuan = `${val} (${zone})`;
 
         const pesan = window.encodeURIComponent(
-            `*ORDER SYRUMISTORE*\n` +
-            `ID PESANAN: ${activeOrderID}\n` +
-            `Produk: ${document.getElementById('order-title').innerText}\n` +
+            `*ORDER BARU SYRUMISTORE*\n\n` +
+            `ID: ${activeOrderID}\n` +
+            `Barang: ${selectedProduct} ${namaProduk}\n` +
             `Tujuan: ${tujuan}\n` +
-            `Item: ${selectedProduct}\n` +
-            `Harga: ${selectedPrice}`
-        );
-        
-        window.location.href = `https://wa.me/6289507913948?text=${pesan}`;
-    }
-
-        if(zone) tujuan += ` (${zone})`;
-
-        const pesan = window.encodeURIComponent(
-            `*Order Syrumi *\n` +
-            `ID PESANAN: ${activeOrderID}\n` +
-            `Produk: ${produk}\n` +
-            `Tujuan: ${tujuan}${linkProfil}\n` + // Link profil otomatis muncul di sini
-            `Item: ${selectedProduct}\n` +
-            `Harga: ${selectedPrice}`
+            `Metode: Web\n\n` +
+            `----------------------------\n` +
+            `*Total:* ${selectedPrice}\n` +
+            `----------------------------\n` +
+            `_Silakan proses pesanan saya admin_`
         );
         
         window.location.href = `https://wa.me/6289507913948?text=${pesan}`;
