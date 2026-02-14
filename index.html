@@ -5,99 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Syrumi Store</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/all.min.css">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
-
-        :root {
-            --primary-pink: #ffdeed;
-            --accent-pink: #ff85b3;
-            --soft-blue: #b5fffc;
-            --glass-white: rgba(255, 255, 255, 0.7);
-            --glass-border: rgba(255, 255, 255, 0.4);
-            --text-dark: #4a4a4a;
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-
-        body {
-            background: linear-gradient(135deg, var(--primary-pink) 0%, var(--soft-blue) 100%);
-            background-attachment: fixed;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            padding: 20px 15px;
-        }
-
-        #app-container { width: 100%; max-width: 450px; position: relative; min-height: 90vh; }
-
-        .logo-wrapper {
-            display: inline-block; padding: 5px; background: white; border-radius: 50%;
-            box-shadow: 0 4px 15px rgba(255, 133, 179, 0.2); border: 2px solid var(--accent-pink);
-            width: 110px; height: 110px; overflow: hidden; margin-bottom: 10px;
-        }
-
-        .profile-img { width: 100%; height: 100%; object-fit: cover; display: block; }
-
-        .overlay {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(8px); z-index: 9999;
-            justify-content: center; align-items: center; padding: 20px;
-        }
-
-        .modal-box {
-            background: white; padding: 30px 20px; border-radius: 30px; text-align: center;
-            max-width: 350px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); animation: fadeIn 0.3s ease;
-        }
-
-        .btn-confirm { background: var(--accent-pink); color: white; border: none; padding: 12px 25px; border-radius: 15px; font-weight: 700; cursor: pointer; margin: 5px; }
-        .btn-cancel { background: #eee; color: #777; border: none; padding: 12px 25px; border-radius: 15px; font-weight: 700; cursor: pointer; margin: 5px; }
-
-        .glass {
-            background: var(--glass-white); backdrop-filter: blur(10px);
-            border: 1px solid var(--glass-border); border-radius: 25px; padding: 20px;
-            box-shadow: 0 10px 25px rgba(255, 133, 179, 0.1);
-        }
-
-        .screen { display: none; animation: fadeIn 0.3s ease forwards; }
-        .screen.active { display: block; }
-
-        .menu-item {
-            display: flex; align-items: center; padding: 15px; background: white;
-            border-radius: 20px; margin-bottom: 12px; cursor: pointer; transition: 0.2s;
-            border: 1px solid var(--glass-border);
-        }
-        .menu-item:hover { transform: scale(1.02); }
-        .menu-item img { width: 40px; height: 40px; border-radius: 10px; margin-right: 15px; object-fit: cover; }
-
-        .manual-input-container { display: flex; gap: 10px; margin-bottom: 15px; }
-        .input-box-wrapper { flex: 1; }
-        .input-box-wrapper label { display: block; font-size: 10px; font-weight: 700; color: #888; margin-bottom: 4px; text-transform: uppercase; }
-        .input-relative { position: relative; display: flex; align-items: center; }
-        .unit-label { position: absolute; right: 12px; font-size: 12px; font-weight: 600; color: #bbb; pointer-events: none; }
-        .divider-text { text-align: center; font-size: 11px; color: #aaa; margin: 15px 0; position: relative; }
-        .divider-text::before, .divider-text::after { content: ""; position: absolute; top: 50%; width: 25%; height: 1px; background: #eee; }
-        .divider-text::before { left: 0; } .divider-text::after { right: 0; }
-
-        .product-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 15px; }
-        .product-card {
-            background: white; border: 2px solid transparent; border-radius: 18px;
-            padding: 15px 10px; text-align: center; cursor: pointer;
-            display: flex; flex-direction: column; align-items: center; min-height: 110px; justify-content: center;
-        }
-        .product-card.selected { border-color: var(--accent-pink); background: #fffafa; }
-        .item-name { font-size: 11px; font-weight: 600; color: #777; margin-bottom: 5px; }
-        .item-price { font-weight: 700; color: var(--accent-pink); font-size: 13px; }
-
-        input { width: 100%; padding: 12px 15px; border-radius: 12px; border: 1px solid #ddd; outline: none; margin-top: 5px; font-size: 14px; }
-        input:read-only { background-color: #f9f9f9; color: #555; }
-        .btn-order { width: 100%; background: var(--accent-pink); color: white; padding: 16px; border-radius: 18px; border: none; font-weight: 700; font-size: 16px; margin-top: 20px; cursor: pointer; box-shadow: 0 5px 15px rgba(255, 133, 179, 0.3); }
-        .btn-back { background: none; border: none; color: var(--accent-pink); font-weight: 700; cursor: pointer; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
-
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .text-center { text-align: center; }
-        .mb-4 { margin-bottom: 20px; }
-        .copyright { text-align: center; margin-top: 30px; padding: 20px 0; font-size: 11px; color: #888; line-height: 1.6; }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -125,8 +33,8 @@
         <section id="screen-lobby" class="screen active">
             <div class="text-center mb-4">
                 <div class="logo-wrapper"><img src="images/syrumi.jpeg" class="profile-img"></div>
-                <h1 style="color: #ff85b3; font-size: 24px;">Syrumi Store</h1>
-                <p style="font-size: 12px; color: #888;">Topup Game & Sosmed Tercepat ✨</p>
+                <h1 class="brand-name">Syrumi Store</h1>
+                <p class="brand-tagline">Topup Game & Sosmed Tercepat ✨</p>
             </div>
             <div onclick="openKategori('game')" class="glass menu-item">
                 <img src="images/game.jfif" onerror="this.src='https://cdn-icons-png.flaticon.com/512/686/686589.png'">
@@ -140,7 +48,7 @@
                 <img src="https://cdn-icons-png.flaticon.com/512/3059/3059502.png">
                 <span>Pulsa, Listrik & Air</span>
             </div>
-            <div onclick="tampilkanKonfirmasiSaluran()" class="glass menu-item" style="border: 1px dashed #ff85b3;">
+            <div onclick="tampilkanKonfirmasiSaluran()" class="glass menu-item highlight">
                 <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png">
                 <span>Testimoni Saluran</span>
             </div>
@@ -148,34 +56,34 @@
 
         <section id="screen-kategori" class="screen">
             <button class="btn-back" onclick="goToLobby()"><i class="fas fa-arrow-left"></i> Kembali</button>
-            <h2 id="kategori-title" class="mb-4" style="color: #ff85b3;">Pilih Layanan</h2>
+            <h2 id="kategori-title" class="section-title">Pilih Layanan</h2>
             <div id="list-layanan"></div>
         </section>
 
         <section id="screen-order" class="screen">
             <button class="btn-back" onclick="backToKategori()"><i class="fas fa-arrow-left"></i> Ganti Produk</button>
             <div class="glass">
-                <h2 id="order-title" class="text-center mb-4" style="color: #ff85b3;">Top Up</h2>
+                <h2 id="order-title" class="text-center mb-4 main-title">Top Up</h2>
                 
                 <div class="mb-4">
-                    <label id="label-input" style="font-size: 11px; font-weight: 600; color: #888;">DATA PEMESANAN</label>
-                    <div style="display: flex; gap: 10px;">
+                    <label id="label-input" class="input-label">DATA PEMESANAN</label>
+                    <div class="input-row">
                         <input type="text" id="user-id" placeholder="Masukkan Link/ID">
-                        <input type="text" id="zone-id" placeholder="Zone" style="flex: 0 0 100px; display: none;">
+                        <input type="text" id="zone-id" placeholder="Zone" style="display: none;">
                     </div>
                 </div>
 
                 <div id="wrapper-manual" style="display:none; margin-bottom:20px;">
                     <div class="manual-input-container">
                         <div class="input-box-wrapper">
-                            <label>Masukkan Jumlah</label>
+                            <label>Jumlah</label>
                             <div class="input-relative">
                                 <input type="number" id="jumlah-manual" placeholder="0" oninput="hitungHargaManual()">
                                 <span class="unit-label">Pcs</span>
                             </div>
                         </div>
                         <div class="input-box-wrapper">
-                            <label>Nominal Harga</label>
+                            <label>Harga</label>
                             <div class="input-relative">
                                 <input type="text" id="harga-manual" placeholder="0" readonly>
                                 <span class="unit-label">Rp</span>
@@ -187,7 +95,7 @@
                 </div>
 
                 <div id="wrapper-grid">
-                    <label style="font-size: 11px; font-weight: 600; color: #888;">PILIH NOMINAL</label>
+                    <label class="input-label">PILIH NOMINAL</label>
                     <div id="grid-produk" class="product-grid"></div>
                 </div>
 
@@ -224,7 +132,7 @@
                     { id: 'tk_fol', name: 'TikTok Followers', label: 'LINK PROFIL', isManual: true },
                     { id: 'tk_like', name: 'TikTok Likes', label: 'LINK VIDEO', isManual: true },
                     { id: 'tk_view', name: 'TikTok Views', label: 'LINK VIDEO', isManual: true },
-                    { id: 'tk_share', name: 'TikTok Share', label: 'LINK VIDEO', isManual: true }
+                    { id: 'tk_share', name: 'TikTok Shares', label: 'LINK VIDEO', isManual: true }
                 ],
                 instagram: [
                     { id: 'ig_fol', name: 'IG Followers', label: 'USERNAME', isManual: true }
@@ -233,8 +141,8 @@
         };
 
         const pricelist = {
-            ml: [{ item: '3 Diamonds', harga: 'Rp1.200', image: 'https://cdn-icons-png.flaticon.com/512/3037/3037156.png' }],
-            ff: [{ item: '5 Diamonds', harga: 'Rp1.000', image: 'https://cdn-icons-png.flaticon.com/512/597/597081.png' }]
+            ml: [{ item: '3 Diamonds', harga: 'Rp1.200' }],
+            ff: [{ item: '5 Diamonds', harga: 'Rp1.000' }]
         };
 
         let selectedProduct = "";
