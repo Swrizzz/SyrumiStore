@@ -55,16 +55,31 @@ const pricelist = {
         { item: '1440 Diamonds', harga: 'Rp188.000' },
         { item: '7290 Diamonds', harga: 'Rp945.000' }
     ],
-pulsa: {
+    pulsa: {
         telkomsel: [
-            { item: 'Pulsa 5.000', harga: 'Rp6.500' },
-            { item: 'Pulsa 10.000', harga: 'Rp11.500' },
-            { item: 'Pulsa 20.000', harga: 'Rp21.500' }
+            { item: 'Pulsa 5.000', harga: 'Rp7.000' },
+            { item: 'Pulsa 10.000', harga: 'Rp12.000' },
+            { item: 'Pulsa 20.000', harga: 'Rp22.000' }
         ],
         indosat: [
-            { item: 'Pulsa 5.000', harga: 'Rp6.700' },
-            { item: 'Pulsa 10.000', harga: 'Rp11.700' }
+            { item: 'Pulsa 5.000', harga: 'Rp7.000' },
+            { item: 'Pulsa 10.000', harga: 'Rp12.000' },
+            { item: 'Pulsa 20.000', harga: 'Rp22.000' }
         ],
-        // Tambahkan operator lain sesuai kebutuhan
+        xl_axis: [
+            { item: 'Pulsa 5.000', harga: 'Rp7.000' },
+            { item: 'Pulsa 10.000', harga: 'Rp12.000' },
+            { item: 'Pulsa 20.000', harga: 'Rp22.000' }
+        ],
+        three: [
+            { item: 'Pulsa 5.000', harga: 'Rp7.000' },
+            { item: 'Pulsa 10.000', harga: 'Rp12.000' },
+            { item: 'Pulsa 20.000', harga: 'Rp22.000' }
+        ],
+        smartfren: [
+            { item: 'Pulsa 5.000', harga: 'Rp7.000' },
+            { item: 'Pulsa 10.000', harga: 'Rp12.000' },
+            { item: 'Pulsa 20.000', harga: 'Rp22.000' }
+        ]
     }
 };
