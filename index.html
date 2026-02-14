@@ -38,6 +38,31 @@
             max-width: 450px;
         }
 
+        /* --- STYLE OVERLAY TUTUP --- */
+        #closed-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(8px);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .closed-box {
+            background: white;
+            padding: 40px 20px;
+            border-radius: 30px;
+            text-align: center;
+            max-width: 350px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .closed-box h2 { color: var(--accent-pink); margin-bottom: 15px; }
+        /* --------------------------- */
+
         .glass {
             background: var(--glass-white);
             backdrop-filter: blur(10px);
@@ -131,10 +156,21 @@
         
         .text-center { text-align: center; }
         .mb-4 { margin-bottom: 20px; }
-        .hidden { display: none; }
     </style>
 </head>
 <body>
+
+    <div id="closed-overlay">
+        <div class="closed-box">
+            <div style="font-size: 50px; margin-bottom: 15px;">🕒</div>
+            <h2>MOHON MAAF</h2>
+            <p style="color: #666; font-size: 14px; line-height: 1.6;">
+                Syrumi Store sedang tutup.<br>
+                Kami melayani pada jam operasional:<br>
+                <strong>07:00 - 21:00 WIB</strong>
+            </p>
+        </div>
+    </div>
 
     <div id="app-container">
         <section id="screen-lobby" class="screen active">
@@ -158,7 +194,8 @@
                 <img src="images/icon-ppob.png">
                 <span>Pulsa, Listrik & Air</span>
             </div>
-            <a href="https://wa.me/6289507913948" target="_blank" style="text-decoration: none;">
+
+            <a href="https://whatsapp.com/channel/0029VbB9bWGLNSa9K95BId3P" target="_blank" style="text-decoration: none;">
                 <div class="glass menu-item" style="border: 1px dashed #ff85b3;">
                     <img src="images/icon-testi.png">
                     <span>Testimoni Saluran</span>
@@ -200,6 +237,32 @@
     </div>
 
     <script>
+        // ==========================================
+        // KONFIGURASI BUKA TUTUP (MANUAL & OTOMATIS)
+        // ==========================================
+        const isManualClosed = true; // Ganti ke 'true' jika ingin tutup manual (misal: libur)
+        const jamBuka = 7;
+        const jamTutup = 21;
+
+        function checkStoreStatus() {
+            const now = new Date();
+            const jamSekarang = now.getHours();
+            const overlay = document.getElementById('closed-overlay');
+
+            if (isManualClosed || jamSekarang < jamBuka || jamSekarang >= jamTutup) {
+                overlay.style.display = 'flex';
+            } else {
+                overlay.style.display = 'none';
+            }
+        }
+        
+        // Cek status saat baru buka
+        checkStoreStatus();
+        // Cek ulang setiap 30 detik
+        setInterval(checkStoreStatus, 30000);
+        // ==========================================
+
+
         // --- DATABASE ---
         const database = {
             game: [
@@ -240,7 +303,6 @@
         let selectedProduct = "";
         let selectedPrice = "";
 
-        // --- NAVIGASI ---
         function switchScreen(id) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById(id).classList.add('active');
