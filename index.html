@@ -112,215 +112,237 @@
     </div>
 
     <script>
-        // --- SETTING HARGA PER 1 UNIT DI SINI ---
-        const hargaTiktokFollowers = 50; 
-        const hargaTiktokLikes = 10;     
-        const hargaTiktokViews = 1;      
-        const hargaIgFollowers = 30; // Contoh harga IG Followers
+    // --- SETTING HARGA PER 1 UNIT ---
+    const hargaTiktokFollowers = 50; 
+    const hargaTiktokLikes = 10;     
+    const hargaTiktokViews = 1;      
+    const hargaIgFollowers = 50; // 100 followers = 5rb
+    const hargaIgLikes = 20; 
+    const hargaIgViews = 5;
+    const hargaYoutubeSub = 500;
+    const hargaYoutubeViews = 150;
+    const hargaFbFollowers = 100;
+    const hargaFbLikes = 50;
+
+    const database = {
+        game: [
+            { id: 'ml', name: 'Mobile Legends', icon: 'images/logo-ml.jfif', label: 'USER ID & ZONE' },
+            { id: 'ff', name: 'Free Fire', icon: 'images/ff.jfif', label: 'PLAYER ID (UID)' }
+        ],
+        sosmed: [
+            { id: 'tiktok', name: 'TikTok', icon: 'https://cdn-icons-png.flaticon.com/512/3046/3046121.png', isAppGroup: true },
+            { id: 'instagram', name: 'Instagram', icon: 'https://cdn-icons-png.flaticon.com/512/174/174855.png', isAppGroup: true },
+            { id: 'youtube', name: 'YouTube', icon: 'https://cdn-icons-png.flaticon.com/512/1384/1384060.png', isAppGroup: true },
+            { id: 'facebook', name: 'Facebook', icon: 'https://cdn-icons-png.flaticon.com/512/733/733547.png', isAppGroup: true }
+        ],
+        ppob: [
+            { id: 'pulsa', name: 'Pulsa & Data', icon: 'https://cdn-icons-png.flaticon.com/512/3059/3059502.png', label: 'NOMOR HP' },
+            { id: 'listrik', name: 'Token Listrik', icon: 'https://cdn-icons-png.flaticon.com/512/3105/3105807.png', label: 'ID PELANGGAN' }
+        ],
+        sosmed_apps: {
+            tiktok: [
+                { id: 'tk_fol', name: 'TikTok Followers', label: 'USERNAME TIKTOK', isManual: true, unit: 'Followers' },
+                { id: 'tk_like', name: 'TikTok Likes', label: 'LINK VIDEO', isManual: true, unit: 'Likes' },
+                { id: 'tk_view', name: 'TikTok Views', label: 'LINK VIDEO', isManual: true, unit: 'Views' }
+            ],
+            instagram: [
+                { id: 'ig_fol', name: 'IG Followers', label: 'USERNAME INSTAGRAM', isManual: true, unit: 'Followers' },
+                { id: 'ig_like', name: 'IG Likes', label: 'LINK POSTINGAN', isManual: true, unit: 'Likes' },
+                { id: 'ig_view', name: 'IG Views', label: 'LINK REELS/VIDEO', isManual: true, unit: 'Views' }
+            ],
+            youtube: [
+                { id: 'yt_sub', name: 'YouTube Subscribers', label: 'LINK CHANNEL', isManual: true, unit: 'Subscribers' },
+                { id: 'yt_view', name: 'YouTube Views', label: 'LINK VIDEO', isManual: true, unit: 'Views' },
+                { id: 'yt_like', name: 'YouTube Likes', label: 'LINK VIDEO', isManual: true, unit: 'Likes' }
+            ],
+            facebook: [
+                { id: 'fb_fol', name: 'FB Followers', label: 'LINK PROFIL/FP', isManual: true, unit: 'Followers' },
+                { id: 'fb_like', name: 'FB Post Likes', label: 'LINK POSTINGAN', isManual: true, unit: 'Likes' }
+            ]
+        }
+    };
+
+    const pricelist = {
+        ml: [{ item: '3 Diamonds', harga: 'Rp1.200' }],
+        ff: [{ item: '5 Diamonds', harga: 'Rp1.000' }],
+        ig_fol: [{ item: '100 Followers', harga: 'Rp5.000' }, { item: '1000 Followers', harga: 'Rp50.000' }]
+    };
+
+    let selectedProduct = "";
+    let selectedPrice = "";
+    let isManualMode = false;
+    let currentServiceId = ""; 
+    let currentUnitName = "Pcs";
+
+    function switchScreen(id) {
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        window.scrollTo(0,0);
+    }
+
+    function openKategori(cat) {
+        const listDiv = document.getElementById('list-layanan');
+        document.getElementById('kategori-title').innerText = "Pilih Layanan";
+        listDiv.innerHTML = "";
+        database[cat].forEach(item => {
+            const func = item.isAppGroup ? `openSubSosmed('${item.id}')` : `openOrder('${item.id}', '${item.name}', '${item.label}', false)`;
+            listDiv.innerHTML += `<div onclick="${func}" class="glass menu-item"><img src="${item.icon}"><span>${item.name}</span></div>`;
+        });
+        switchScreen('screen-kategori');
+    }
+
+    function openSubSosmed(appId) {
+        const listDiv = document.getElementById('list-layanan');
+        listDiv.innerHTML = "";
+        database.sosmed_apps[appId].forEach(sub => {
+            listDiv.innerHTML += `<div onclick="openOrder('${sub.id}', '${sub.name}', '${sub.label}', true, '${sub.unit}')" class="glass menu-item"><i class="fas fa-chevron-right" style="margin-right:15px; color:#ff85b3;"></i><span>${sub.name}</span></div>`;
+        });
+    }
+
+    function openOrder(id, name, label, manual, unitName = "Pcs") {
+        isManualMode = manual;
+        currentServiceId = id; 
+        currentUnitName = unitName;
+        selectedProduct = ""; selectedPrice = "";
         
-        const database = {
-            game: [
-                { id: 'ml', name: 'Mobile Legends', icon: 'images/logo-ml.jfif', label: 'USER ID & ZONE' },
-                { id: 'ff', name: 'Free Fire', icon: 'images/ff.jfif', label: 'PLAYER ID (UID)' }
-            ],
-            sosmed: [
-                { id: 'tiktok', name: 'TikTok', icon: 'images/tt.jfif', isAppGroup: true },
-                { id: 'instagram', name: 'Instagram', icon: 'images/ig.jfif', isAppGroup: true }
-            ],
-            ppob: [
-                { id: 'pulsa', name: 'Pulsa & Data', icon: 'https://cdn-icons-png.flaticon.com/512/3059/3059502.png', label: 'NOMOR HP' },
-                { id: 'listrik', name: 'Token Listrik', icon: 'https://cdn-icons-png.flaticon.com/512/3105/3105807.png', label: 'ID PELANGGAN' }
-            ],
-            sosmed_apps: {
-                tiktok: [
-                    { id: 'tk_fol', name: 'TikTok Followers', label: 'USERNAME TIKTOK', isManual: true },
-                    { id: 'tk_like', name: 'TikTok Likes', label: 'LINK VIDEO', isManual: true },
-                    { id: 'tk_view', name: 'TikTok Views', label: 'LINK VIDEO', isManual: true }
-                ],
-                instagram: [
-                    { id: 'ig_fol', name: 'IG Followers', label: 'USERNAME INSTAGRAM', isManual: true }
-                ]
-            }
-        };
+        document.getElementById('order-title').innerText = name;
+        document.getElementById('label-input').innerText = label;
+        
+        // Update label unit di input box
+        document.querySelectorAll('.unit-label').forEach(el => {
+            if(el.innerText !== "Rp") el.innerText = unitName;
+        });
 
-        const pricelist = {
-            ml: [{ item: '3 Diamonds', harga: 'Rp1.200' }],
-            ff: [{ item: '5 Diamonds', harga: 'Rp1.000' }]
-        };
+        const userIdInput = document.getElementById('user-id');
+        userIdInput.value = "";
+        
+        // Dynamic Placeholder logic
+        if(id.includes('fol') || id.includes('sub')) userIdInput.placeholder = "Masukkan Username atau Link Profil";
+        else if (id.includes('like') || id.includes('view')) userIdInput.placeholder = "Masukkan Link Konten/Video";
+        else userIdInput.placeholder = "Masukkan Data";
 
-        let selectedProduct = "";
-        let selectedPrice = "";
-        let isManualMode = false;
-        let currentServiceId = ""; 
-
-        function switchScreen(id) {
-            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            window.scrollTo(0,0);
+        document.getElementById('zone-id').style.display = (id === 'ml') ? 'block' : 'none';
+        
+        if(manual) {
+            document.getElementById('wrapper-manual').style.display = 'block';
+            document.getElementById('wrapper-grid').style.display = 'none';
+            document.getElementById('jumlah-manual').value = "";
+            document.getElementById('harga-manual').value = "";
+            renderProducts(id, true);
+        } else {
+            document.getElementById('wrapper-manual').style.display = 'none';
+            document.getElementById('wrapper-grid').style.display = 'block';
+            renderProducts(id, false);
         }
+        switchScreen('screen-order');
+    }
 
-        function openKategori(cat) {
-            const listDiv = document.getElementById('list-layanan');
-            document.getElementById('kategori-title').innerText = "Pilih Layanan";
-            listDiv.innerHTML = "";
-            database[cat].forEach(item => {
-                const func = item.isAppGroup ? `openSubSosmed('${item.id}')` : `openOrder('${item.id}', '${item.name}', '${item.label}', false)`;
-                listDiv.innerHTML += `<div onclick="${func}" class="glass menu-item"><img src="${item.icon}"><span>${item.name}</span></div>`;
-            });
-            switchScreen('screen-kategori');
-        }
-
-        function openSubSosmed(appId) {
-            const listDiv = document.getElementById('list-layanan');
-            listDiv.innerHTML = "";
-            database.sosmed_apps[appId].forEach(sub => {
-                listDiv.innerHTML += `<div onclick="openOrder('${sub.id}', '${sub.name}', '${sub.label}', true)" class="glass menu-item"><i class="fas fa-chevron-right" style="margin-right:15px; color:#ff85b3;"></i><span>${sub.name}</span></div>`;
+    function renderProducts(id, isManual) {
+        const gridId = isManual ? 'grid-produk-manual' : 'grid-produk';
+        const grid = document.getElementById(gridId);
+        grid.innerHTML = pricelist[id] ? "" : "<p style='grid-column: span 2; text-align:center; font-size:12px; color:#aaa; padding:20px;'>Pilihan paket segera hadir...</p>";
+        
+        if(pricelist[id]) {
+            pricelist[id].forEach(p => {
+                grid.innerHTML += `
+                    <div onclick="selectItem('${p.item}', '${p.harga}', this)" class="product-card">
+                        <span class="item-name">${p.item}</span>
+                        <span class="item-price">${p.harga}</span>
+                    </div>`;
             });
         }
+    }
 
-        function openOrder(id, name, label, manual) {
-            isManualMode = manual;
-            currentServiceId = id; 
+    function selectItem(item, harga, el) {
+        selectedProduct = item; 
+        selectedPrice = harga;
+        document.querySelectorAll('.product-card').forEach(c => c.classList.remove('selected'));
+        el.classList.add('selected');
+
+        if (isManualMode) {
+            const qtyOnly = item.replace(/\D/g, "");
+            document.getElementById('jumlah-manual').value = qtyOnly;
+            document.getElementById('harga-manual').value = harga.replace(/[^\d]/g, "").toLocaleString('id-ID');
+        }
+    }
+
+    function hitungHargaManual() {
+        const qty = document.getElementById('jumlah-manual').value;
+        const inputHarga = document.getElementById('harga-manual');
+        document.querySelectorAll('.product-card').forEach(c => c.classList.remove('selected'));
+
+        let hrg = 0;
+        if(currentServiceId === 'tk_fol') hrg = hargaTiktokFollowers;
+        else if(currentServiceId === 'tk_like') hrg = hargaTiktokLikes;
+        else if(currentServiceId === 'tk_view') hrg = hargaTiktokViews;
+        else if(currentServiceId === 'ig_fol') hrg = hargaIgFollowers;
+        else if(currentServiceId === 'ig_like') hrg = hargaIgLikes;
+        else if(currentServiceId === 'ig_view') hrg = hargaIgViews;
+        else if(currentServiceId === 'yt_sub') hrg = hargaYoutubeSub;
+        else if(currentServiceId === 'yt_view') hrg = hargaYoutubeViews;
+        else if(currentServiceId === 'yt_like') hrg = hargaYoutubeViews; // Sama dgn views contohnya
+        else if(currentServiceId === 'fb_fol') hrg = hargaFbFollowers;
+        else if(currentServiceId === 'fb_like') hrg = hargaFbLikes;
+
+        if(qty < 50 && qty !== "") {
+            inputHarga.value = "Min. 50";
             selectedProduct = ""; selectedPrice = "";
-            
-            document.getElementById('order-title').innerText = name;
-            document.getElementById('label-input').innerText = label;
-            
-            const userIdInput = document.getElementById('user-id');
-            userIdInput.value = "";
-            
-            // --- Custom Placeholder ---
-            if(id === 'tk_fol') {
-                userIdInput.placeholder = "Masukkan Username (Contoh: @syrumi)";
-            } else if (id === 'tk_like' || id === 'tk_view') {
-                userIdInput.placeholder = "Salin & Tempel Link Video TikTok";
-            } else if (id === 'ig_fol') {
-                userIdInput.placeholder = "Masukkan Username IG (Contoh: @syrumi)";
-            } else {
-                userIdInput.placeholder = "Masukkan Data";
-            }
-
-            document.getElementById('zone-id').style.display = (id === 'ml') ? 'block' : 'none';
-            
-            if(manual) {
-                document.getElementById('wrapper-manual').style.display = 'block';
-                document.getElementById('wrapper-grid').style.display = 'none';
-                document.getElementById('jumlah-manual').value = "";
-                document.getElementById('harga-manual').value = "";
-                renderProducts(id, true);
-            } else {
-                document.getElementById('wrapper-manual').style.display = 'none';
-                document.getElementById('wrapper-grid').style.display = 'block';
-                renderProducts(id, false);
-            }
-            switchScreen('screen-order');
+            return;
         }
 
-        function renderProducts(id, isManual) {
-            const gridId = isManual ? 'grid-produk-manual' : 'grid-produk';
-            const grid = document.getElementById(gridId);
-            grid.innerHTML = pricelist[id] ? "" : "<p style='grid-column: span 2; text-align:center; font-size:12px; color:#aaa; padding:20px;'>Pilihan paket segera hadir...</p>";
-            
-            if(pricelist[id]) {
-                pricelist[id].forEach(p => {
-                    grid.innerHTML += `
-                        <div onclick="selectItem('${p.item}', '${p.harga}', this)" class="product-card">
-                            <span class="item-name">${p.item}</span>
-                            <span class="item-price">${p.harga}</span>
-                        </div>`;
-                });
-            }
+        if(qty >= 50) {
+            const total = qty * hrg;
+            selectedProduct = qty + " " + currentUnitName;
+            selectedPrice = "Rp" + total.toLocaleString('id-ID');
+            inputHarga.value = total.toLocaleString('id-ID');
+        } else {
+            inputHarga.value = "";
+            selectedProduct = ""; selectedPrice = "";
+        }
+    }
+
+    function tampilkanKonfirmasi() {
+        const val = document.getElementById('user-id').value.trim();
+        if(!val) return alert("Harap isi data tujuan!");
+
+        // --- LINK GUARD ---
+        const needsLink = currentServiceId.includes('like') || currentServiceId.includes('view') || currentServiceId.includes('yt') || currentServiceId.includes('fb');
+        if(needsLink && !val.includes('http')) {
+            return alert("Gagal! Layanan ini membutuhkan Link (URL) yang valid.");
         }
 
-        function selectItem(item, harga, el) {
-            selectedProduct = item; 
-            selectedPrice = harga;
-            document.querySelectorAll('.product-card').forEach(c => c.classList.remove('selected'));
-            el.classList.add('selected');
-
-            if (isManualMode) {
-                const qtyOnly = item.replace(/\D/g, "");
-                document.getElementById('jumlah-manual').value = qtyOnly;
-                document.getElementById('harga-manual').value = harga.replace(/[^\d]/g, "").toLocaleString('id-ID');
-            }
-        }
-
-        function hitungHargaManual() {
+        if(!selectedProduct) {
             const qty = document.getElementById('jumlah-manual').value;
-            const inputHarga = document.getElementById('harga-manual');
-            document.querySelectorAll('.product-card').forEach(c => c.classList.remove('selected'));
+            if(qty < 50) return alert("Minimal pembelian adalah 50 unit!");
+            return alert("Pilih nominal atau masukkan jumlah!");
+        }
+        document.getElementById('confirm-overlay').style.display = 'flex';
+    }
 
-            let currentHargaSatuan = 0;
-            if(currentServiceId === 'tk_fol') currentHargaSatuan = hargaTiktokFollowers;
-            else if(currentServiceId === 'tk_like') currentHargaSatuan = hargaTiktokLikes;
-            else if(currentServiceId === 'tk_view') currentHargaSatuan = hargaTiktokViews;
-            else if(currentServiceId === 'ig_fol') currentHargaSatuan = hargaIgFollowers;
+    function prosesKeWA() {
+        let idInput = document.getElementById('user-id').value.trim();
+        const zone = document.getElementById('zone-id').value;
+        let tujuanAkhir = idInput;
 
-            // Minimal 100 untuk TikTok
-            if(currentServiceId.startsWith('tk_')) {
-                if(qty < 100) {
-                    inputHarga.value = "Min. 100"; 
-                    selectedProduct = ""; selectedPrice = "";
-                    return; 
-                }
-            }
-
-            if(qty > 0) {
-                const total = qty * currentHargaSatuan;
-                selectedProduct = qty + " Pcs";
-                selectedPrice = "Rp" + total.toLocaleString('id-ID');
-                inputHarga.value = total.toLocaleString('id-ID');
-            } else {
-                inputHarga.value = "";
-                selectedProduct = ""; selectedPrice = "";
-            }
+        // Auto Link conversion jika hanya username
+        if(currentServiceId === 'tk_fol' && !idInput.includes('tiktok.com')) {
+            tujuanAkhir = `https://www.tiktok.com/@${idInput.replace(/^@/, '')}`;
+        } else if(currentServiceId === 'ig_fol' && !idInput.includes('instagram.com')) {
+            tujuanAkhir = `https://www.instagram.com/${idInput.replace(/^@/, '')}`;
         }
 
-        function tampilkanKonfirmasi() {
-            const userIdValue = document.getElementById('user-id').value.trim();
-            if(!userIdValue) return alert("Harap isi data tujuan!");
+        if(zone) tujuanAkhir = `${tujuanAkhir} (${zone})`;
 
-            // --- LINK GUARD ---
-            if(currentServiceId === 'tk_like' || currentServiceId === 'tk_view') {
-                if(!userIdValue.includes('tiktok.com')) {
-                    return alert("Gagal! Harap masukkan Link Video TikTok yang valid.");
-                }
-            }
+        const pesan = window.encodeURIComponent(`*ORDER SYRUMISTORE*\nProduk: ${document.getElementById('order-title').innerText}\nTujuan: ${tujuanAkhir}\nItem: ${selectedProduct}\nHarga: ${selectedPrice}`);
+        window.location.href = `https://wa.me/6289507913948?text=${pesan}`;
+    }
 
-            if(!selectedProduct) {
-                if(currentServiceId.startsWith('tk_')) {
-                    const qty = document.getElementById('jumlah-manual').value;
-                    if(qty < 100) return alert("Minimal pembelian adalah 100 Pcs!");
-                }
-                return alert("Pilih nominal atau masukkan jumlah!");
-            }
-            document.getElementById('confirm-overlay').style.display = 'flex';
-        }
-
-        function prosesKeWA() {
-            let idInput = document.getElementById('user-id').value.trim();
-            const zone = document.getElementById('zone-id').value;
-            let tujuanAkhir = idInput;
-
-            // Auto Convert Username ke Link (TikTok & IG)
-            if(currentServiceId === 'tk_fol' && !idInput.includes('tiktok.com')) {
-                tujuanAkhir = `https://www.tiktok.com/@${idInput.replace(/^@/, '')}`;
-            } else if(currentServiceId === 'ig_fol' && !idInput.includes('instagram.com')) {
-                tujuanAkhir = `https://www.instagram.com/${idInput.replace(/^@/, '')}`;
-            }
-
-            if(zone) tujuanAkhir = `${tujuanAkhir} (${zone})`;
-
-            const pesan = window.encodeURIComponent(`*ORDER SYRUMISTORE*\nProduk: ${document.getElementById('order-title').innerText}\nTujuan: ${tujuanAkhir}\nItem: ${selectedProduct}\nHarga: ${selectedPrice}`);
-            window.location.href = `https://wa.me/6289507913948?text=${pesan}`;
-        }
-
-        function goToLobby() { switchScreen('screen-lobby'); }
-        function backToKategori() { switchScreen('screen-kategori'); }
-        function tutupKonfirmasi() { document.getElementById('confirm-overlay').style.display = 'none'; }
-        function tampilkanKonfirmasiSaluran() { document.getElementById('testi-overlay').style.display = 'flex'; }
-        function tutupTesti() { document.getElementById('testi-overlay').style.display = 'none'; }
-        function bukaSaluran() { window.open("https://whatsapp.com/channel/0029VbB9bWGLNSa9K95BId3P", "_blank"); tutupTesti(); }
-    </script>
+    function goToLobby() { switchScreen('screen-lobby'); }
+    function backToKategori() { switchScreen('screen-kategori'); }
+    function tutupKonfirmasi() { document.getElementById('confirm-overlay').style.display = 'none'; }
+    function tampilkanKonfirmasiSaluran() { document.getElementById('testi-overlay').style.display = 'flex'; }
+    function tutupTesti() { document.getElementById('testi-overlay').style.display = 'none'; }
+    function bukaSaluran() { window.open("https://whatsapp.com/channel/0029VbB9bWGLNSa9K95BId3P", "_blank"); tutupTesti(); }
+</script>
 </body>
 </html>
