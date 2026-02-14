@@ -111,9 +111,10 @@
         </div>
     </div>
 
-    <script>
+   <script>
         const hargasatuan = 50; 
         
+        // --- 1. Update Database Label ---
         const database = {
             game: [
                 { id: 'ml', name: 'Mobile Legends', icon: 'images/logo-ml.jfif', label: 'USER ID & ZONE' },
@@ -129,7 +130,8 @@
             ],
             sosmed_apps: {
                 tiktok: [
-                    { id: 'tk_fol', name: 'TikTok Followers', label: 'LINK PROFIL', isManual: true },
+                    // Label diubah sesuai request
+                    { id: 'tk_fol', name: 'TikTok Followers', label: 'LINK AKUN TIKTOK', isManual: true },
                     { id: 'tk_like', name: 'TikTok Likes', label: 'LINK VIDEO', isManual: true },
                     { id: 'tk_view', name: 'TikTok Views', label: 'LINK VIDEO', isManual: true },
                     { id: 'tk_share', name: 'TikTok Shares', label: 'LINK VIDEO', isManual: true }
@@ -148,6 +150,7 @@
         let selectedProduct = "";
         let selectedPrice = "";
         let isManualMode = false;
+        let currentServiceId = ""; // Variabel baru untuk melacak layanan apa yang sedang dibuka
 
         function switchScreen(id) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
@@ -176,10 +179,22 @@
 
         function openOrder(id, name, label, manual) {
             isManualMode = manual;
+            currentServiceId = id; // Simpan ID layanan saat ini
             selectedProduct = ""; selectedPrice = "";
+            
             document.getElementById('order-title').innerText = name;
             document.getElementById('label-input').innerText = label;
-            document.getElementById('user-id').value = "";
+            
+            const userIdInput = document.getElementById('user-id');
+            userIdInput.value = "";
+            
+            // --- 2. Kustomisasi Placeholder untuk TikTok Followers ---
+            if(id === 'tk_fol') {
+                userIdInput.placeholder = "https://www.tiktok.com/@username";
+            } else {
+                userIdInput.placeholder = "Masukkan Link/ID";
+            }
+
             document.getElementById('zone-id').style.display = (id === 'ml') ? 'block' : 'none';
             
             if(manual) {
@@ -230,6 +245,16 @@
             const inputHarga = document.getElementById('harga-manual');
             document.querySelectorAll('.product-card').forEach(c => c.classList.remove('selected'));
 
+            // --- 3. Logic Minimal Pembelian 100 Khusus TikTok Followers ---
+            if(currentServiceId === 'tk_fol') {
+                if(qty < 100) {
+                    inputHarga.value = "Min. 100"; // Info error di kolom harga
+                    selectedProduct = ""; // Kosongkan agar tidak bisa dipesan
+                    selectedPrice = "";
+                    return; // Stop proses
+                }
+            }
+
             if(qty > 0) {
                 const total = qty * hargasatuan;
                 selectedProduct = qty + " Pcs";
@@ -243,8 +268,27 @@
         }
 
         function tampilkanKonfirmasi() {
-            if(!document.getElementById('user-id').value) return alert("Harap isi tujuan!");
-            if(!selectedProduct) return alert("Pilih nominal atau masukkan jumlah!");
+            const userIdValue = document.getElementById('user-id').value;
+            
+            if(!userIdValue) return alert("Harap isi tujuan!");
+
+            // --- 4. Validasi Link Harus https://www.tiktok.com/@ ---
+            if(currentServiceId === 'tk_fol') {
+                if(!userIdValue.startsWith("https://www.tiktok.com/@")) {
+                    alert("Link salah! Format wajib: https://www.tiktok.com/@username");
+                    return;
+                }
+            }
+
+            if(!selectedProduct) {
+                // Cek pesan error khusus jika kurang dari 100
+                if(currentServiceId === 'tk_fol') {
+                    const qty = document.getElementById('jumlah-manual').value;
+                    if(qty < 100) return alert("Minimal pembelian TikTok Followers adalah 100 Pcs!");
+                }
+                return alert("Pilih nominal atau masukkan jumlah!");
+            }
+            
             document.getElementById('confirm-overlay').style.display = 'flex';
         }
 
