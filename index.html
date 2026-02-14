@@ -37,7 +37,7 @@
         <div class="modal-box">
             <div style="font-size: 50px;">⭐</div>
             <h2>Lihat Testimoni</h2>
-            <p>Kamu akan dialihkan ke Saluran WhatsApp kami untuk melihat testimoni pelanggan.</p>
+            <p>Kamu akan dialihkan ke Saluran WhatsApp kami.</p>
             <button class="btn-confirm" onclick="bukaSaluran()">Buka Saluran</button>
             <button class="btn-cancel" onclick="tutupTesti()">Batal</button>
         </div>
@@ -60,7 +60,7 @@
             </div>
             <div onclick="openKategori('ppob')" class="glass menu-item">
                 <img src="https://cdn-icons-png.flaticon.com/512/3059/3059502.png">
-                <span>Pulsa, Listrik & Air</span>
+                <span>Pulsa & Tagihan</span>
             </div>
             <div onclick="switchScreen('screen-status')" class="glass menu-item" style="border: 1px solid #b5fffc;">
                 <img src="https://cdn-icons-png.flaticon.com/512/833/833593.png">
@@ -76,9 +76,8 @@
             <button class="btn-back" onclick="goToLobby()"><i class="fas fa-arrow-left"></i> Kembali</button>
             <div class="glass text-center">
                 <h2 class="section-title">Lacak Pesanan</h2>
-                <input type="text" id="input-resi" placeholder="Contoh: SYR-1234" style="text-align:center; text-transform: uppercase;">
+                <input type="text" id="input-resi" placeholder="Contoh: SYR-1402-2015" style="text-align:center; text-transform: uppercase;">
                 <button class="btn-order" onclick="cekResi()" style="margin-top:10px;">Cek Progres</button>
-
                 <div id="status-result-box" style="display:none; margin-top:20px; padding:20px; border-radius:20px; background:white;">
                     <div id="st-icon" style="font-size: 40px;"></div>
                     <div id="st-label" style="font-weight: 700; font-size: 18px; margin: 5px 0;"></div>
@@ -95,7 +94,7 @@
         </section>
 
         <section id="screen-order" class="screen">
-            <button class="btn-back" onclick="backToKategori()"><i class="fas fa-arrow-left"></i> Ganti Produk</button>
+            <button class="btn-back" onclick="backToKategori()"><i class="fas fa-arrow-left"></i> Kembali</button>
             <div class="glass">
                 <h2 id="order-title" class="text-center mb-4 main-title">Top Up</h2>
                 <div class="mb-4">
@@ -123,7 +122,6 @@
                             </div>
                         </div>
                     </div>
-                    <div id="grid-produk-manual" class="product-grid"></div>
                 </div>
 
                 <div id="wrapper-grid">
@@ -144,11 +142,8 @@
     </div>
 
     <script>
-    // Harga per item
     const hargaTiktokFollowers = 50, hargaTiktokLikes = 10, hargaTiktokViews = 1;
     const hargaIgFollowers = 50, hargaIgLikes = 20;
-    const hargaYoutubeSub = 500;
-    const hargaFbFollowers = 100;
 
     const database = {
         game: [
@@ -157,37 +152,23 @@
         ],
         sosmed: [
             { id: 'tiktok', name: 'TikTok', icon: 'https://cdn-icons-png.flaticon.com/512/3046/3046121.png', isAppGroup: true },
-            { id: 'instagram', name: 'Instagram', icon: 'https://cdn-icons-png.flaticon.com/512/174/174855.png', isAppGroup: true },
-            { id: 'youtube', name: 'YouTube', icon: 'https://cdn-icons-png.flaticon.com/512/1384/1384060.png', isAppGroup: true },
-            { id: 'facebook', name: 'Facebook', icon: 'https://cdn-icons-png.flaticon.com/512/733/733547.png', isAppGroup: true }
+            { id: 'instagram', name: 'Instagram', icon: 'https://cdn-icons-png.flaticon.com/512/174/174855.png', isAppGroup: true }
         ],
-        ppob: [
-            { id: 'pulsa', name: 'Pulsa & Data', icon: 'https://cdn-icons-png.flaticon.com/512/3059/3059502.png', label: 'NOMOR HP' },
-            { id: 'listrik', name: 'Token Listrik', icon: 'https://cdn-icons-png.flaticon.com/512/3105/3105807.png', label: 'ID PELANGGAN' }
-        ],
+        ppob: [{ id: 'pulsa', name: 'Pulsa & Data', icon: 'https://cdn-icons-png.flaticon.com/512/3059/3059502.png', label: 'NOMOR HP' }],
         sosmed_apps: {
             tiktok: [
                 { id: 'tk_fol', name: 'TikTok Followers', label: 'USERNAME TIKTOK', isManual: true, unit: 'Fol' },
-                { id: 'tk_like', name: 'TikTok Likes', label: 'LINK VIDEO', isManual: true, unit: 'Likes' },
-                { id: 'tk_view', name: 'TikTok Views', label: 'LINK VIDEO', isManual: true, unit: 'Views' }
+                { id: 'tk_like', name: 'TikTok Likes', label: 'LINK VIDEO', isManual: true, unit: 'Likes' }
             ],
             instagram: [
-                { id: 'ig_fol', name: 'IG Followers', label: 'USERNAME INSTAGRAM', isManual: true, unit: 'Fol' },
-                { id: 'ig_like', name: 'IG Likes', label: 'LINK POSTINGAN', isManual: true, unit: 'Likes' }
-            ],
-            youtube: [
-                { id: 'yt_sub', name: 'YouTube Subscribers', label: 'LINK CHANNEL', isManual: true, unit: 'Sub' }
-            ],
-            facebook: [
-                { id: 'fb_fol', name: 'FB Followers', label: 'LINK PROFIL/FP', isManual: true, unit: 'Fol' }
+                { id: 'ig_fol', name: 'IG Followers', label: 'USERNAME INSTAGRAM', isManual: true, unit: 'Fol' }
             ]
         }
     };
 
     const pricelist = {
-        ml: [{ item: '3 Diamonds', harga: 'Rp1.200' }],
-        ff: [{ item: '5 Diamonds', harga: 'Rp1.000' }],
-        ig_fol: [{ item: '100 Followers', harga: 'Rp5.000' }]
+        ml: [{ item: '3 Diamonds', harga: 'Rp1.200' }, { item: '5 Diamonds', harga: 'Rp1.600' }],
+        ff: [{ item: '5 Diamonds', harga: 'Rp1.000' }]
     };
 
     let selectedProduct = "", selectedPrice = "", isManualMode = false, currentServiceId = "", currentUnitName = "Pcs", activeOrderID = "";
@@ -200,15 +181,16 @@
     }
     function tutupAlert() { document.getElementById('alert-overlay').style.display = 'none'; }
 
+    // SWITCH SCREEN DENGAN ANIMASI FADE
     function switchScreen(id) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-        document.getElementById(id).classList.add('active');
+        const target = document.getElementById(id);
+        setTimeout(() => { target.classList.add('active'); }, 10);
         window.scrollTo(0,0);
     }
 
     function openKategori(cat) {
         const listDiv = document.getElementById('list-layanan');
-        document.getElementById('kategori-title').innerText = "Pilih Layanan";
         listDiv.innerHTML = "";
         database[cat].forEach(item => {
             const func = item.isAppGroup ? `openSubSosmed('${item.id}')` : `openOrder('${item.id}', '${item.name}', '${item.label}', false)`;
@@ -234,21 +216,15 @@
         document.getElementById('unit-label-text').innerText = unitName;
         document.getElementById('zone-id').style.display = (id === 'ml') ? 'block' : 'none';
         
-        if(manual) {
-            document.getElementById('wrapper-manual').style.display = 'block';
-            document.getElementById('wrapper-grid').style.display = 'none';
-            document.getElementById('jumlah-manual').value = "";
-            document.getElementById('harga-manual').value = "";
-        } else {
-            document.getElementById('wrapper-manual').style.display = 'none';
-            document.getElementById('wrapper-grid').style.display = 'block';
-        }
+        document.getElementById('wrapper-manual').style.display = manual ? 'block' : 'none';
+        document.getElementById('wrapper-grid').style.display = manual ? 'none' : 'block';
+        
         renderProducts(id, manual);
         switchScreen('screen-order');
     }
 
     function renderProducts(id, isManual) {
-        const grid = document.getElementById(isManual ? 'grid-produk-manual' : 'grid-produk');
+        const grid = document.getElementById('grid-produk');
         grid.innerHTML = pricelist[id] ? "" : "<p style='text-align:center; font-size:12px; color:#aaa; padding:20px;'>Paket segera hadir...</p>";
         if(pricelist[id]) {
             pricelist[id].forEach(p => {
@@ -269,11 +245,7 @@
         let hrg = 0;
         if(currentServiceId === 'tk_fol') hrg = hargaTiktokFollowers;
         else if(currentServiceId === 'tk_like') hrg = hargaTiktokLikes;
-        else if(currentServiceId === 'tk_view') hrg = hargaTiktokViews;
         else if(currentServiceId === 'ig_fol') hrg = hargaIgFollowers;
-        else if(currentServiceId === 'ig_like') hrg = hargaIgLikes;
-        else if(currentServiceId === 'yt_sub') hrg = hargaYoutubeSub;
-        else if(currentServiceId === 'fb_fol') hrg = hargaFbFollowers;
 
         if(qty >= 50) {
             const total = qty * hrg;
@@ -281,8 +253,7 @@
             selectedPrice = "Rp" + total.toLocaleString('id-ID');
             inputHarga.value = total.toLocaleString('id-ID');
         } else {
-            inputHarga.value = qty > 0 ? "Min. 50" : "";
-            selectedProduct = ""; selectedPrice = "";
+            inputHarga.value = ""; selectedProduct = ""; selectedPrice = "";
         }
     }
 
@@ -290,11 +261,9 @@
         if(!document.getElementById('user-id').value) return kustomAlert("Data Kosong", "Isi Link/ID tujuan!", "❌");
         if(!selectedProduct) return kustomAlert("Pilihan Kosong", "Pilih nominal dulu!", "🛒");
 
-        // FORMAT ID: SYR-TGLBLN-JAMMENIT (Contoh: SYR-1402-2015)
         const d = new Date();
         const tglBln = String(d.getDate()).padStart(2, '0') + String(d.getMonth() + 1).padStart(2, '0');
         const jamMnt = String(d.getHours()).padStart(2, '0') + String(d.getMinutes()).padStart(2, '0');
-        
         activeOrderID = `SYR-${tglBln}-${jamMnt}`;
         
         document.getElementById('generated-id').innerText = activeOrderID;
@@ -307,15 +276,8 @@
         const namaProduk = document.getElementById('order-title').innerText;
         let tujuan = val;
 
-        // Link Otomatis
-        if (namaProduk.toLowerCase().includes("tiktok")) {
-            tujuan = `https://tiktok.com/@${val}`;
-        } else if (namaProduk.toLowerCase().includes("instagram") || namaProduk.toLowerCase().includes("ig")) {
-            tujuan = `https://instagram.com/${val}`;
-        } else if (namaProduk.toLowerCase().includes("facebook") || namaProduk.toLowerCase().includes("fb")) {
-            if (!val.includes("http")) tujuan = `https://facebook.com/${val}`;
-        }
-
+        if (namaProduk.toLowerCase().includes("tiktok")) tujuan = `https://tiktok.com/@${val}`;
+        else if (namaProduk.toLowerCase().includes("instagram") || namaProduk.toLowerCase().includes("ig")) tujuan = `https://instagram.com/${val}`;
         if (zone) tujuan = `${val} (${zone})`;
 
         const pesan = window.encodeURIComponent(
@@ -324,12 +286,10 @@
             `Barang: ${selectedProduct} ${namaProduk}\n` +
             `Tujuan: ${tujuan}\n` +
             `Metode: Web\n\n` +
-            `----------------------------\n` +
             `*Total:* ${selectedPrice}\n` +
             `----------------------------\n` +
-            `_Silakan proses pesanan saya admin_`
+            `_Halo admin, silakan proses pesanan saya_`
         );
-        
         window.location.href = `https://wa.me/6289507913948?text=${pesan}`;
     }
 
@@ -342,10 +302,9 @@
             document.getElementById('st-icon').innerText = data.icon;
             document.getElementById('st-label').innerText = data.status;
             document.getElementById('st-desc').innerText = data.desc;
-            const actionDiv = document.getElementById('st-action');
-            actionDiv.innerHTML = data.link !== "" ? `<button onclick="window.open('${data.link}')" class="btn-proof">Lihat Bukti Saluran</button>` : "";
+            document.getElementById('st-action').innerHTML = data.link !== "" ? `<button onclick="window.open('${data.link}')" class="btn-proof">Lihat Bukti</button>` : "";
         } else {
-            kustomAlert("Tidak Ditemukan", "ID belum terdaftar di sistem.", "🔍");
+            kustomAlert("Tidak Ditemukan", "ID belum terdaftar.", "🔍");
             box.style.display = 'none';
         }
     }
