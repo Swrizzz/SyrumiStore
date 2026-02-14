@@ -6,55 +6,24 @@
     --soft-blue: #b5fffc;
     --glass-white: rgba(255, 255, 255, 0.7);
     --glass-border: rgba(255, 255, 255, 0.4);
-    --text-dark: #4a4a4a;
 }
 
-/* --- Global Reset --- */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
 
 body {
     background: linear-gradient(135deg, var(--primary-pink) 0%, var(--soft-blue) 100%);
-    background-attachment: fixed;
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    padding: 20px 15px;
+    background-attachment: fixed; min-height: 100vh;
+    display: flex; justify-content: center; padding: 20px 15px;
 }
 
-#app-container {
-    width: 100%;
-    max-width: 450px;
-    position: relative;
-}
+#app-container { width: 100%; max-width: 450px; position: relative; }
 
-/* --- Menghilangkan Spin Button (Dropdown Panah Atas Bawah) --- */
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-}
-
-input[type=number] {
-    -moz-appearance: textfield; /* Untuk Firefox */
-}
-
-/* --- Glassmorphism UI --- */
 .glass {
-    background: var(--glass-white);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid var(--glass-border);
-    border-radius: 25px;
-    padding: 20px;
-    box-shadow: 0 10px 25px rgba(255, 133, 179, 0.1);
+    background: var(--glass-white); backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border); border-radius: 25px;
+    padding: 20px; box-shadow: 0 10px 25px rgba(255, 133, 179, 0.1);
 }
 
-/* --- Brand Section --- */
 .logo-wrapper {
     display: inline-block; padding: 5px; background: white; border-radius: 50%;
     box-shadow: 0 4px 15px rgba(255, 133, 179, 0.2); border: 2px solid var(--accent-pink);
@@ -64,78 +33,56 @@ input[type=number] {
 .brand-name { color: #ff85b3; font-size: 24px; }
 .brand-tagline { font-size: 12px; color: #888; }
 
-/* --- Menu & Lists --- */
 .menu-item {
     display: flex; align-items: center; padding: 15px; background: white;
     border-radius: 20px; margin-bottom: 12px; cursor: pointer; transition: 0.2s;
-    border: 1px solid var(--glass-border);
 }
 .menu-item:hover { transform: scale(1.02); }
 .menu-item img { width: 40px; height: 40px; border-radius: 10px; margin-right: 15px; object-fit: cover; }
 .menu-item.highlight { border: 1px dashed var(--accent-pink); }
 
-/* --- Order Screen Elements --- */
-.section-title { color: var(--accent-pink); margin-bottom: 20px; }
-.main-title { color: var(--accent-pink); }
+.section-title, .main-title { color: var(--accent-pink); margin-bottom: 20px; }
 .input-label { font-size: 11px; font-weight: 600; color: #888; display: block; margin-bottom: 5px; }
 
 .input-row { display: flex; gap: 10px; }
-input {
-    width: 100%; padding: 12px 15px; border-radius: 12px; border: 1px solid #ddd;
-    outline: none; font-size: 14px; background: white; transition: 0.2s;
-}
+input { width: 100%; padding: 12px 15px; border-radius: 12px; border: 1px solid #ddd; outline: none; font-size: 14px; }
 input:focus { border-color: var(--accent-pink); }
-input:read-only { background-color: #f9f9f9; color: #555; }
-#zone-id { flex: 0 0 100px; }
 
-/* --- Manual Input Dua Kolom --- */
 .manual-input-container { display: flex; gap: 10px; margin-bottom: 15px; }
 .input-box-wrapper { flex: 1; }
-.input-box-wrapper label { display: block; font-size: 10px; font-weight: 700; color: #888; margin-bottom: 4px; text-transform: uppercase; }
+.input-box-wrapper label { font-size: 10px; font-weight: 700; color: #888; text-transform: uppercase; }
 .input-relative { position: relative; display: flex; align-items: center; }
-.unit-label { position: absolute; right: 12px; font-size: 12px; font-weight: 600; color: #bbb; pointer-events: none; }
+.unit-label { position: absolute; right: 12px; font-size: 12px; color: #bbb; }
 
-.divider-text { text-align: center; font-size: 11px; color: #aaa; margin: 15px 0; position: relative; }
-.divider-text::before, .divider-text::after { content: ""; position: absolute; top: 50%; width: 25%; height: 1px; background: #eee; }
-.divider-text::before { left: 0; } .divider-text::after { right: 0; }
-
-/* --- Product Grid --- */
-.product-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 15px; }
+.divider-text { text-align: center; font-size: 11px; color: #aaa; margin: 15px 0; }
+.product-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
 .product-card {
     background: white; border: 2px solid transparent; border-radius: 18px;
-    padding: 15px 10px; text-align: center; cursor: pointer;
-    display: flex; flex-direction: column; align-items: center; min-height: 110px; justify-content: center;
-    transition: 0.2s;
+    padding: 15px 10px; text-align: center; cursor: pointer; transition: 0.2s;
 }
 .product-card.selected { border-color: var(--accent-pink); background: #fffafa; }
-.item-name { font-size: 11px; font-weight: 600; color: #777; margin-bottom: 5px; }
-.item-price { font-weight: 700; color: var(--accent-pink); font-size: 13px; }
+.item-price { font-weight: 700; color: var(--accent-pink); }
 
-/* --- Buttons --- */
 .btn-order {
     width: 100%; background: var(--accent-pink); color: white; padding: 16px;
-    border-radius: 18px; border: none; font-weight: 700; font-size: 16px;
-    margin-top: 20px; cursor: pointer; box-shadow: 0 5px 15px rgba(255, 133, 179, 0.3);
+    border-radius: 18px; border: none; font-weight: 700; margin-top: 20px; cursor: pointer;
 }
-.btn-back { background: none; border: none; color: var(--accent-pink); font-weight: 700; cursor: pointer; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
+.btn-back { background: none; border: none; color: var(--accent-pink); font-weight: 700; cursor: pointer; margin-bottom: 15px; }
 
-/* --- Overlay & Modal --- */
 .overlay {
     display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(8px); z-index: 9999;
+    background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(8px); z-index: 9999;
     justify-content: center; align-items: center; padding: 20px;
 }
 .modal-box {
-    background: white; padding: 30px 20px; border-radius: 30px; text-align: center;
-    max-width: 350px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); animation: fadeIn 0.3s ease;
+    background: white; padding: 30px; border-radius: 30px; text-align: center;
+    max-width: 340px; animation: popIn 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
-.btn-confirm { background: var(--accent-pink); color: white; border: none; padding: 12px 25px; border-radius: 15px; font-weight: 700; cursor: pointer; margin: 5px; }
-.btn-cancel { background: #eee; color: #777; border: none; padding: 12px 25px; border-radius: 15px; font-weight: 700; cursor: pointer; margin: 5px; }
+@keyframes popIn { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
+.btn-confirm { background: var(--accent-pink); color: white; border: none; padding: 12px 20px; border-radius: 12px; cursor: pointer; margin: 5px; }
+.btn-cancel { background: #eee; color: #777; border: none; padding: 12px 20px; border-radius: 12px; cursor: pointer; margin: 5px; }
 
-/* --- Utilities --- */
-.screen { display: none; animation: fadeIn 0.3s ease forwards; }
-.screen.active { display: block; }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-.text-center { text-align: center; }
-.mb-4 { margin-bottom: 20px; }
-.copyright { text-align: center; margin-top: 30px; padding: 20px 0; font-size: 11px; color: #888; line-height: 1.6; }
+.screen { display: none; }
+.screen.active { display: block; animation: fadeIn 0.3s ease; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.copyright { text-align: center; font-size: 11px; color: #888; margin-top: 30px; }
