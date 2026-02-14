@@ -9,49 +9,59 @@
 </head>
 <body>
 
-    <div id="alert-overlay" class="overlay">
-        <div class="modal-box">
-            <div id="alert-icon" style="font-size: 50px; margin-bottom: 10px;">⚠️</div>
-            <h2 id="alert-title">Pemberitahuan</h2>
-            <p id="alert-message">Pesan di sini...</p>
-            <button class="btn-confirm" onclick="tutupAlert()">Oke, Paham</button>
-        </div>
-    </div>
-
     <div id="confirm-overlay" class="overlay">
         <div class="modal-box">
             <div style="font-size: 50px;">📲</div>
             <h2>Konfirmasi Pesanan</h2>
-            <div class="id-badge-container">
-                <span style="font-size: 10px; font-weight: bold; color: #ff85b3;">ID PESANAN ANDA:</span>
-                <h3 id="generated-id">SYR-XXXX</h3>
+            <p style="font-size: 13px; color:#666;">Lanjutkan ke WhatsApp admin.</p>
+            <div style="background:#fff0f6; border:2px dashed #ff85b3; padding:15px; border-radius:15px; margin:15px 0;">
+                <span style="font-size: 10px; font-weight: bold; color:#ff85b3;">ID PESANAN:</span>
+                <h3 id="generated-id" style="font-family: monospace;">SYR-XXXX</h3>
             </div>
-            <button class="btn-confirm" onclick="prosesKeWA()">Lanjutkan ke WA</button>
-            <button class="btn-cancel" onclick="tutupKonfirmasi()">Batal</button>
+            <button class="btn-order" onclick="prosesKeWA()">Lanjutkan</button>
+            <button style="background:none; border:none; color:#aaa; cursor:pointer; margin-top:10px;" onclick="tutupKonfirmasi()">Batal</button>
         </div>
     </div>
 
     <div id="app-container">
         <section id="screen-lobby" class="screen active">
-            <div class="text-center mb-4">
+            <div class="text-center">
                 <div class="logo-wrapper"><img src="images/syrumi.jpeg" class="profile-img"></div>
                 <h1 class="brand-name">Syrumi Store</h1>
                 <p class="brand-tagline">Topup Game & Sosmed Tercepat ✨</p>
             </div>
-            
             <div onclick="openKategori('game')" class="glass menu-item">
                 <img src="images/game.jfif" onerror="this.src='https://cdn-icons-png.flaticon.com/512/686/686589.png'">
                 <span>Top Up Game</span>
             </div>
-
             <div onclick="openKategori('sosmed')" class="glass menu-item">
                 <img src="images/suntik.jfif" onerror="this.src='https://cdn-icons-png.flaticon.com/512/174/174876.png'">
                 <span>Suntik Sosmed</span>
             </div>
-
+            <div onclick="openKategori('ppob')" class="glass menu-item">
+                <img src="https://cdn-icons-png.flaticon.com/512/3059/3059502.png">
+                <span>Pulsa & Tagihan</span>
+            </div>
             <div onclick="switchScreen('screen-status')" class="glass menu-item">
                 <img src="https://cdn-icons-png.flaticon.com/512/833/833593.png">
                 <span>Cek Status Pesanan</span>
+            </div>
+        </section>
+
+        <section id="screen-kategori" class="screen">
+            <button class="btn-back" onclick="goToLobby()"><i class="fas fa-arrow-left"></i> Kembali</button>
+            <h2 id="kategori-title" style="margin-bottom:15px;">Pilih Layanan</h2>
+            <div id="list-layanan"></div>
+        </section>
+
+        <section id="screen-order" class="screen">
+            <button class="btn-back" onclick="backToKategori()"><i class="fas fa-arrow-left"></i> Kembali</button>
+            <div class="glass">
+                <h2 id="order-title" class="text-center">Top Up</h2>
+                <input type="text" id="user-id" placeholder="Masukkan Link/ID">
+                <input type="text" id="zone-id" placeholder="Zone" style="display: none;">
+                <div id="grid-produk" class="product-grid"></div>
+                <button class="btn-order" onclick="tampilkanKonfirmasi()">Pesan Sekarang</button>
             </div>
         </section>
 
@@ -60,34 +70,7 @@
             <div class="glass text-center">
                 <h2>Lacak Pesanan</h2>
                 <input type="text" id="input-resi" placeholder="Masukkan ID Pesanan">
-                <button class="btn-order" onclick="alert('Fitur ini memerlukan database-pesanan.js aktif!')">Cek Progres</button>
-            </div>
-        </section>
-
-        <section id="screen-kategori" class="screen">
-            <button class="btn-back" onclick="goToLobby()"><i class="fas fa-arrow-left"></i> Kembali</button>
-            <h2 id="kategori-title" class="section-title">Pilih Layanan</h2>
-            <div id="list-layanan"></div>
-        </section>
-
-        <section id="screen-order" class="screen">
-            <button class="btn-back" onclick="backToKategori()"><i class="fas fa-arrow-left"></i> Kembali</button>
-            <div class="glass">
-                <h2 id="order-title" class="text-center">Top Up</h2>
-                <div class="mb-4">
-                    <label id="label-input" class="input-label">DATA PEMESANAN</label>
-                    <input type="text" id="user-id" placeholder="Masukkan Link/ID">
-                    <input type="text" id="zone-id" placeholder="Zone" style="display: none;">
-                </div>
-
-                <div id="wrapper-grid">
-                    <label class="input-label">PILIH NOMINAL</label>
-                    <div id="grid-produk" class="product-grid"></div>
-                </div>
-
-                <button class="btn-order" onclick="tampilkanKonfirmasi()">
-                    <i class="fab fa-whatsapp"></i> Pesan Sekarang
-                </button>
+                <button class="btn-order">Cek Status</button>
             </div>
         </section>
 
@@ -97,7 +80,6 @@
     </div>
 
     <script>
-    // DATA HARGA BERDASARKAN SPREADSHEET KAMU
     const pricelist = {
         ml: [
             { item: '5 Diamonds', harga: 'Rp1.560' },
@@ -115,28 +97,31 @@
             { item: 'Weekly Diamond Pass', harga: 'Rp27.500' },
             { item: 'Twilight Pass', harga: 'Rp145.000' }
         ],
-        tiktok_fol: [{ item: '100 Followers', harga: 'Rp5.000' }, { item: '500 Followers', harga: 'Rp20.000' }],
-        ig_fol: [{ item: '100 Followers', harga: 'Rp4.000' }]
+        ff: [{ item: '50 Diamonds', harga: 'Rp8.000' }],
+        tiktok_fol: [{ item: '100 Follower', harga: 'Rp5.000' }],
+        pulsa: [{ item: 'Pulsa 5rb', harga: 'Rp7.000' }]
     };
 
     const database = {
         game: [
-            { id: 'ml', name: 'Mobile Legends', icon: 'images/logo-ml.jfif', label: 'USER ID & ZONE' }
+            { id: 'ml', name: 'Mobile Legends', icon: 'images/logo-ml.jfif', label: 'USER ID & ZONE' },
+            { id: 'ff', name: 'Free Fire', icon: 'images/ff.jfif', label: 'PLAYER ID (UID)' }
         ],
         sosmed: [
-            { id: 'tiktok_fol', name: 'TikTok Followers', icon: 'https://cdn-icons-png.flaticon.com/512/3046/3046121.png', label: 'USERNAME/LINK' },
-            { id: 'ig_fol', name: 'Instagram Followers', icon: 'https://cdn-icons-png.flaticon.com/512/174/174855.png', label: 'USERNAME' }
+            { id: 'tiktok_fol', name: 'TikTok Followers', icon: 'https://cdn-icons-png.flaticon.com/512/3046/3046121.png', label: 'USERNAME' }
+        ],
+        ppob: [
+            { id: 'pulsa', name: 'Pulsa Reguler', icon: 'https://cdn-icons-png.flaticon.com/512/3059/3059502.png', label: 'NOMOR HP' }
         ]
     };
 
     let selectedProduct = "", selectedPrice = "", activeOrderID = "";
 
     function switchScreen(id) {
-        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('.screen').forEach(s => { s.classList.remove('active'); s.style.display = 'none'; });
         const target = document.getElementById(id);
         target.style.display = 'block';
         setTimeout(() => { target.classList.add('active'); }, 50);
-        window.scrollTo(0,0);
     }
 
     function openKategori(cat) {
@@ -151,7 +136,6 @@
     function openOrder(id, name, label) {
         selectedProduct = ""; selectedPrice = "";
         document.getElementById('order-title').innerText = name;
-        document.getElementById('label-input').innerText = label;
         document.getElementById('user-id').value = "";
         document.getElementById('zone-id').style.display = (id === 'ml') ? 'block' : 'none';
         renderProducts(id);
@@ -175,8 +159,8 @@
     }
 
     function tampilkanKonfirmasi() {
-        if(!document.getElementById('user-id').value) return alert("Isi ID/Link tujuan!");
-        if(!selectedProduct) return alert("Pilih nominal!");
+        if(!document.getElementById('user-id').value) return alert("Isi data tujuan!");
+        if(!selectedProduct) return alert("Pilih paket!");
         const d = new Date();
         activeOrderID = `SYR-${String(d.getDate()).padStart(2,'0')}${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getHours()).padStart(2,'0')}${String(d.getMinutes()).padStart(2,'0')}`;
         document.getElementById('generated-id').innerText = activeOrderID;
@@ -186,8 +170,8 @@
     function prosesKeWA() {
         const idUser = document.getElementById('user-id').value;
         const zone = document.getElementById('zone-id').value;
-        const layanan = document.getElementById('order-title').innerText;
-        const pesan = window.encodeURIComponent(`Halo Admin, order Baru!\nID: ${activeOrderID}\nLayanan: ${layanan}\nPaket: ${selectedProduct}\nTujuan: ${idUser} ${zone ? '('+zone+')' : ''}\nTotal: ${selectedPrice}`);
+        const game = document.getElementById('order-title').innerText;
+        const pesan = window.encodeURIComponent(`Halo Admin, mau order!\nID: ${activeOrderID}\nGame: ${game}\nNominal: ${selectedProduct}\nTujuan: ${idUser} ${zone ? '('+zone+')' : ''}\nTotal: ${selectedPrice}`);
         window.location.href = `https://wa.me/6289507913948?text=${pesan}`;
     }
 
