@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Syrumi Store</title>
+    <link rel="icon" type="image/png" href="images/syrumi.jpeg">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -32,16 +33,6 @@
         </div>
     </div>
 
-    <div id="testi-overlay" class="overlay">
-        <div class="modal-box">
-            <div style="font-size: 50px;">⭐</div>
-            <h2>Lihat Testimoni</h2>
-            <p>Kamu akan dialihkan ke Saluran WhatsApp kami.</p>
-            <button class="btn-confirm" onclick="bukaSaluran()">Buka Saluran</button>
-            <button class="btn-cancel" onclick="tutupTesti()">Batal</button>
-        </div>
-    </div>
-
     <div id="app-container">
         <section id="screen-lobby" class="screen active">
             <div class="text-center">
@@ -65,25 +56,6 @@
                 <img src="https://cdn-icons-png.flaticon.com/512/833/833593.png">
                 <span>Cek Status Pesanan</span>
             </div>
-            <div onclick="tampilkanKonfirmasiSaluran()" class="glass menu-item highlight">
-                <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png">
-                <span>Testimoni Saluran</span>
-            </div>
-        </section>
-
-        <section id="screen-status" class="screen">
-            <button class="btn-back" onclick="goToLobby()"><i class="fas fa-arrow-left"></i> Kembali</button>
-            <div class="glass text-center">
-                <h2 style="margin-bottom: 20px; color: #ff85b3;">Lacak Pesanan</h2>
-                <input type="text" id="input-resi" placeholder="Contoh: SYR-1402-2015" style="text-align:center; text-transform: uppercase;">
-                <button class="btn-order" onclick="cekResi()">Cek Progres</button>
-                <div id="status-result-box" style="display:none; margin-top:20px; padding:20px; border-radius:20px; background:white;">
-                    <div id="st-icon" style="font-size: 40px;"></div>
-                    <div id="st-label" style="font-weight: 700; font-size: 18px; margin: 5px 0;"></div>
-                    <p id="st-desc" style="font-size: 13px; color: #777;"></p>
-                    <div id="st-action"></div>
-                </div>
-            </div>
         </section>
 
         <section id="screen-kategori" class="screen">
@@ -98,11 +70,17 @@
             <button class="btn-back" onclick="backToKategori()"><i class="fas fa-arrow-left"></i> Kembali</button>
             <div class="glass">
                 <h2 id="order-title" class="text-center mb-4" style="color: #ff85b3;">Top Up</h2>
+                
                 <label id="label-input" class="input-label">DATA PEMESANAN</label>
-                <div style="display: flex; gap: 10px;">
-                    <input type="text" id="user-id" placeholder="Masukkan Link/ID">
+                <div class="input-wrapper" style="position: relative; display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
+                    <div id="operator-logo-container" style="position: absolute; right: 15px; display: none; z-index: 10;">
+                        <img id="operator-logo" src="" style="width: 25px; height: 25px; object-fit: contain;">
+                    </div>
+                    
+                    <input type="tel" id="user-id" placeholder="Masukkan Link/ID" class="glass input-field" style="width: 100%; padding-right: 50px;">
                     <input type="text" id="zone-id" placeholder="Zone" style="display: none; width: 100px;">
                 </div>
+
                 <div id="wrapper-manual" style="display:none; margin-bottom:20px;">
                     <div style="display: flex; gap: 10px;">
                         <div style="flex: 1;">
@@ -115,24 +93,20 @@
                         </div>
                     </div>
                 </div>
+
                 <div id="wrapper-grid">
                     <label class="input-label">PILIH NOMINAL</label>
                     <div id="grid-produk" class="product-grid"></div>
                 </div>
+
                 <button class="btn-order" onclick="tampilkanKonfirmasi()">
                     <i class="fab fa-whatsapp"></i> Pesan Sekarang
                 </button>
             </div>
         </section>
-
-        <div class="copyright">
-            &copy; 2026 <strong>Syrumi Store</strong>. All Rights Reserved.<br>
-            Topup Aman, Murah, dan Terpercaya ✨
-        </div>
     </div>
 
     <script src="data-produk.js"></script>
-    <script src="data-pesanan.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
