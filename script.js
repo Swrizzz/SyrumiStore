@@ -50,6 +50,24 @@ function openOrder(id, name, label, manual, unitName = "Pcs") {
     switchScreen('screen-order');
 }
 
+function deteksiOperator(nomor) {
+    const prefix = nomor.slice(0, 4);
+    if (/^0811|0812|0813|0821|0822|0823|0851|0852|0853$/.test(prefix)) return "telkomsel";
+    if (/^0814|0815|0816|0855|0856|0857|0858$/.test(prefix)) return "indosat";
+    if (/^0817|0818|0819|0859|0877|0878|0831|0832|0833|0838$/.test(prefix)) return "xl_axis";
+    if (/^0895|0896|0897|0898|0899$/.test(prefix)) return "three";
+    if (/^0881|0882|0883|0884|0885|0886|0887|0888|0889$/.test(prefix)) return "smartfren";
+    return null;
+}
+
+// Tambahkan event listener pada input nomor HP di HTML
+document.getElementById('input-nomor').addEventListener('keyup', function() {
+    const provider = deteksiOperator(this.value);
+    if (provider) {
+        renderProductsPulsa(provider); // Fungsi untuk munculkan grid harga pulsa
+    }
+});
+
 function renderProducts(id) {
     const grid = document.getElementById('grid-produk');
     grid.innerHTML = pricelist[id] ? "" : "<p style='text-align:center; font-size:12px; color:#aaa; padding:20px;'>Paket segera hadir...</p>";
