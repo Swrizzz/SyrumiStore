@@ -55,11 +55,15 @@ function renderProducts(id) {
     grid.innerHTML = pricelist[id] ? "" : "<p style='text-align:center; font-size:12px; color:#aaa; padding:20px;'>Paket segera hadir...</p>";
     if(pricelist[id]) {
         pricelist[id].forEach(p => {
-            grid.innerHTML += `<div onclick="selectItem('${p.item}', '${p.harga}', this)" class="product-card"><span class="item-name">${p.item}</span><span class="item-price">${p.harga}</span></div>`;
+            const premiumClass = p.isPremium ? 'premium' : '';
+            grid.innerHTML += `
+                <div onclick="selectItem('${p.item}', '${p.harga}', this)" class="product-card ${premiumClass}">
+                    <span class="item-name">${p.item}</span>
+                    <span class="item-price">${p.harga}</span>
+                </div>`;
         });
     }
 }
-
 function selectItem(item, harga, el) {
     selectedProduct = item; selectedPrice = harga;
     document.querySelectorAll('.product-card').forEach(c => c.classList.remove('selected'));
