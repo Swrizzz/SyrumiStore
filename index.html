@@ -112,7 +112,10 @@
     </div>
 
    <script>
-        const hargasatuan = 50; 
+        // --- SETTING HARGA PER 1 UNIT DI SINI ---
+        const hargaFollowers = 50; // Rp 5.000 / 100
+        const hargaLikes = 10;     // Rp 1.000 / 100
+        const hargaViews = 1;      // Rp 1.000 / 1.000
         
         const database = {
             game: [
@@ -129,11 +132,10 @@
             ],
             sosmed_apps: {
                 tiktok: [
-                    // Label diubah jadi USERNAME biar user paham isinya cuma username
                     { id: 'tk_fol', name: 'TikTok Followers', label: 'USERNAME TIKTOK', isManual: true },
                     { id: 'tk_like', name: 'TikTok Likes', label: 'LINK VIDEO', isManual: true },
-                    { id: 'tk_view', name: 'TikTok Views', label: 'LINK VIDEO', isManual: true },
-                    { id: 'tk_share', name: 'TikTok Shares', label: 'LINK VIDEO', isManual: true }
+                    { id: 'tk_view', name: 'TikTok Views', label: 'LINK VIDEO', isManual: true }
+                    // TikTok Shares sudah dihapus
                 ],
                 instagram: [
                     { id: 'ig_fol', name: 'IG Followers', label: 'USERNAME', isManual: true }
@@ -187,9 +189,11 @@
             const userIdInput = document.getElementById('user-id');
             userIdInput.value = "";
             
-            // --- 1. Placeholder Friendly ---
+            // --- Logic Placeholder & Label ---
             if(id === 'tk_fol') {
                 userIdInput.placeholder = "Masukkan Username (Contoh: @syrumi)";
+            } else if (id === 'tk_like' || id === 'tk_view') {
+                userIdInput.placeholder = "Masukkan Link Video";
             } else {
                 userIdInput.placeholder = "Masukkan Data";
             }
@@ -244,8 +248,16 @@
             const inputHarga = document.getElementById('harga-manual');
             document.querySelectorAll('.product-card').forEach(c => c.classList.remove('selected'));
 
-            // Logic Minimal 100 TikTok Followers
-            if(currentServiceId === 'tk_fol') {
+            let currentHargaSatuan = 0;
+            
+            // Pilih harga berdasarkan layanan
+            if(currentServiceId === 'tk_fol') currentHargaSatuan = hargaFollowers;
+            else if(currentServiceId === 'tk_like') currentHargaSatuan = hargaLikes;
+            else if(currentServiceId === 'tk_view') currentHargaSatuan = hargaViews;
+            else currentHargaSatuan = 0;
+
+            // Logic Minimal 100 Pcs untuk TikTok
+            if(currentServiceId.startsWith('tk_')) {
                 if(qty < 100) {
                     inputHarga.value = "Min. 100"; 
                     selectedProduct = ""; 
@@ -255,7 +267,7 @@
             }
 
             if(qty > 0) {
-                const total = qty * hargasatuan;
+                const total = qty * currentHargaSatuan;
                 selectedProduct = qty + " Pcs";
                 selectedPrice = "Rp" + total.toLocaleString('id-ID');
                 inputHarga.value = total.toLocaleString('id-ID');
@@ -268,17 +280,15 @@
 
         function tampilkanKonfirmasi() {
             const userIdValue = document.getElementById('user-id').value;
-            
             if(!userIdValue) return alert("Harap isi data tujuan!");
 
             if(!selectedProduct) {
-                if(currentServiceId === 'tk_fol') {
+                if(currentServiceId.startsWith('tk_')) {
                     const qty = document.getElementById('jumlah-manual').value;
-                    if(qty < 100) return alert("Minimal pembelian TikTok Followers adalah 100 Pcs!");
+                    if(qty < 100) return alert("Minimal pembelian layanan TikTok adalah 100 Pcs!");
                 }
                 return alert("Pilih nominal atau masukkan jumlah!");
             }
-            
             document.getElementById('confirm-overlay').style.display = 'flex';
         }
 
@@ -287,18 +297,14 @@
             const zone = document.getElementById('zone-id').value;
             let tujuanAkhir = idInput;
 
-            // --- 2. FITUR AUTO CONVERT USERNAME KE LINK ---
+            // Auto Convert khusus Followers
             if(currentServiceId === 'tk_fol') {
-                // Cek apakah input BUKAN link (tidak ada tiktok.com)
                 if(!idInput.includes('tiktok.com')) {
-                    // Hapus tanda @ di depan kalau user iseng nulis @
                     let usernameClean = idInput.replace(/^@/, '');
-                    // Format jadi link lengkap
                     tujuanAkhir = `https://www.tiktok.com/@${usernameClean}`;
                 }
             }
 
-            // Gabungkan Zone ID jika ada (untuk ML)
             if(zone) {
                 tujuanAkhir = `${tujuanAkhir} (${zone})`;
             }
