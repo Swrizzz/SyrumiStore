@@ -210,6 +210,12 @@
                 { id: 'tiktok', name: 'TikTok', icon: 'images/tt.jfif', isAppGroup: true },
                 { id: 'instagram', name: 'Instagram', icon: 'images/ig.jfif', isAppGroup: true }
             ],
+            // TAMBAHKAN KATEGORI PPOB DI SINI
+            ppob: [
+                { id: 'pulsa', name: 'Pulsa & Data', icon: 'https://cdn-icons-png.flaticon.com/512/3059/3059502.png', label: 'NOMOR HP' },
+                { id: 'listrik', name: 'Token Listrik', icon: 'https://cdn-icons-png.flaticon.com/512/3105/3105807.png', label: 'ID PELANGGAN' },
+                { id: 'ewallet', name: 'Topup E-Wallet', icon: 'https://cdn-icons-png.flaticon.com/512/10149/10149458.png', label: 'NOMOR HP (DANA/OVO/DLL)' }
+            ],
             sosmed_apps: {
                 tiktok: [{ id: 'tk_like', name: 'TikTok Likes', label: 'LINK VIDEO' }],
                 instagram: [{ id: 'ig_fol', name: 'IG Followers', label: 'USERNAME' }]
@@ -218,12 +224,21 @@
 
         const pricelist = {
             ml: [{ item: '3 Diamonds', harga: 'Rp1.200', image: 'https://cdn-icons-png.flaticon.com/512/3037/3037156.png' }],
-            tk_like: [{ item: '100 Likes', harga: 'Rp1.000', image: 'https://cdn-icons-png.flaticon.com/512/833/833472.png' }]
+            tk_like: [{ item: '100 Likes', harga: 'Rp1.000', image: 'https://cdn-icons-png.flaticon.com/512/833/833472.png' }],
+            // DAFTAR HARGA UNTUK PPOB
+            pulsa: [
+                { item: 'Pulsa 5k', harga: 'Rp7.000', image: 'https://cdn-icons-png.flaticon.com/512/3059/3059502.png' },
+                { item: 'Pulsa 10k', harga: 'Rp12.000', image: 'https://cdn-icons-png.flaticon.com/512/3059/3059502.png' }
+            ],
+            listrik: [
+                { item: 'Token 20rb', harga: 'Rp22.000', image: 'https://cdn-icons-png.flaticon.com/512/3105/3105807.png' },
+                { item: 'Token 50rb', harga: 'Rp52.000', image: 'https://cdn-icons-png.flaticon.com/512/3105/3105807.png' }
+            ],
+            ewallet: [
+                { item: 'Dana 10k', harga: 'Rp12.500', image: 'https://cdn-icons-png.flaticon.com/512/10149/10149458.png' },
+                { item: 'Ovo 10k', harga: 'Rp12.500', image: 'https://cdn-icons-png.flaticon.com/512/10149/10149458.png' }
+            ]
         };
-
-        let selectedProduct = "";
-        let selectedPrice = "";
-
         // --- NAVIGATION ---
         function switchScreen(id) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
