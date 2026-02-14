@@ -22,7 +22,11 @@
         <div class="modal-box">
             <div style="font-size: 50px;">📲</div>
             <h2>Konfirmasi Pesanan</h2>
-            <p>Kamu akan diarahkan ke WhatsApp admin untuk konfirmasi pembelian dan pembayaran.</p>
+            <p style="font-size: 13px; color: #666; margin-bottom: 10px;">Silakan lanjutkan ke WhatsApp admin.</p>
+            <div class="id-badge-container">
+                <span style="font-size: 10px; font-weight: bold; color: #ff85b3;">ID PESANAN ANDA:</span>
+                <h3 id="generated-id">SYR-XXXX</h3>
+            </div>
             <button class="btn-confirm" onclick="prosesKeWA()">Lanjutkan</button>
             <button class="btn-cancel" onclick="tutupKonfirmasi()">Batal</button>
         </div>
@@ -57,9 +61,29 @@
                 <img src="https://cdn-icons-png.flaticon.com/512/3059/3059502.png">
                 <span>Pulsa, Listrik & Air</span>
             </div>
+            <div onclick="switchScreen('screen-status')" class="glass menu-item" style="border: 1px solid #b5fffc;">
+                <img src="https://cdn-icons-png.flaticon.com/512/833/833593.png">
+                <span>Cek Status Pesanan</span>
+            </div>
             <div onclick="tampilkanKonfirmasiSaluran()" class="glass menu-item highlight">
                 <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png">
                 <span>Testimoni Saluran</span>
+            </div>
+        </section>
+
+        <section id="screen-status" class="screen">
+            <button class="btn-back" onclick="goToLobby()"><i class="fas fa-arrow-left"></i> Kembali</button>
+            <div class="glass text-center">
+                <h2 class="section-title">Lacak Pesanan</h2>
+                <input type="text" id="input-resi" placeholder="Contoh: SYR-1234" style="text-align:center; text-transform: uppercase;">
+                <button class="btn-order" onclick="cekResi()" style="margin-top:10px;">Cek Progres</button>
+
+                <div id="status-result-box" style="display:none; margin-top:20px; padding:20px; border-radius:20px; background:white;">
+                    <div id="st-icon" style="font-size: 40px;"></div>
+                    <div id="st-label" style="font-weight: 700; font-size: 18px; margin: 5px 0;"></div>
+                    <p id="st-desc" style="font-size: 13px; color: #777;"></p>
+                    <div id="st-action"></div>
+                </div>
             </div>
         </section>
 
@@ -73,7 +97,6 @@
             <button class="btn-back" onclick="backToKategori()"><i class="fas fa-arrow-left"></i> Ganti Produk</button>
             <div class="glass">
                 <h2 id="order-title" class="text-center mb-4 main-title">Top Up</h2>
-                
                 <div class="mb-4">
                     <label id="label-input" class="input-label">DATA PEMESANAN</label>
                     <div class="input-row">
@@ -99,7 +122,6 @@
                             </div>
                         </div>
                     </div>
-                    <div class="divider-text">Atau pilih dari penawaran terbaik</div>
                     <div id="grid-produk-manual" class="product-grid"></div>
                 </div>
 
@@ -121,6 +143,14 @@
     </div>
 
     <script>
+    // ==========================================
+    // DATABASE STATUS (Update di Sini Manual)
+    // ==========================================
+    const databaseStatus = {
+        "SYR-1001": { status: "Sukses", desc: "Top Up 3 Diamonds ML Berhasil!", icon: "✅", link: "https://whatsapp.com/channel/0029VbB9bWGLNSa9K95BId3P" },
+        "SYR-1002": { status: "Proses", desc: "Followers sedang dalam pengiriman.", icon: "⏳", link: "" }
+    };
+
     const hargaTiktokFollowers = 50, hargaTiktokLikes = 10, hargaTiktokViews = 1;
     const hargaIgFollowers = 50, hargaIgLikes = 20, hargaIgViews = 5;
     const hargaYoutubeSub = 500, hargaYoutubeViews = 150, hargaYoutubeLikes = 150;
@@ -149,17 +179,13 @@
             ],
             instagram: [
                 { id: 'ig_fol', name: 'IG Followers', label: 'USERNAME INSTAGRAM', isManual: true, unit: 'Followers' },
-                { id: 'ig_like', name: 'IG Likes', label: 'LINK POSTINGAN', isManual: true, unit: 'Likes' },
-                { id: 'ig_view', name: 'IG Views', label: 'LINK REELS/VIDEO', isManual: true, unit: 'Views' }
+                { id: 'ig_like', name: 'IG Likes', label: 'LINK POSTINGAN', isManual: true, unit: 'Likes' }
             ],
             youtube: [
-                { id: 'yt_sub', name: 'YouTube Subscribers', label: 'LINK CHANNEL', isManual: true, unit: 'Subscribers' },
-                { id: 'yt_view', name: 'YouTube Views', label: 'LINK VIDEO', isManual: true, unit: 'Views' },
-                { id: 'yt_like', name: 'YouTube Likes', label: 'LINK VIDEO', isManual: true, unit: 'Likes' }
+                { id: 'yt_sub', name: 'YouTube Subscribers', label: 'LINK CHANNEL', isManual: true, unit: 'Subscribers' }
             ],
             facebook: [
-                { id: 'fb_fol', name: 'FB Followers', label: 'LINK PROFIL/FP', isManual: true, unit: 'Followers' },
-                { id: 'fb_like', name: 'FB Post Likes', label: 'LINK POSTINGAN', isManual: true, unit: 'Likes' }
+                { id: 'fb_fol', name: 'FB Followers', label: 'LINK PROFIL/FP', isManual: true, unit: 'Followers' }
             ]
         }
     };
@@ -167,10 +193,10 @@
     const pricelist = {
         ml: [{ item: '3 Diamonds', harga: 'Rp1.200' }],
         ff: [{ item: '5 Diamonds', harga: 'Rp1.000' }],
-        ig_fol: [{ item: '100 Followers', harga: 'Rp5.000' }, { item: '1000 Followers', harga: 'Rp50.000' }]
+        ig_fol: [{ item: '100 Followers', harga: 'Rp5.000' }]
     };
 
-    let selectedProduct = "", selectedPrice = "", isManualMode = false, currentServiceId = "", currentUnitName = "Pcs";
+    let selectedProduct = "", selectedPrice = "", isManualMode = false, currentServiceId = "", currentUnitName = "Pcs", activeOrderID = "";
 
     function kustomAlert(title, message, icon = "⚠️") {
         document.getElementById('alert-icon').innerText = icon;
@@ -210,27 +236,22 @@
         selectedProduct = ""; selectedPrice = "";
         document.getElementById('order-title').innerText = name;
         document.getElementById('label-input').innerText = label;
-        document.querySelectorAll('.unit-label').forEach(el => { if(el.innerText !== "Rp") el.innerText = unitName; });
-        const userIdInput = document.getElementById('user-id');
-        userIdInput.value = "";
-        userIdInput.placeholder = (id.includes('fol') || id.includes('sub')) ? "Masukkan Username atau Link" : "Masukkan Link Konten/Video";
+        document.getElementById('user-id').value = "";
         document.getElementById('zone-id').style.display = (id === 'ml') ? 'block' : 'none';
         if(manual) {
             document.getElementById('wrapper-manual').style.display = 'block';
             document.getElementById('wrapper-grid').style.display = 'none';
-            document.getElementById('jumlah-manual').value = ""; document.getElementById('harga-manual').value = "";
-            renderProducts(id, true);
         } else {
             document.getElementById('wrapper-manual').style.display = 'none';
             document.getElementById('wrapper-grid').style.display = 'block';
-            renderProducts(id, false);
         }
+        renderProducts(id, manual);
         switchScreen('screen-order');
     }
 
     function renderProducts(id, isManual) {
         const grid = document.getElementById(isManual ? 'grid-produk-manual' : 'grid-produk');
-        grid.innerHTML = pricelist[id] ? "" : "<p style='grid-column: span 2; text-align:center; font-size:12px; color:#aaa; padding:20px;'>Pilihan paket segera hadir...</p>";
+        grid.innerHTML = pricelist[id] ? "" : "<p style='text-align:center; font-size:12px; color:#aaa; padding:20px;'>Paket segera hadir...</p>";
         if(pricelist[id]) {
             pricelist[id].forEach(p => {
                 grid.innerHTML += `<div onclick="selectItem('${p.item}', '${p.harga}', this)" class="product-card"><span class="item-name">${p.item}</span><span class="item-price">${p.harga}</span></div>`;
@@ -276,28 +297,43 @@
     }
 
     function tampilkanKonfirmasi() {
-        const val = document.getElementById('user-id').value.trim();
-        if(!val) return kustomAlert("Data Kosong", "Isi Link/ID tujuan dulu!", "❌");
+        if(!document.getElementById('user-id').value) return kustomAlert("Data Kosong", "Isi Link/ID tujuan!", "❌");
+        if(!selectedProduct) return kustomAlert("Pilihan Kosong", "Pilih nominal dulu!", "🛒");
 
-        const isLinkNeeded = currentServiceId.includes('like') || currentServiceId.includes('view') || currentServiceId.includes('yt') || currentServiceId.includes('fb');
-        const domains = ['youtube.com', 'youtu.be', 'tiktok.com', 'instagram.com', 'facebook.com', 'fb.watch'];
-        
-        if(isLinkNeeded && !domains.some(d => val.toLowerCase().includes(d))) {
-            return kustomAlert("Link Salah", "Layanan ini wajib menggunakan Link URL valid!", "🔗");
-        }
-
-        if(!selectedProduct) return kustomAlert("Pilihan Kosong", "Pilih nominal atau masukkan jumlah min. 50!", "🛒");
-        
+        activeOrderID = "SYR-" + Math.floor(1000 + Math.random() * 9000);
+        document.getElementById('generated-id').innerText = activeOrderID;
         document.getElementById('confirm-overlay').style.display = 'flex';
     }
 
     function prosesKeWA() {
         let val = document.getElementById('user-id').value.trim();
         const zone = document.getElementById('zone-id').value;
-        let tujuan = (currentServiceId === 'tk_fol' && !val.includes('http')) ? `https://www.tiktok.com/@${val.replace('@','')}` : val;
+        let tujuan = val;
         if(zone) tujuan += ` (${zone})`;
-        const pesan = window.encodeURIComponent(`*ORDER SYRUMISTORE*\nProduk: ${document.getElementById('order-title').innerText}\nTujuan: ${tujuan}\nItem: ${selectedProduct}\nHarga: ${selectedPrice}`);
+        const pesan = window.encodeURIComponent(`*ORDER SYRUMISTORE*\nID PESANAN: ${activeOrderID}\nProduk: ${document.getElementById('order-title').innerText}\nTujuan: ${tujuan}\nItem: ${selectedProduct}\nHarga: ${selectedPrice}`);
         window.location.href = `https://wa.me/6289507913948?text=${pesan}`;
+    }
+
+    function cekResi() {
+        const idInput = document.getElementById('input-resi').value.trim().toUpperCase();
+        const box = document.getElementById('status-result-box');
+        const data = databaseStatus[idInput];
+
+        if(data) {
+            box.style.display = 'block';
+            document.getElementById('st-icon').innerText = data.icon;
+            document.getElementById('st-label').innerText = data.status;
+            document.getElementById('st-desc').innerText = data.desc;
+            
+            const actionDiv = document.getElementById('st-action');
+            actionDiv.innerHTML = "";
+            if(data.link !== "") {
+                actionDiv.innerHTML = `<button onclick="window.open('${data.link}')" class="btn-proof">Lihat Bukti Saluran</button>`;
+            }
+        } else {
+            kustomAlert("Tidak Ditemukan", "ID belum terdaftar di sistem.", "🔍");
+            box.style.display = 'none';
+        }
     }
 
     function goToLobby() { switchScreen('screen-lobby'); }
