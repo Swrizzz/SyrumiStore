@@ -30,7 +30,6 @@
 
         #app-container { width: 100%; max-width: 450px; }
 
-        /* --- LOGO ANTI PEANG --- */
         .logo-wrapper {
             display: inline-block;
             padding: 5px;
@@ -51,7 +50,6 @@
             display: block;
         }
 
-        /* --- MODAL / OVERLAY --- */
         .overlay {
             display: none;
             position: fixed;
@@ -77,7 +75,6 @@
         .btn-confirm { background: var(--accent-pink); color: white; border: none; padding: 12px 25px; border-radius: 15px; font-weight: 700; cursor: pointer; margin: 5px; }
         .btn-cancel { background: #eee; color: #777; border: none; padding: 12px 25px; border-radius: 15px; font-weight: 700; cursor: pointer; margin: 5px; }
 
-        /* --- UI UTAMA --- */
         .glass {
             background: var(--glass-white);
             backdrop-filter: blur(10px);
@@ -136,6 +133,16 @@
         </div>
     </div>
 
+    <div id="testi-overlay" class="overlay">
+        <div class="modal-box">
+            <div style="font-size: 50px;">⭐</div>
+            <h2>Lihat Testimoni</h2>
+            <p>Kamu akan dialihkan ke Saluran WhatsApp kami untuk melihat testimoni pelanggan.</p>
+            <button class="btn-confirm" onclick="bukaSaluran()">Buka Saluran</button>
+            <button class="btn-cancel" onclick="tutupTesti()">Batal</button>
+        </div>
+    </div>
+
     <div id="app-container">
         <section id="screen-lobby" class="screen active">
             <div class="text-center mb-4">
@@ -158,12 +165,10 @@
                 <img src="https://cdn-icons-png.flaticon.com/512/3059/3059502.png">
                 <span>Pulsa, Listrik & Air</span>
             </div>
-            <a href="https://whatsapp.com/channel/0029VbB9bWGLNSa9K95BId3P" target="_blank" style="text-decoration: none; color: inherit;">
-                <div class="glass menu-item" style="border: 1px dashed #ff85b3;">
-                    <i class="fas fa-star"></i>
-                    <span>Testimoni Saluran</span>
-                </div>
-            </a>
+            <div onclick="tampilkanKonfirmasiSaluran()" class="glass menu-item" style="border: 1px dashed #ff85b3;">
+                <i class="fas fa-star"></i>
+                <span>Testimoni Saluran</span>
+            </div>
         </section>
 
         <section id="screen-kategori" class="screen">
@@ -312,6 +317,19 @@
             el.classList.add('selected');
         }
 
+        // --- KONFIRMASI SALURAN (BARU) ---
+        function tampilkanKonfirmasiSaluran() {
+            document.getElementById('testi-overlay').style.display = 'flex';
+        }
+        function tutupTesti() {
+            document.getElementById('testi-overlay').style.display = 'none';
+        }
+        function bukaSaluran() {
+            window.open("https://whatsapp.com/channel/0029VbB9bWGLNSa9K95BId3P", "_blank");
+            tutupTesti();
+        }
+
+        // --- KONFIRMASI ORDER ---
         function tampilkanKonfirmasi() {
             if (!document.getElementById('user-id').value || !selectedProduct) return alert("Isi Data & Pilih Produk!");
             document.getElementById('confirm-overlay').style.display = 'flex';
