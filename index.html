@@ -167,10 +167,25 @@
     };
 
     const pricelist = {
-        ml: [{ item: '3 Diamonds', harga: 'Rp1.200' }, { item: '5 Diamonds', harga: 'Rp1.600' }],
-        ff: [{ item: '5 Diamonds', harga: 'Rp1.000' }]
-    };
-
+        ml: [
+            { item: '5 Diamonds', harga: 'Rp1.560' },
+            { item: '17 Diamonds', harga: 'Rp4.900' },
+            { item: '28 Diamonds', harga: 'Rp8.000' },
+            { item: '44 Diamonds', harga: 'Rp12.000' },
+            { item: '59 Diamonds', harga: 'Rp16.000' },
+            { item: '86 Diamonds', harga: 'Rp23.000' },
+            { item: '172 Diamonds', harga: 'Rp46.000' },
+            { item: '257 Diamonds', harga: 'Rp72.000' },
+            { item: '706 Diamonds', harga: 'Rp185.000' },
+            { item: '2195 Diamonds', harga: 'Rp545.000' },
+            { item: '5532 Diamonds', harga: 'Rp1.350.000' },
+            { item: '9288 Diamonds', harga: 'Rp2.300.000' },
+            { item: 'Weekly Diamond Pass', harga: 'Rp27.500' },
+            { item: 'Twilight Pass', harga: 'Rp145.000' }
+        ],
+        ff: [{ item: '5 Diamonds', harga: 'Rp1.000' }]
+    };
+      
     let selectedProduct = "", selectedPrice = "", isManualMode = false, currentServiceId = "", currentUnitName = "Pcs", activeOrderID = "";
 
     function kustomAlert(title, message, icon = "⚠️") {
