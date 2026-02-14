@@ -69,7 +69,15 @@
         .menu-item:hover { transform: scale(1.02); }
         .menu-item img { width: 40px; height: 40px; border-radius: 10px; margin-right: 15px; object-fit: cover; }
 
-        .copyright { text-align: center; margin-top: 30px; padding: 20px 0; font-size: 11px; color: #888; line-height: 1.6; }
+        /* --- CSS MANUAL INPUT (ALA ROBUX) --- */
+        .manual-input-container { display: flex; gap: 10px; margin-bottom: 15px; }
+        .input-box-wrapper { flex: 1; }
+        .input-box-wrapper label { display: block; font-size: 10px; font-weight: 700; color: #888; margin-bottom: 4px; text-transform: uppercase; }
+        .input-relative { position: relative; display: flex; align-items: center; }
+        .unit-label { position: absolute; right: 12px; font-size: 12px; font-weight: 600; color: #bbb; pointer-events: none; }
+        .divider-text { text-align: center; font-size: 11px; color: #aaa; margin: 15px 0; position: relative; }
+        .divider-text::before, .divider-text::after { content: ""; position: absolute; top: 50%; width: 25%; height: 1px; background: #eee; }
+        .divider-text::before { left: 0; } .divider-text::after { right: 0; }
 
         .product-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 15px; }
         .product-card {
@@ -78,25 +86,21 @@
             display: flex; flex-direction: column; align-items: center; min-height: 110px; justify-content: center;
         }
         .product-card.selected { border-color: var(--accent-pink); background: #fffafa; }
+        .item-name { font-size: 11px; font-weight: 600; color: #777; margin-bottom: 5px; }
+        .item-price { font-weight: 700; color: var(--accent-pink); font-size: 13px; }
 
-        input { width: 100%; padding: 12px 15px; border-radius: 12px; border: 1px solid #ddd; outline: none; margin-top: 5px; }
-        .btn-order { width: 100%; background: var(--accent-pink); color: white; padding: 16px; border-radius: 18px; border: none; font-weight: 700; font-size: 16px; margin-top: 20px; cursor: pointer; }
+        input { width: 100%; padding: 12px 15px; border-radius: 12px; border: 1px solid #ddd; outline: none; margin-top: 5px; font-size: 14px; }
+        input:read-only { background-color: #f9f9f9; color: #555; }
+        .btn-order { width: 100%; background: var(--accent-pink); color: white; padding: 16px; border-radius: 18px; border: none; font-weight: 700; font-size: 16px; margin-top: 20px; cursor: pointer; box-shadow: 0 5px 15px rgba(255, 133, 179, 0.3); }
         .btn-back { background: none; border: none; color: var(--accent-pink); font-weight: 700; cursor: pointer; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .text-center { text-align: center; }
         .mb-4 { margin-bottom: 20px; }
+        .copyright { text-align: center; margin-top: 30px; padding: 20px 0; font-size: 11px; color: #888; line-height: 1.6; }
     </style>
 </head>
 <body>
-
-    <div id="closed-overlay" class="overlay">
-        <div class="modal-box">
-            <div style="font-size: 50px;">🕒</div>
-            <h2>MOHON MAAF</h2>
-            <p>Syrumi Store sedang tutup.<br>Operasional: <strong>07:00 - 21:00 WIB</strong></p>
-        </div>
-    </div>
 
     <div id="confirm-overlay" class="overlay">
         <div class="modal-box">
@@ -153,18 +157,34 @@
             <button class="btn-back" onclick="backToKategori()"><i class="fas fa-arrow-left"></i> Ganti Produk</button>
             <div class="glass">
                 <h2 id="order-title" class="text-center mb-4" style="color: #ff85b3;">Top Up</h2>
+                
                 <div class="mb-4">
                     <label id="label-input" style="font-size: 11px; font-weight: 600; color: #888;">DATA PEMESANAN</label>
                     <div style="display: flex; gap: 10px;">
                         <input type="text" id="user-id" placeholder="Masukkan Link/ID">
-                        <input type="text" id="zone-id" placeholder="Zone" style="flex: 0 0 100px;">
+                        <input type="text" id="zone-id" placeholder="Zone" style="flex: 0 0 100px; display: none;">
                     </div>
                 </div>
 
                 <div id="wrapper-manual" style="display:none; margin-bottom:20px;">
-                    <label style="font-size: 11px; font-weight: 600; color: #888;">JUMLAH PESANAN</label>
-                    <input type="number" id="jumlah-manual" placeholder="Minimal 100" oninput="hitungHargaManual()">
-                    <p id="info-harga" style="font-size: 12px; color: var(--accent-pink); font-weight: 700; margin-top: 5px;"></p>
+                    <div class="manual-input-container">
+                        <div class="input-box-wrapper">
+                            <label>Masukkan Jumlah</label>
+                            <div class="input-relative">
+                                <input type="number" id="jumlah-manual" placeholder="0" oninput="hitungHargaManual()">
+                                <span class="unit-label">Pcs</span>
+                            </div>
+                        </div>
+                        <div class="input-box-wrapper">
+                            <label>Nominal Harga</label>
+                            <div class="input-relative">
+                                <input type="text" id="harga-manual" placeholder="0" readonly>
+                                <span class="unit-label">Rp</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="divider-text">Atau pilih dari penawaran terbaik</div>
+                    <div id="grid-produk-manual" class="product-grid"></div>
                 </div>
 
                 <div id="wrapper-grid">
@@ -185,8 +205,9 @@
     </div>
 
     <script>
-        // --- CONFIG & DATABASE ---
-        const hargasatuan = 50; // Harga default per 1 pcs (Rp50)
+        // --- CONFIG ---
+        const hargasatuan = 50; // Harga per 1 pcs (Rp 50)
+        
         const database = {
             game: [
                 { id: 'ml', name: 'Mobile Legends', icon: 'images/logo-ml.jfif', label: 'USER ID & ZONE' },
@@ -202,13 +223,12 @@
             ],
             sosmed_apps: {
                 tiktok: [
-                    { id: 'tk_fol', name: 'TikTok Followers', label: 'LINK AKUN / PROFIL', isManual: true },
+                    { id: 'tk_fol', name: 'TikTok Followers', label: 'LINK PROFIL', isManual: true },
                     { id: 'tk_like', name: 'TikTok Likes', label: 'LINK VIDEO', isManual: true },
-                    { id: 'tk_view', name: 'TikTok Views', label: 'LINK VIDEO', isManual: true },
-                    { id: 'tk_share', name: 'TikTok Share', label: 'LINK VIDEO', isManual: true }
+                    { id: 'tk_view', name: 'TikTok Views', label: 'LINK VIDEO', isManual: true }
                 ],
                 instagram: [
-                    { id: 'ig_fol', name: 'IG Followers', label: 'USERNAME/LINK AKUN', isManual: true }
+                    { id: 'ig_fol', name: 'IG Followers', label: 'USERNAME', isManual: true }
                 ]
             }
         };
@@ -216,14 +236,16 @@
         const pricelist = {
             ml: [{ item: '3 Diamonds', harga: 'Rp1.200', image: 'https://cdn-icons-png.flaticon.com/512/3037/3037156.png' }],
             ff: [{ item: '5 Diamonds', harga: 'Rp1.000', image: 'https://cdn-icons-png.flaticon.com/512/597/597081.png' }],
-            pulsa: [{ item: 'Pulsa 5k', harga: 'Rp7.200', image: 'https://cdn-icons-png.flaticon.com/512/3059/3059502.png' }]
+            tk_fol: [
+                { item: '100 Followers', harga: 'Rp5.000', image: 'https://cdn-icons-png.flaticon.com/512/833/833472.png' },
+                { item: '500 Followers', harga: 'Rp25.000', image: 'https://cdn-icons-png.flaticon.com/512/833/833472.png' }
+            ]
         };
 
         let selectedProduct = "";
         let selectedPrice = "";
         let isManualMode = false;
 
-        // --- CORE FUNCTIONS ---
         function switchScreen(id) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById(id).classList.add('active');
@@ -254,55 +276,72 @@
             selectedProduct = ""; selectedPrice = "";
             document.getElementById('order-title').innerText = name;
             document.getElementById('label-input').innerText = label;
-            document.getElementById('user-id').placeholder = (id === 'tk_fol') ? "https://www.tiktok.com/@user" : "Masukkan Link/ID";
+            document.getElementById('user-id').value = "";
             document.getElementById('zone-id').style.display = (id === 'ml') ? 'block' : 'none';
             
             if(manual) {
                 document.getElementById('wrapper-manual').style.display = 'block';
                 document.getElementById('wrapper-grid').style.display = 'none';
                 document.getElementById('jumlah-manual').value = "";
-                document.getElementById('info-harga').innerText = "";
+                document.getElementById('harga-manual').value = "";
+                renderProducts(id, true);
             } else {
                 document.getElementById('wrapper-manual').style.display = 'none';
                 document.getElementById('wrapper-grid').style.display = 'block';
-                renderProducts(id);
+                renderProducts(id, false);
             }
             switchScreen('screen-order');
         }
 
-        function renderProducts(id) {
-            const grid = document.getElementById('grid-produk');
-            grid.innerHTML = pricelist[id] ? "" : "<p>Segera Hadir!</p>";
+        function renderProducts(id, isManual) {
+            const gridId = isManual ? 'grid-produk-manual' : 'grid-produk';
+            const grid = document.getElementById(gridId);
+            grid.innerHTML = pricelist[id] ? "" : "<p style='grid-column: span 2; text-align:center; font-size:12px; color:#aaa; padding:20px;'>Pilihan paket segera hadir...</p>";
+            
             if(pricelist[id]) {
                 pricelist[id].forEach(p => {
-                    grid.innerHTML += `<div onclick="selectItem('${p.item}', '${p.harga}', this)" class="product-card"><img src="${p.image}" style="width:30px; margin-bottom:5px;"><span>${p.item}</span><small>${p.harga}</small></div>`;
+                    grid.innerHTML += `
+                        <div onclick="selectItem('${p.item}', '${p.harga}', this)" class="product-card">
+                            <span class="item-name">${p.item}</span>
+                            <span class="item-price">${p.harga}</span>
+                        </div>`;
                 });
             }
         }
 
         function selectItem(item, harga, el) {
-            selectedProduct = item; selectedPrice = harga;
+            selectedProduct = item; 
+            selectedPrice = harga;
             document.querySelectorAll('.product-card').forEach(c => c.classList.remove('selected'));
             el.classList.add('selected');
+
+            if (isManualMode) {
+                const qtyOnly = item.replace(/\D/g, "");
+                document.getElementById('jumlah-manual').value = qtyOnly;
+                document.getElementById('harga-manual').value = harga.replace(/[^\d]/g, "");
+            }
         }
 
         function hitungHargaManual() {
             const qty = document.getElementById('jumlah-manual').value;
-            const total = qty * hargasatuan;
-            if(qty >= 100) {
+            const inputHarga = document.getElementById('harga-manual');
+            document.querySelectorAll('.product-card').forEach(c => c.classList.remove('selected'));
+
+            if(qty > 0) {
+                const total = qty * hargasatuan;
                 selectedProduct = qty + " Pcs";
                 selectedPrice = "Rp" + total.toLocaleString('id-ID');
-                document.getElementById('info-harga').innerText = "Estimasi Harga: " + selectedPrice;
+                inputHarga.value = total.toLocaleString('id-ID');
             } else {
-                document.getElementById('info-harga').innerText = "Minimal 100!";
+                inputHarga.value = "";
+                selectedProduct = "";
+                selectedPrice = "";
             }
         }
 
         function tampilkanKonfirmasi() {
-            const idInput = document.getElementById('user-id').value;
-            if(!idInput) return alert("Harap isi link/ID tujuan!");
-            if(isManualMode && document.getElementById('jumlah-manual').value < 100) return alert("Minimal order 100!");
-            if(!isManualMode && !selectedProduct) return alert("Pilih nominal produk!");
+            if(!document.getElementById('user-id').value) return alert("Harap isi tujuan!");
+            if(!selectedProduct) return alert("Pilih nominal atau masukkan jumlah!");
             document.getElementById('confirm-overlay').style.display = 'flex';
         }
 
@@ -314,7 +353,6 @@
             window.location.href = `https://wa.me/6289507913948?text=${pesan}`;
         }
 
-        // --- UI HELPERS ---
         function goToLobby() { switchScreen('screen-lobby'); }
         function backToKategori() { switchScreen('screen-kategori'); }
         function tutupKonfirmasi() { document.getElementById('confirm-overlay').style.display = 'none'; }
