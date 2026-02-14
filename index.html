@@ -198,11 +198,23 @@
 
     // SWITCH SCREEN DENGAN ANIMASI FADE
     function switchScreen(id) {
-        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-        const target = document.getElementById(id);
-        setTimeout(() => { target.classList.add('active'); }, 10);
-        window.scrollTo(0,0);
-    }
+    // Sembunyikan semua screen dan hapus class active
+    document.querySelectorAll('.screen').forEach(s => {
+        s.classList.remove('active');
+        s.style.display = 'none';
+    });
+
+    // Tampilkan screen target
+    const target = document.getElementById(id);
+    target.style.display = 'block';
+    
+    // Beri jeda sedikit agar browser sempat mendeteksi display:block sebelum animasi jalan
+    setTimeout(() => {
+        target.classList.add('active');
+    }, 10);
+    
+    window.scrollTo(0, 0);
+}
 
     function openKategori(cat) {
         const listDiv = document.getElementById('list-layanan');
