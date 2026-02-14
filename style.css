@@ -127,7 +127,7 @@ body {
 /* --- KHUSUS TAMPILAN HP (3 KOLOM BERSEBELAHAN) --- */
 @media (max-width: 480px) {
     .product-grid {
-        grid-template-columns: repeat(3, 1fr); /* Paksa 3 kolom ke samping */
+        grid-template-columns: repeat(2, 1fr); /* Paksa 3 kolom ke samping */
         gap: 8px;
     }
     
