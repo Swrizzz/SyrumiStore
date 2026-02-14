@@ -69,7 +69,6 @@
         .menu-item:hover { transform: scale(1.02); }
         .menu-item img { width: 40px; height: 40px; border-radius: 10px; margin-right: 15px; object-fit: cover; }
 
-        /* --- CSS MANUAL INPUT (ALA ROBUX) --- */
         .manual-input-container { display: flex; gap: 10px; margin-bottom: 15px; }
         .input-box-wrapper { flex: 1; }
         .input-box-wrapper label { display: block; font-size: 10px; font-weight: 700; color: #888; margin-bottom: 4px; text-transform: uppercase; }
@@ -205,8 +204,7 @@
     </div>
 
     <script>
-        // --- CONFIG ---
-        const hargasatuan = 50; // Harga per 1 pcs (Rp 50)
+        const hargasatuan = 50; 
         
         const database = {
             game: [
@@ -225,7 +223,8 @@
                 tiktok: [
                     { id: 'tk_fol', name: 'TikTok Followers', label: 'LINK PROFIL', isManual: true },
                     { id: 'tk_like', name: 'TikTok Likes', label: 'LINK VIDEO', isManual: true },
-                    { id: 'tk_view', name: 'TikTok Views', label: 'LINK VIDEO', isManual: true }
+                    { id: 'tk_view', name: 'TikTok Views', label: 'LINK VIDEO', isManual: true },
+                    { id: 'tk_share', name: 'TikTok Share', label: 'LINK VIDEO', isManual: true }
                 ],
                 instagram: [
                     { id: 'ig_fol', name: 'IG Followers', label: 'USERNAME', isManual: true }
@@ -235,11 +234,7 @@
 
         const pricelist = {
             ml: [{ item: '3 Diamonds', harga: 'Rp1.200', image: 'https://cdn-icons-png.flaticon.com/512/3037/3037156.png' }],
-            ff: [{ item: '5 Diamonds', harga: 'Rp1.000', image: 'https://cdn-icons-png.flaticon.com/512/597/597081.png' }],
-            tk_fol: [
-                { item: '100 Followers', harga: 'Rp5.000', image: 'https://cdn-icons-png.flaticon.com/512/833/833472.png' },
-                { item: '500 Followers', harga: 'Rp25.000', image: 'https://cdn-icons-png.flaticon.com/512/833/833472.png' }
-            ]
+            ff: [{ item: '5 Diamonds', harga: 'Rp1.000', image: 'https://cdn-icons-png.flaticon.com/512/597/597081.png' }]
         };
 
         let selectedProduct = "";
@@ -318,7 +313,7 @@
             if (isManualMode) {
                 const qtyOnly = item.replace(/\D/g, "");
                 document.getElementById('jumlah-manual').value = qtyOnly;
-                document.getElementById('harga-manual').value = harga.replace(/[^\d]/g, "");
+                document.getElementById('harga-manual').value = harga.replace(/[^\d]/g, "").toLocaleString('id-ID');
             }
         }
 
