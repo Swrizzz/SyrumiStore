@@ -13,12 +13,12 @@
 body {
     background: linear-gradient(135deg, var(--primary-pink) 0%, var(--soft-blue) 100%);
     background-attachment: fixed; min-height: 100vh;
-    display: flex; justify-content: center; padding: 20px 15px;
+    display: flex; justify-content: center; align-items: flex-start; padding: 20px 15px;
 }
 
-#app-container { width: 100%; max-width: 450px; position: relative; }
+#app-container { width: 100%; max-width: 450px; display: flex; flex-direction: column; align-items: center; }
 
-.text-center { text-align: center; display: flex; flex-direction: column; align-items: center; width: 100%; }
+.text-center { text-align: center; width: 100%; display: flex; flex-direction: column; align-items: center; }
 
 .logo-wrapper {
     display: flex; justify-content: center; align-items: center; padding: 5px; background: white; 
@@ -28,16 +28,16 @@ body {
 
 .profile-img { width: 100%; height: 100%; object-fit: cover; }
 .brand-name { color: #ff85b3; font-size: 24px; font-weight: 700; margin: 0; }
-.brand-tagline { font-size: 12px; color: #888; margin-top: 5px; }
+.brand-tagline { font-size: 12px; color: #888; margin-top: 5px; margin-bottom: 20px; }
 
 .glass {
     background: var(--glass-white); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-    border: 1px solid var(--glass-border); border-radius: 25px; padding: 20px; 
+    border: 1px solid var(--glass-border); border-radius: 25px; padding: 20px; width: 100%;
     box-shadow: 0 10px 25px rgba(255, 133, 179, 0.1);
 }
 
 .menu-item {
-    display: flex; align-items: center; padding: 15px; background: white;
+    display: flex; align-items: center; padding: 15px; background: white; width: 100%;
     border-radius: 20px; margin-bottom: 12px; cursor: pointer; 
     transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     border: 1px solid var(--glass-border);
@@ -46,14 +46,11 @@ body {
 .menu-item img { width: 40px; height: 40px; border-radius: 10px; margin-right: 15px; object-fit: cover; }
 
 .btn-back {
-    background: none; border: none; outline: none;
-    color: var(--accent-pink); font-weight: 700; cursor: pointer;
-    margin-bottom: 15px; display: flex; align-items: center; gap: 8px;
-    padding: 8px 12px; border-radius: 12px; transition: 0.3s;
-    -webkit-tap-highlight-color: transparent;
+    background: none; border: none; color: var(--accent-pink); font-weight: 700; 
+    cursor: pointer; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; align-self: flex-start;
 }
 
-.product-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 10px; }
+.product-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 15px; }
 .product-card {
     background: white; border: 2px solid transparent; border-radius: 18px;
     padding: 15px 10px; text-align: center; cursor: pointer; transition: 0.2s;
@@ -65,10 +62,10 @@ body {
 .btn-order {
     width: 100%; background: var(--accent-pink); color: white; padding: 16px;
     border-radius: 18px; border: none; font-weight: 700; font-size: 16px;
-    margin-top: 20px; cursor: pointer; box-shadow: 0 5px 15px rgba(255, 133, 179, 0.3); transition: 0.3s;
+    margin-top: 20px; cursor: pointer; box-shadow: 0 5px 15px rgba(255, 133, 179, 0.3);
 }
 
-.screen { display: none; opacity: 0; transform: translateY(15px); transition: 0.4s ease; }
+.screen { display: none; width: 100%; opacity: 0; transform: translateY(15px); transition: 0.4s ease; }
 .screen.active { display: block; opacity: 1; transform: translateY(0); }
 
 .overlay {
@@ -76,11 +73,6 @@ body {
     background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(6px); z-index: 9999;
     justify-content: center; align-items: center; padding: 20px;
 }
-.modal-box {
-    background: white; padding: 30px; border-radius: 30px; text-align: center;
-    width: 100%; max-width: 340px; animation: popIn 0.4s ease;
-}
-
-@keyframes popIn { from { transform: scale(0.8); } to { transform: scale(1); } }
+.modal-box { background: white; padding: 30px; border-radius: 30px; text-align: center; width: 100%; max-width: 340px; }
 input { width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #ddd; outline: none; margin: 10px 0; }
-.copyright { text-align: center; font-size: 11px; color: #888; margin-top: 30px; }
+.copyright { text-align: center; font-size: 11px; color: #888; margin-top: 30px; width: 100%; }
