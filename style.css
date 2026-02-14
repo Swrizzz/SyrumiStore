@@ -92,12 +92,12 @@ body {
 .menu-item img { width: 45px; height: 45px; border-radius: 12px; margin-right: 20px; object-fit: cover; }
 .menu-item span { font-weight: 600; color: #444; font-size: 16px; }
 
-/* --- GRID DIAMOND (STYLE ALA MOBAPAY) --- */
+/* --- GRID DIAMOND --- */
 .product-grid { 
     display: grid; 
     grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); 
     gap: 15px; 
-    margin-top: 15px; 
+    margin-top: 20px; /* Jarak atas ditambah agar HOT tidak kepotong header */
 }
 
 .product-card {
@@ -114,10 +114,10 @@ body {
     align-items: center;
     min-height: 100px;
     position: relative;
-    overflow: hidden;
+    /* PENTING: overflow harus visible agar label HOT muncul */
+    overflow: visible !important; 
 }
 
-/* Efek saat dipilih */
 .product-card.selected { 
     border-color: var(--accent-pink); 
     background: #fffafa; 
@@ -125,7 +125,6 @@ body {
     box-shadow: 0 8px 15px rgba(255, 133, 179, 0.2);
 }
 
-/* Nama Item (Diamond) */
 .item-name { 
     display: block; 
     font-size: 14px; 
@@ -134,7 +133,6 @@ body {
     margin-bottom: 8px; 
 }
 
-/* Label Harga (Latar Belakang Halus ala MobaPay) */
 .item-price { 
     font-weight: 700; 
     color: var(--accent-pink); 
@@ -145,26 +143,51 @@ body {
     display: inline-block;
 }
 
-/* --- KHUSUS TAMPILAN HP (2 KOLOM LEBAR & GEDE) --- */
+/* --- TAMPILAN PREMIUM (Weekly/Twilight) --- */
+.product-card.premium {
+    background: linear-gradient(145deg, #ffffff, #fdf2ff);
+    border: 2px solid #e0aaff !important;
+}
+
+.product-card.premium .item-name {
+    color: #6a0dad !important;
+}
+
+.product-card.premium .item-price {
+    background: #6a0dad !important;
+    color: white !important;
+}
+
+/* Label HOT - Biar nongol keluar kotak */
+.product-card.premium::after {
+    content: "HOT";
+    position: absolute;
+    top: -10px; 
+    right: -5px; 
+    background: linear-gradient(45deg, #ff4757, #ff6b81);
+    color: white;
+    font-size: 10px;
+    font-weight: bold;
+    padding: 3px 10px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(255, 71, 87, 0.3);
+    z-index: 10;
+}
+
+/* --- RESPONSIVE HP (2 KOLOM) --- */
 @media (max-width: 480px) {
     .product-grid {
-        grid-template-columns: 1fr 1fr !important; /* Paksa 2 kolom rata */
-        gap: 12px !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 15px 12px !important; /* Jarak vertikal ditambah agar HOT tidak tumpang tindih */
     }
     
     .product-card {
-        padding: 25px 10px !important; /* Kotak jadi lebih gemuk */
+        padding: 25px 10px !important;
         min-height: 110px !important;
     }
 
-    .item-name { 
-        font-size: 13px !important; 
-    }
-    
-    .item-price { 
-        font-size: 13px !important; 
-        width: 90%; /* Agar label harga memenuhi lebar kotak */
-    }
+    .item-name { font-size: 13px !important; }
+    .item-price { font-size: 13px !important; width: 90%; }
 }
 
 /* --- TOMBOL --- */
@@ -183,49 +206,25 @@ body {
 }
 
 .btn-back {
-    background: white; 
-    border: none; 
-    color: var(--accent-pink); 
-    font-weight: 700; 
-    padding: 10px 20px;
-    border-radius: 12px; 
-    cursor: pointer; 
-    margin-bottom: 20px; 
-    display: inline-flex; 
-    align-items: center; 
-    gap: 8px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    background: white; border: none; color: var(--accent-pink); font-weight: 700; 
+    padding: 10px 20px; border-radius: 12px; cursor: pointer; margin-bottom: 20px; 
+    display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);
 }
 
-/* --- MODAL / OVERLAY --- */
+/* --- MODAL --- */
 .overlay {
-    display: none; 
-    position: fixed; 
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0, 0, 0, 0.4); 
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    z-index: 9999; 
-    justify-content: center; 
-    align-items: center; 
-    padding: 20px;
+    display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    z-index: 9999; justify-content: center; align-items: center; padding: 20px;
 }
 
 .modal-box {
-    background: white; 
-    padding: 30px; 
-    border-radius: 30px; 
-    text-align: center;
-    width: 100%; 
-    max-width: 380px; 
-    box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+    background: white; padding: 30px; border-radius: 30px; text-align: center;
+    width: 100%; max-width: 380px; box-shadow: 0 15px 35px rgba(0,0,0,0.2);
     animation: popIn 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
-@keyframes popIn { 
-    from { opacity: 0; transform: scale(0.8); } 
-    to { opacity: 1; transform: scale(1); } 
-}
+@keyframes popIn { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
 
 .btn-confirm { background: var(--accent-pink); color: white; border: none; padding: 12px 25px; border-radius: 12px; font-weight: 700; cursor: pointer; margin: 5px; }
 .btn-cancel { background: #f0f0f0; color: #777; border: none; padding: 12px 25px; border-radius: 12px; font-weight: 700; cursor: pointer; margin: 5px; }
@@ -235,33 +234,3 @@ input { width: 100%; padding: 14px; border-radius: 15px; border: 1px solid #ddd;
 .input-label { font-size: 12px; font-weight: 700; color: #ff85b3; display: block; margin-top: 10px; }
 
 .copyright { text-align: center; font-size: 12px; color: #888; margin-top: 40px; padding-bottom: 20px; }
-
-/* Efek Premium untuk Weekly & Twilight */
-.product-card.premium {
-    background: linear-gradient(145deg, #ffffff, #fdf2ff);
-    border: 2px solid #e0aaff; /* Warna ungu muda */
-}
-
-.product-card.premium .item-name {
-    color: #6a0dad; /* Tulisan ungu tua */
-}
-
-.product-card.premium .item-price {
-    background: #6a0dad;
-    color: white;
-}
-
-/* Animasi kilau halus untuk item premium */
-.product-card.premium::after {
-    content: "HOT";
-    position: absolute;
-    top: -5px;
-    right: -5px;
-    background: #ff4757;
-    color: white;
-    font-size: 8px;
-    font-weight: bold;
-    padding: 2px 6px;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
