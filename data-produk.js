@@ -27,8 +27,8 @@ const databaseLayanan = {
 
 const pricelist = {
     ml: [
-        { item: 'Weekly Diamond Pass', harga: 'Rp27.500' },
-        { item: 'Twilight Pass', harga: 'Rp145.000' },
+        { item: 'Weekly Diamond Pass', harga: 'Rp27.500', isPremium: true },
+        { item: 'Twilight Pass', harga: 'Rp145.000', isPremium: true },
         { item: '5 Diamonds', harga: 'Rp1.560' },
         { item: '17 Diamonds', harga: 'Rp4.900' },
         { item: '28 Diamonds', harga: 'Rp8.000' },
