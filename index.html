@@ -298,9 +298,33 @@
     function prosesKeWA() {
         let val = document.getElementById('user-id').value.trim();
         const zone = document.getElementById('zone-id').value;
+        const produk = document.getElementById('order-title').innerText;
         let tujuan = val;
+        let linkProfil = "";
+
+        // Logika membuat link otomatis berdasarkan produk
+        if (produk.toLowerCase().includes("instagram")) {
+            linkProfil = `\nLink Profil: https://instagram.com/${val.replace('@', '')}`;
+        } else if (produk.toLowerCase().includes("tiktok")) {
+            linkProfil = `\nLink Profil: https://tiktok.com/@${val.replace('@', '')}`;
+        } else if (produk.toLowerCase().includes("facebook")) {
+            // Jika FB biasanya pembeli langsung input link, tapi kita rapikan jika hanya username
+            if (!val.includes("facebook.com")) {
+                linkProfil = `\nLink Profil: https://facebook.com/${val}`;
+            }
+        }
+
         if(zone) tujuan += ` (${zone})`;
-        const pesan = window.encodeURIComponent(`*ORDER SYRUMISTORE*\nID PESANAN: ${activeOrderID}\nProduk: ${document.getElementById('order-title').innerText}\nTujuan: ${tujuan}\nItem: ${selectedProduct}\nHarga: ${selectedPrice}`);
+
+        const pesan = window.encodeURIComponent(
+            `*Order Syrumi *\n` +
+            `ID PESANAN: ${activeOrderID}\n` +
+            `Produk: ${produk}\n` +
+            `Tujuan: ${tujuan}${linkProfil}\n` + // Link profil otomatis muncul di sini
+            `Item: ${selectedProduct}\n` +
+            `Harga: ${selectedPrice}`
+        );
+        
         window.location.href = `https://wa.me/6289507913948?text=${pesan}`;
     }
 
