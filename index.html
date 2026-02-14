@@ -9,36 +9,64 @@
 </head>
 <body>
 
+    <div id="alert-overlay" class="overlay">
+        <div class="modal-box">
+            <div id="alert-icon" style="font-size: 50px; margin-bottom: 10px;">⚠️</div>
+            <h2 id="alert-title">Pemberitahuan</h2>
+            <p id="alert-message">Pesan di sini...</p>
+            <button class="btn-confirm" onclick="tutupAlert()">Oke, Paham</button>
+        </div>
+    </div>
+
     <div id="confirm-overlay" class="overlay">
         <div class="modal-box">
             <div style="font-size: 50px;">📲</div>
             <h2>Konfirmasi Pesanan</h2>
-            <p style="font-size: 13px; color: #666; margin-bottom: 10px;">Lanjutkan pesanan ke WhatsApp admin.</p>
-            <div style="background: #fff0f6; border: 2px dashed #ff85b3; padding: 15px; border-radius: 15px; margin: 15px 0;">
-                <span style="font-size: 10px; font-weight: bold; color: #ff85b3;">ID PESANAN:</span>
-                <h3 id="generated-id" style="font-family: monospace; font-size: 22px;">SYR-XXXX</h3>
+            <div class="id-badge-container">
+                <span style="font-size: 10px; font-weight: bold; color: #ff85b3;">ID PESANAN ANDA:</span>
+                <h3 id="generated-id">SYR-XXXX</h3>
             </div>
-            <button class="btn-order" style="margin-top:0;" onclick="prosesKeWA()">Lanjutkan</button>
-            <button style="background:none; border:none; color:#aaa; margin-top:10px; cursor:pointer;" onclick="tutupKonfirmasi()">Batal</button>
+            <button class="btn-confirm" onclick="prosesKeWA()">Lanjutkan ke WA</button>
+            <button class="btn-cancel" onclick="tutupKonfirmasi()">Batal</button>
         </div>
     </div>
 
     <div id="app-container">
         <section id="screen-lobby" class="screen active">
-            <div class="text-center">
+            <div class="text-center mb-4">
                 <div class="logo-wrapper"><img src="images/syrumi.jpeg" class="profile-img"></div>
                 <h1 class="brand-name">Syrumi Store</h1>
                 <p class="brand-tagline">Topup Game & Sosmed Tercepat ✨</p>
             </div>
-            <div onclick="openKategori('game')" class="glass menu-item" style="margin-top:20px;">
+            
+            <div onclick="openKategori('game')" class="glass menu-item">
                 <img src="images/game.jfif" onerror="this.src='https://cdn-icons-png.flaticon.com/512/686/686589.png'">
                 <span>Top Up Game</span>
+            </div>
+
+            <div onclick="openKategori('sosmed')" class="glass menu-item">
+                <img src="images/suntik.jfif" onerror="this.src='https://cdn-icons-png.flaticon.com/512/174/174876.png'">
+                <span>Suntik Sosmed</span>
+            </div>
+
+            <div onclick="switchScreen('screen-status')" class="glass menu-item">
+                <img src="https://cdn-icons-png.flaticon.com/512/833/833593.png">
+                <span>Cek Status Pesanan</span>
+            </div>
+        </section>
+
+        <section id="screen-status" class="screen">
+            <button class="btn-back" onclick="goToLobby()"><i class="fas fa-arrow-left"></i> Kembali</button>
+            <div class="glass text-center">
+                <h2>Lacak Pesanan</h2>
+                <input type="text" id="input-resi" placeholder="Masukkan ID Pesanan">
+                <button class="btn-order" onclick="alert('Fitur ini memerlukan database-pesanan.js aktif!')">Cek Progres</button>
             </div>
         </section>
 
         <section id="screen-kategori" class="screen">
             <button class="btn-back" onclick="goToLobby()"><i class="fas fa-arrow-left"></i> Kembali</button>
-            <h2 class="section-title">Pilih Game</h2>
+            <h2 id="kategori-title" class="section-title">Pilih Layanan</h2>
             <div id="list-layanan"></div>
         </section>
 
@@ -46,10 +74,16 @@
             <button class="btn-back" onclick="backToKategori()"><i class="fas fa-arrow-left"></i> Kembali</button>
             <div class="glass">
                 <h2 id="order-title" class="text-center">Top Up</h2>
-                <input type="text" id="user-id" placeholder="Masukkan Link/ID">
-                <input type="text" id="zone-id" placeholder="Zone" style="display: none;">
-                
-                <div id="grid-produk" class="product-grid"></div>
+                <div class="mb-4">
+                    <label id="label-input" class="input-label">DATA PEMESANAN</label>
+                    <input type="text" id="user-id" placeholder="Masukkan Link/ID">
+                    <input type="text" id="zone-id" placeholder="Zone" style="display: none;">
+                </div>
+
+                <div id="wrapper-grid">
+                    <label class="input-label">PILIH NOMINAL</label>
+                    <div id="grid-produk" class="product-grid"></div>
+                </div>
 
                 <button class="btn-order" onclick="tampilkanKonfirmasi()">
                     <i class="fab fa-whatsapp"></i> Pesan Sekarang
@@ -63,27 +97,36 @@
     </div>
 
     <script>
+    // DATA HARGA BERDASARKAN SPREADSHEET KAMU
     const pricelist = {
         ml: [
-            { item: '5 Diamonds', harga: 'Rp1.560' }, //
-            { item: '17 Diamonds', harga: 'Rp4.900' }, //
-            { item: '28 Diamonds', harga: 'Rp8.000' }, //
-            { item: '44 Diamonds', harga: 'Rp12.000' }, //
-            { item: '59 Diamonds', harga: 'Rp16.000' }, //
-            { item: '86 Diamonds', harga: 'Rp23.000' }, //
-            { item: '172 Diamonds', harga: 'Rp46.000' }, //
-            { item: '257 Diamonds', harga: 'Rp72.000' }, //
-            { item: '706 Diamonds', harga: 'Rp185.000' }, //
-            { item: '2195 Diamonds', harga: 'Rp545.000' }, //
-            { item: '5532 Diamonds', harga: 'Rp1.350.000' }, //
-            { item: '9288 Diamonds', harga: 'Rp2.300.000' }, //
-            { item: 'Weekly Diamond Pass', harga: 'Rp27.500' }, //
-            { item: 'Twilight Pass', harga: 'Rp145.000' } //
-        ]
+            { item: '5 Diamonds', harga: 'Rp1.560' },
+            { item: '17 Diamonds', harga: 'Rp4.900' },
+            { item: '28 Diamonds', harga: 'Rp8.000' },
+            { item: '44 Diamonds', harga: 'Rp12.000' },
+            { item: '59 Diamonds', harga: 'Rp16.000' },
+            { item: '86 Diamonds', harga: 'Rp23.000' },
+            { item: '172 Diamonds', harga: 'Rp46.000' },
+            { item: '257 Diamonds', harga: 'Rp72.000' },
+            { item: '706 Diamonds', harga: 'Rp185.000' },
+            { item: '2195 Diamonds', harga: 'Rp545.000' },
+            { item: '5532 Diamonds', harga: 'Rp1.350.000' },
+            { item: '9288 Diamonds', harga: 'Rp2.300.000' },
+            { item: 'Weekly Diamond Pass', harga: 'Rp27.500' },
+            { item: 'Twilight Pass', harga: 'Rp145.000' }
+        ],
+        tiktok_fol: [{ item: '100 Followers', harga: 'Rp5.000' }, { item: '500 Followers', harga: 'Rp20.000' }],
+        ig_fol: [{ item: '100 Followers', harga: 'Rp4.000' }]
     };
 
     const database = {
-        game: [{ id: 'ml', name: 'Mobile Legends', icon: 'images/logo-ml.jfif', label: 'USER ID & ZONE' }]
+        game: [
+            { id: 'ml', name: 'Mobile Legends', icon: 'images/logo-ml.jfif', label: 'USER ID & ZONE' }
+        ],
+        sosmed: [
+            { id: 'tiktok_fol', name: 'TikTok Followers', icon: 'https://cdn-icons-png.flaticon.com/512/3046/3046121.png', label: 'USERNAME/LINK' },
+            { id: 'ig_fol', name: 'Instagram Followers', icon: 'https://cdn-icons-png.flaticon.com/512/174/174855.png', label: 'USERNAME' }
+        ]
     };
 
     let selectedProduct = "", selectedPrice = "", activeOrderID = "";
@@ -93,6 +136,7 @@
         const target = document.getElementById(id);
         target.style.display = 'block';
         setTimeout(() => { target.classList.add('active'); }, 50);
+        window.scrollTo(0,0);
     }
 
     function openKategori(cat) {
@@ -107,6 +151,7 @@
     function openOrder(id, name, label) {
         selectedProduct = ""; selectedPrice = "";
         document.getElementById('order-title').innerText = name;
+        document.getElementById('label-input').innerText = label;
         document.getElementById('user-id').value = "";
         document.getElementById('zone-id').style.display = (id === 'ml') ? 'block' : 'none';
         renderProducts(id);
@@ -116,9 +161,11 @@
     function renderProducts(id) {
         const grid = document.getElementById('grid-produk');
         grid.innerHTML = "";
-        pricelist[id].forEach(p => {
-            grid.innerHTML += `<div onclick="selectItem('${p.item}', '${p.harga}', this)" class="product-card"><span class="item-name">${p.item}</span><span class="item-price">${p.harga}</span></div>`;
-        });
+        if(pricelist[id]) {
+            pricelist[id].forEach(p => {
+                grid.innerHTML += `<div onclick="selectItem('${p.item}', '${p.harga}', this)" class="product-card"><span class="item-name">${p.item}</span><span class="item-price">${p.harga}</span></div>`;
+            });
+        }
     }
 
     function selectItem(item, harga, el) {
@@ -128,7 +175,7 @@
     }
 
     function tampilkanKonfirmasi() {
-        if(!document.getElementById('user-id').value) return alert("Isi ID tujuan!");
+        if(!document.getElementById('user-id').value) return alert("Isi ID/Link tujuan!");
         if(!selectedProduct) return alert("Pilih nominal!");
         const d = new Date();
         activeOrderID = `SYR-${String(d.getDate()).padStart(2,'0')}${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getHours()).padStart(2,'0')}${String(d.getMinutes()).padStart(2,'0')}`;
@@ -139,7 +186,8 @@
     function prosesKeWA() {
         const idUser = document.getElementById('user-id').value;
         const zone = document.getElementById('zone-id').value;
-        const pesan = window.encodeURIComponent(`Halo Admin, order Baru!\nID Pesanan: ${activeOrderID}\nGame: Mobile Legends\nNominal: ${selectedProduct}\nID: ${idUser} (${zone})\nTotal: ${selectedPrice}`);
+        const layanan = document.getElementById('order-title').innerText;
+        const pesan = window.encodeURIComponent(`Halo Admin, order Baru!\nID: ${activeOrderID}\nLayanan: ${layanan}\nPaket: ${selectedProduct}\nTujuan: ${idUser} ${zone ? '('+zone+')' : ''}\nTotal: ${selectedPrice}`);
         window.location.href = `https://wa.me/6289507913948?text=${pesan}`;
     }
 
