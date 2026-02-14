@@ -27,6 +27,8 @@ const databaseLayanan = {
 
 const pricelist = {
     ml: [
+        { item: 'Weekly Diamond Pass', harga: 'Rp27.500' },
+        { item: 'Twilight Pass', harga: 'Rp145.000' },
         { item: '5 Diamonds', harga: 'Rp1.560' },
         { item: '17 Diamonds', harga: 'Rp4.900' },
         { item: '28 Diamonds', harga: 'Rp8.000' },
@@ -38,9 +40,9 @@ const pricelist = {
         { item: '706 Diamonds', harga: 'Rp185.000' },
         { item: '2195 Diamonds', harga: 'Rp545.000' },
         { item: '5532 Diamonds', harga: 'Rp1.350.000' },
-        { item: '9288 Diamonds', harga: 'Rp2.300.000' },
-        { item: 'Weekly Diamond Pass', harga: 'Rp27.500' },
-        { item: 'Twilight Pass', harga: 'Rp145.000' }
+        { item: '9288 Diamonds', harga: 'Rp2.300.000' }
     ],
-    ff: [{ item: '5 Diamonds', harga: 'Rp1.000' }]
+    ff: [
+        { item: '5 Diamonds', harga: 'Rp1.000' }
+    ]
 };
