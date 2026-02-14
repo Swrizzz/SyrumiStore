@@ -54,5 +54,17 @@ const pricelist = {
         { item: '720 Diamonds', harga: 'Rp95.000' },
         { item: '1440 Diamonds', harga: 'Rp188.000' },
         { item: '7290 Diamonds', harga: 'Rp945.000' }
-    ]
+    ],
+pulsa: {
+        telkomsel: [
+            { item: 'Pulsa 5.000', harga: 'Rp6.500' },
+            { item: 'Pulsa 10.000', harga: 'Rp11.500' },
+            { item: 'Pulsa 20.000', harga: 'Rp21.500' }
+        ],
+        indosat: [
+            { item: 'Pulsa 5.000', harga: 'Rp6.700' },
+            { item: 'Pulsa 10.000', harga: 'Rp11.700' }
+        ],
+        // Tambahkan operator lain sesuai kebutuhan
+    }
 };
