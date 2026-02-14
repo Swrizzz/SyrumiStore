@@ -8,165 +8,81 @@
     --glass-border: rgba(255, 255, 255, 0.4);
 }
 
-* { 
-    margin: 0; 
-    padding: 0; 
-    box-sizing: border-box; 
-    font-family: 'Poppins', sans-serif; 
-}
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
 
 body {
     background: linear-gradient(135deg, var(--primary-pink) 0%, var(--soft-blue) 100%);
-    background-attachment: fixed; 
-    min-height: 100vh;
-    display: flex; 
-    justify-content: center; 
-    padding: 20px 15px;
+    background-attachment: fixed; min-height: 100vh;
+    display: flex; justify-content: center; padding: 20px 15px;
 }
 
 #app-container { width: 100%; max-width: 450px; position: relative; }
 
-/* --- Perbaikan Logo & Header agar Center --- */
-.text-center { 
-    text-align: center; 
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-}
+.text-center { text-align: center; display: flex; flex-direction: column; align-items: center; width: 100%; }
 
 .logo-wrapper {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 5px; 
-    background: white; 
-    border-radius: 50%;
-    box-shadow: 0 4px 15px rgba(255, 133, 179, 0.2); 
-    border: 2px solid var(--accent-pink);
-    width: 110px; 
-    height: 110px; 
-    overflow: hidden; 
-    margin-bottom: 10px;
+    display: flex; justify-content: center; align-items: center; padding: 5px; background: white; 
+    border-radius: 50%; box-shadow: 0 4px 15px rgba(255, 133, 179, 0.2); 
+    border: 2px solid var(--accent-pink); width: 110px; height: 110px; overflow: hidden; margin-bottom: 10px;
 }
 
 .profile-img { width: 100%; height: 100%; object-fit: cover; }
 .brand-name { color: #ff85b3; font-size: 24px; font-weight: 700; margin: 0; }
 .brand-tagline { font-size: 12px; color: #888; margin-top: 5px; }
 
-/* --- Menghilangkan Dropdown/Panah pada Input Jumlah --- */
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-}
-input[type=number] { -moz-appearance: textfield; }
-
 .glass {
-    background: var(--glass-white); 
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid var(--glass-border); 
-    border-radius: 25px;
-    padding: 20px; 
+    background: var(--glass-white); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border); border-radius: 25px; padding: 20px; 
     box-shadow: 0 10px 25px rgba(255, 133, 179, 0.1);
 }
 
 .menu-item {
-    display: flex; 
-    align-items: center; 
-    padding: 15px; 
-    background: white;
-    border-radius: 20px; 
-    margin-bottom: 12px; 
-    cursor: pointer; 
-    transition: 0.2s;
+    display: flex; align-items: center; padding: 15px; background: white;
+    border-radius: 20px; margin-bottom: 12px; cursor: pointer; transition: 0.2s;
     border: 1px solid var(--glass-border);
 }
 .menu-item:hover { transform: scale(1.02); }
 .menu-item img { width: 40px; height: 40px; border-radius: 10px; margin-right: 15px; object-fit: cover; }
 .menu-item.highlight { border: 1px dashed var(--accent-pink); }
 
-.section-title, .main-title { color: var(--accent-pink); margin-bottom: 20px; text-align: center; width: 100%; }
-.input-label { font-size: 11px; font-weight: 600; color: #888; display: block; margin-bottom: 5px; }
-
-.input-row { display: flex; gap: 10px; }
-input { 
-    width: 100%; 
-    padding: 12px 15px; 
-    border-radius: 12px; 
-    border: 1px solid #ddd; 
-    outline: none; 
-    font-size: 14px; 
-    background: white;
+.id-badge-container {
+    background: #fff0f6; border: 2px dashed var(--accent-pink); padding: 10px;
+    border-radius: 15px; margin: 15px 0;
 }
-input:focus { border-color: var(--accent-pink); }
+#generated-id { color: #333; font-family: monospace; font-size: 22px; }
 
-.manual-input-container { display: flex; gap: 10px; margin-bottom: 15px; }
-.input-box-wrapper { flex: 1; }
-.input-box-wrapper label { font-size: 10px; font-weight: 700; color: #888; text-transform: uppercase; margin-bottom: 3px; display: block; }
-.input-relative { position: relative; display: flex; align-items: center; }
-.unit-label { position: absolute; right: 12px; font-size: 11px; font-weight: 600; color: #bbb; pointer-events: none; }
-
-.divider-text { text-align: center; font-size: 11px; color: #aaa; margin: 15px 0; }
-
-/* --- Perbaikan Kartu Produk Instagram (Agar Tidak Nyatu) --- */
 .product-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 10px; }
 .product-card {
-    background: white; 
-    border: 2px solid transparent; 
-    border-radius: 18px;
-    padding: 15px 10px; 
-    text-align: center; 
-    cursor: pointer; 
-    transition: 0.2s;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    min-height: 80px;
+    background: white; border: 2px solid transparent; border-radius: 18px;
+    padding: 15px 10px; text-align: center; cursor: pointer; transition: 0.2s;
+    display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 80px;
 }
 .product-card.selected { border-color: var(--accent-pink); background: #fffafa; }
-.item-name { display: block; font-size: 12px; font-weight: 600; color: #666; margin-bottom: 4px; }
-.item-price { display: block; font-weight: 700; color: var(--accent-pink); font-size: 14px; }
+.item-name { display: block; font-size: 12px; font-weight: 600; color: #666; }
+.item-price { font-weight: 700; color: var(--accent-pink); font-size: 14px; }
 
 .btn-order {
-    width: 100%; 
-    background: var(--accent-pink); 
-    color: white; 
-    padding: 16px;
-    border-radius: 18px; 
-    border: none; 
-    font-weight: 700; 
-    font-size: 16px;
-    margin-top: 20px; 
-    cursor: pointer;
-    box-shadow: 0 5px 15px rgba(255, 133, 179, 0.3);
+    width: 100%; background: var(--accent-pink); color: white; padding: 16px;
+    border-radius: 18px; border: none; font-weight: 700; font-size: 16px;
+    margin-top: 20px; cursor: pointer; box-shadow: 0 5px 15px rgba(255, 133, 179, 0.3);
+}
+
+.btn-proof {
+    background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
+    color: white; border: none; padding: 10px 20px; border-radius: 12px;
+    font-weight: 700; cursor: pointer; margin-top: 15px; transition: 0.3s;
 }
 
 .btn-back { background: none; border: none; color: var(--accent-pink); font-weight: 700; cursor: pointer; margin-bottom: 15px; display: flex; align-items: center; gap: 5px; }
 
-/* --- Overlay & Modal --- */
 .overlay {
-    display: none; 
-    position: fixed; 
-    top: 0; left: 0; 
-    width: 100%; height: 100%;
-    background: rgba(0, 0, 0, 0.6); 
-    backdrop-filter: blur(8px); 
-    z-index: 9999;
-    justify-content: center; 
-    align-items: center; 
-    padding: 20px;
+    display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(8px); z-index: 9999;
+    justify-content: center; align-items: center; padding: 20px;
 }
 .modal-box {
-    background: white; 
-    padding: 30px; 
-    border-radius: 30px; 
-    text-align: center;
-    width: 100%;
-    max-width: 340px; 
-    animation: popIn 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    background: white; padding: 30px; border-radius: 30px; text-align: center;
+    width: 100%; max-width: 340px; animation: popIn 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 @keyframes popIn { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
 
@@ -174,7 +90,6 @@ input:focus { border-color: var(--accent-pink); }
 .btn-cancel { background: #f0f0f0; color: #777; border: none; padding: 12px 20px; border-radius: 12px; font-weight: 700; cursor: pointer; margin: 5px; }
 
 .screen { display: none; }
-.screen.active { display: block; animation: fadeIn 0.3s ease; }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-.copyright { text-align: center; font-size: 11px; color: #888; margin-top: 30px; line-height: 1.6; }
+.screen.active { display: block; }
+input { width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #ddd; outline: none; margin: 5px 0; }
+.copyright { text-align: center; font-size: 11px; color: #888; margin-top: 30px; }
