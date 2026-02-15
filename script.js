@@ -84,13 +84,11 @@ function openOrder(id, name, label, isSosmed, extraNote = "", pattern = "") {
     const grid = document.getElementById('grid-produk');
     const containerOtomatis = document.getElementById('operator-logo-container');
     
-    // RESET SEMUA
     inputTujuan.value = "";
     inputZona.value = ""; 
     containerOtomatis.style.display = 'none';
     containerOtomatis.innerHTML = "";
 
-    // LOGIKA INPUT DATA
     if (id === 'pulsa' || id === 'ml' || id === 'ff') {
         inputTujuan.oninput = function() {
             this.value = this.value.replace(/[^0-9]/g, ''); 
@@ -104,48 +102,42 @@ function openOrder(id, name, label, isSosmed, extraNote = "", pattern = "") {
     
     if (id === 'ml') {
         inputZona.style.display = 'block';
-        inputZona.oninput = function() { this.value = this.value.replace(/[^0-9]/g, '').slice(0, 5); };
     } else {
         inputZona.style.display = 'none';
     }
 
-    // LOGIKA TAMPILAN GRID & KALKULATOR
     grid.innerHTML = ""; 
 
     if (isSosmed) {
-        // Tampilkan Info Catatan
         grid.innerHTML = `
             <div style="background:rgba(255,133,179,0.1); border:1px solid #ff85b3; padding:10px; border-radius:8px; font-size:11px; margin-bottom:15px; color:#333; text-align:left;">
                 <strong>INFO:</strong> Akun dilarang private. ${extraNote}
             </div>
         `;
 
-        // KALKULATOR DI BAWAH LINK (Full Width)
         if (typeof hargaSatuan !== 'undefined' && hargaSatuan[id]) {
             const data = hargaSatuan[id];
-            containerOtomatis.style.display = 'flex';
-            containerOtomatis.style.flexDirection = 'column'; // Supaya turun ke bawah
-            containerOtomatis.style.width = '100%';
-            containerOtomatis.style.marginTop = '15px'; // Jarak dari input username
+            // Tampilkan container di bawah input username
+            containerOtomatis.style.display = 'block'; 
+            containerOtomatis.style.marginTop = '15px';
             
             containerOtomatis.innerHTML = `
-                <div style="display:flex; gap:10px; width:100%;">
-                    <div style="flex: 2;">
-                        <small style="font-size:10px; color:#ff85b3; font-weight:bold; margin-bottom:5px; display:block;">JUMLAH BEBAS</small>
+                <div style="display: flex; gap: 10px; align-items: flex-end;">
+                    <div style="flex: 1.5; text-align: left;">
+                        <label style="font-size: 10px; color: #ff85b3; font-weight: bold; margin-left: 5px;">JUMLAH BEBAS</label>
                         <input type="number" id="custom-qty" placeholder="Min: ${data.min}" 
-                            style="width:100%; padding:12px; border-radius:12px; border:1px solid #ff85b3; background:#fff; color:#000;"
+                            style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #ff85b3; background: #fff; margin-top: 5px;"
                             oninput="hitungHargaOtomatis(this.value, '${id}')">
                     </div>
-                    <div style="flex: 1.2;">
-                        <small style="font-size:10px; color:#ff85b3; font-weight:bold; margin-bottom:5px; display:block;">HARGA</small>
+                    <div style="flex: 1; text-align: left;">
+                        <label style="font-size: 10px; color: #ff85b3; font-weight: bold; margin-left: 5px;">HARGA</label>
                         <div id="display-harga-otomatis" 
-                            style="height:45px; background:#fff; border-radius:12px; border:1px solid #ff85b3; display:flex; align-items:center; justify-content:center; font-weight:bold; color:#ff85b3; font-size:14px;">
+                            style="height: 42px; background: #fff; border-radius: 12px; border: 1px solid #ff85b3; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #ff85b3; margin-top: 5px; font-size: 14px;">
                             Rp0
                         </div>
                     </div>
                 </div>
             `;
-            // Teks "Atau Pilih Paket Tetap" sudah dihapus
         }
     } else if (id === 'pulsa') {
         grid.innerHTML = "<p style='text-align:center; padding:20px;'>Masukkan nomor...</p>";
