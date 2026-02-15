@@ -121,7 +121,7 @@ function openOrder(id, name, label, isSosmed, extraNote = "", pattern = "") {
         };
     } else {
         inputTujuan.maxLength = 500;
-        inputTujuan.placeholder = "Masukkan Link / Username...";
+        inputTujuan.placeholder = "Masukkan Link/Username";
         inputTujuan.oninput = null;
     }
     
