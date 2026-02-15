@@ -66,10 +66,13 @@ function openOrder(id, name, label, manual, unitName = "Pcs") {
     document.getElementById('label-input').innerText = label;
     
     const inputTujuan = document.getElementById('user-id');
+    const inputZona = document.getElementById('zone-id');
+    
     inputTujuan.value = "";
+    inputZona.value = ""; 
     document.getElementById('operator-logo-container').style.display = 'none';
 
-    // CEK DISINI: Jika pulsa/game pakai angka, jika sosmed pakai teks
+    // Logika Input ID Utama
     if (id === 'pulsa' || id === 'ml' || id === 'ff') {
         inputTujuan.type = "tel"; 
         inputTujuan.oninput = function() {
@@ -83,13 +86,24 @@ function openOrder(id, name, label, manual, unitName = "Pcs") {
         inputTujuan.placeholder = "Masukkan Link / Username...";
     }
     
-    document.getElementById('zone-id').style.display = (id === 'ml') ? 'block' : 'none';
+    // Logika Kolom Zona (Khusus ML)
+    if (id === 'ml') {
+        inputZona.style.display = 'block';
+        inputZona.type = "tel"; 
+        inputZona.oninput = function() {
+            this.value = this.value.replace(/[^0-9]/g, '').slice(0, 5); 
+        };
+    } else {
+        inputZona.style.display = 'none';
+    }
+
     const grid = document.getElementById('grid-produk');
     grid.innerHTML = (id === 'pulsa') ? "<p style='text-align:center; padding:20px;'>Masukkan nomor...</p>" : "";
     
     if (id !== 'pulsa') renderProducts(id);
     switchScreen('screen-order');
 }
+
 // --- DETEKSI OPERATOR PULSA ---
 function handleDeteksiOperator(nomor) {
     const provider = deteksiOperator(nomor);
