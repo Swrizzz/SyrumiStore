@@ -1,5 +1,6 @@
 let selectedProduct = "", selectedPrice = "", currentServiceId = "", currentUnitName = "Pcs";
 
+// --- FUNGSI ALERT & MODAL ---
 function kustomAlert(title, message, icon = "⚠️") {
     document.getElementById('alert-icon').innerText = icon;
     document.getElementById('alert-title').innerText = title;
@@ -9,7 +10,6 @@ function kustomAlert(title, message, icon = "⚠️") {
 
 function tutupAlert() { document.getElementById('alert-overlay').style.display = 'none'; }
 
-// Fungsi Testimoni
 function bukaTesti() { document.getElementById('testi-overlay').style.display = 'flex'; }
 function tutupTesti() { document.getElementById('testi-overlay').style.display = 'none'; }
 
@@ -21,6 +21,7 @@ function konfirmasiSaluran() {
     }, 2000);
 }
 
+// --- NAVIGASI SCREEN ---
 function switchScreen(id) {
     document.querySelectorAll('.screen').forEach(s => {
         s.classList.remove('active');
@@ -32,6 +33,11 @@ function switchScreen(id) {
     window.scrollTo(0, 0);
 }
 
+function goToLobby() { switchScreen('screen-lobby'); }
+function backToKategori() { switchScreen('screen-kategori'); }
+function tutupKonfirmasi() { document.getElementById('confirm-overlay').style.display = 'none'; }
+
+// --- LOGIKA KATEGORI & PRODUK ---
 function openKategori(cat) {
     const listDiv = document.getElementById('list-layanan');
     listDiv.innerHTML = "";
@@ -55,28 +61,58 @@ function openOrder(id, name, label, manual, unitName = "Pcs") {
     currentUnitName = unitName;
     selectedProduct = ""; 
     selectedPrice = "";
+    
     document.getElementById('order-title').innerText = name;
     document.getElementById('label-input').innerText = label;
+    
     const inputTujuan = document.getElementById('user-id');
     inputTujuan.value = "";
     document.getElementById('operator-logo-container').style.display = 'none';
 
-    if (id === 'pulsa') {
-        inputTujuan.placeholder = "Contoh: 08123456789";
-    } else if (id === 'ml' || id === 'ff') {
-        inputTujuan.placeholder = "Masukkan ID";
+    // LOGIKA ANTI-HURUF (Otomatis hapus jika bukan angka untuk Pulsa & Game)
+    if (id === 'pulsa' || id === 'ml' || id === 'ff') {
+        inputTujuan.oninput = function() {
+            this.value = this.value.replace(/[^0-9]/g, ''); 
+            // Trigger deteksi operator jika ini menu pulsa
+            if (currentServiceId === 'pulsa') {
+                handleDeteksiOperator(this.value);
+            }
+        };
+        inputTujuan.placeholder = id === 'pulsa' ? "Minimal 10 angka..." : "Masukkan ID...";
     } else {
-        inputTujuan.placeholder = "Masukkan Link / Username";
+        inputTujuan.oninput = null; 
+        inputTujuan.placeholder = "Masukkan Link / Username...";
     }
     
     document.getElementById('zone-id').style.display = (id === 'ml') ? 'block' : 'none';
     const grid = document.getElementById('grid-produk');
-    if (id === 'pulsa') {
-        grid.innerHTML = "<p style='text-align:center; font-size:12px; color:#aaa; padding:20px;'>Masukkan nomor HP...</p>";
-    } else {
-        renderProducts(id);
-    }
+    grid.innerHTML = (id === 'pulsa') ? "<p style='text-align:center; font-size:12px; color:#aaa; padding:20px;'>Masukkan nomor HP...</p>" : "";
+    
+    if (id !== 'pulsa') renderProducts(id);
     switchScreen('screen-order');
+}
+
+// --- DETEKSI OPERATOR PULSA ---
+function handleDeteksiOperator(nomor) {
+    const provider = deteksiOperator(nomor);
+    const logoCont = document.getElementById('operator-logo-container');
+    const logoImg = document.getElementById('operator-logo');
+    const daftarLogo = {
+        "telkomsel": "images/telkomsel.jfif", 
+        "indosat":   "images/indosat.jfif",
+        "xl_axis":   "images/XL.jfif",
+        "three":     "images/three.jfif",
+        "smartfren": "images/smartfren.jfif"
+    };
+
+    if (provider) {
+        renderProductsPulsa(provider);
+        logoImg.src = daftarLogo[provider]; 
+        logoCont.style.display = 'block';
+    } else {
+        logoCont.style.display = 'none';
+        document.getElementById('grid-produk').innerHTML = "<p style='text-align:center; font-size:12px; color:#aaa; padding:20px;'>Menunggu operator...</p>";
+    }
 }
 
 function deteksiOperator(nomor) {
@@ -90,28 +126,7 @@ function deteksiOperator(nomor) {
     return null;
 }
 
-document.addEventListener('keyup', function(e) {
-    if (e.target && e.target.id === 'user-id' && currentServiceId === 'pulsa') {
-        const provider = deteksiOperator(e.target.value);
-        const logoCont = document.getElementById('operator-logo-container');
-        const logoImg = document.getElementById('operator-logo');
-        const daftarLogo = {
-            "telkomsel": "images/telkomsel.jfif", 
-            "indosat":   "images/indosat.jfif",
-            "xl_axis":   "images/XL.jfif",
-            "three":     "images/three.jfif",
-            "smartfren": "images/smartfren.jfif"
-        };
-        if (provider) {
-            renderProductsPulsa(provider);
-            logoImg.src = daftarLogo[provider]; 
-            logoCont.style.display = 'block';
-        } else {
-            logoCont.style.display = 'none';
-        }
-    }
-});
-
+// --- RENDER PRODUK ---
 function renderProducts(id) {
     const grid = document.getElementById('grid-produk');
     grid.innerHTML = pricelist[id] ? "" : "<p style='text-align:center; font-size:12px; color:#aaa; padding:20px;'>Paket segera hadir...</p>";
@@ -133,9 +148,10 @@ function renderProductsPulsa(provider) {
     if (pricelist.pulsa && pricelist.pulsa[provider]) {
         grid.innerHTML = "";
         pricelist.pulsa[provider].forEach(p => {
+            const labelHTML = p.label ? `<span class="badge-premium">${p.label}</span>` : '';
             grid.innerHTML += `
                 <div onclick="selectItem('${p.item}', '${p.harga}', this)" class="product-card">
-                    <span class="item-name">${p.item}</span>
+                    <span class="item-name">${p.item} ${labelHTML}</span>
                     <span class="item-price">${p.harga}</span>
                 </div>`;
         });
@@ -148,19 +164,27 @@ function selectItem(item, harga, el) {
     el.classList.add('selected');
 }
 
+// --- KONFIRMASI & PROSES ---
 function tampilkanKonfirmasi() {
-    const val = document.getElementById('user-id').value;
-    if(!val) return kustomAlert("Data Kosong", "Isi nomor/ID tujuan!", "❌");
-    if(!selectedProduct) return kustomAlert("Pilihan Kosong", "Pilih nominal dulu!", "🛒");
+    const val = document.getElementById('user-id').value.trim();
+    
+    // Validasi Minimal 10 Angka khusus Pulsa
+    if (currentServiceId === 'pulsa') {
+        if (val.length < 10) {
+            return kustomAlert("Nomor Kurang", "Nomor HP minimal harus 10 angka!", "❌");
+        }
+    }
+
+    if (!val) return kustomAlert("Data Kosong", "Isi nomor/ID tujuan!", "❌");
+    if (!selectedProduct) return kustomAlert("Pilihan Kosong", "Pilih nominal dulu!", "🛒");
+    
     document.getElementById('confirm-overlay').style.display = 'flex';
 }
 
 function prosesKeWA() {
     let val = document.getElementById('user-id').value.trim();
     const zone = document.getElementById('zone-id').value;
-    // Perbaikan: Hanya mengambil selectedProduct agar tidak dobel dengan kategori
     const namaProdukFix = selectedProduct; 
-    
     let tujuan = (currentServiceId === 'ml' && zone) ? `${val} (${zone})` : val;
     const linkTesti = "https://whatsapp.com/channel/0029VbB9bWGLNSa9K95BId3P/504"; 
 
@@ -173,24 +197,20 @@ function prosesKeWA() {
         `----------------------------\n` +
         `[ METODE PEMBAYARAN ]\n` +
         `- DANA: 089507913948\n` +
-        `- QRIS: `${linkTesti}\n` +
+        `- QRIS: ${linkTesti}\n` + 
         `----------------------------\n` +
         `[ CATATAN ADMIN ]\n` +
-        `Mohon bersabar jika belum dibalas. Proses 100% Manual & Sesuai Antrean! 🙏\n` +
+        `Mohon bersabar jika admin belum membalas karena proses 100% Manual. Pesanan diproses sesuai antrean ya! 🙏\n` +
         `----------------------------`;
 
     const pesan = window.encodeURIComponent(
-        `*ORDER BARU SYRUMISTORE*\n\n` +
+        `*ORDER SYRUMI STORE*\n\n` +
         `*Produk:* ${namaProdukFix}\n` + 
         `*Tujuan:* ${tujuan}\n` +
-        `*Harga: ${selectedPrice}*\n\n` +
+        `*TOTAL TAGIHAN: ${selectedPrice}*\n\n` +
         `${instruksi}\n\n` +
         `_Silakan kirim bukti transfer agar segera diproses._`
     );
 
     window.location.href = `https://wa.me/6289507913948?text=${pesan}`;
 }
-
-function goToLobby() { switchScreen('screen-lobby'); }
-function backToKategori() { switchScreen('screen-kategori'); }
-function tutupKonfirmasi() { document.getElementById('confirm-overlay').style.display = 'none'; }
