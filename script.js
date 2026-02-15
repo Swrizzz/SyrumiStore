@@ -302,43 +302,64 @@ function kirimTestiWA() {
     window.location.href = `https://wa.me/6289507913948?text=*TESTIMONI SYRUMI*\n"${t}"`;
 }
 
-// FUNGSI BARU: HITUNG HARGA REAL-TIME UNTUK INPUT BEBAS
+// --- LOGIKA KUNCI: KALKULATOR VS PAKET BUNDLE ---
+
 function hitungHargaOtomatis(qty, id) {
     const display = document.getElementById('display-harga-otomatis');
     const data = hargaSatuan[id];
     
-    // Jika input kosong
+    // 1. Matikan pilihan paket bundle di bawah jika user mengetik manual
+    document.querySelectorAll('.product-card').forEach(c => c.classList.remove('selected'));
+
     if (!qty || qty <= 0) {
-        display.innerHTML = `<small style="color:#aaa;">Min: ${data.min.toLocaleString()} | Max: ${data.max.toLocaleString()}</small>`;
-        selectedProduct = ""; selectedPrice = "";
+        display.innerText = "Rp0";
+        selectedProduct = ""; 
+        selectedPrice = "";
         return;
     }
 
-    // Validasi Batasan Order
+    // 2. Validasi Minimal Order
     if (qty < data.min) {
-        display.innerHTML = `<span style="color:#ff4d4d; font-size:12px;">❌ Minimal order ${data.min.toLocaleString()}!</span>`;
-        selectedProduct = ""; selectedPrice = "";
+        display.innerHTML = `<span style="color:#ff4d4d; font-size:10px;">Min: ${data.min.toLocaleString()}</span>`;
+        selectedProduct = ""; 
+        selectedPrice = "";
         return;
     } 
+    
+    // 3. Validasi Maksimal Order
     if (qty > data.max) {
-        display.innerHTML = `<span style="color:#ff4d4d; font-size:12px;">❌ Maksimal order ${data.max.toLocaleString()}!</span>`;
-        selectedProduct = ""; selectedPrice = "";
+        display.innerHTML = `<span style="color:#ff4d4d; font-size:10px;">Limit!</span>`;
+        selectedProduct = ""; 
+        selectedPrice = "";
         return;
     }
 
-    // Hitung Harga jika lolos validasi
+    // 4. Hitung & Simpan Data
     const total = Math.ceil(qty * data.price);
     const formattedTotal = new Intl.NumberFormat('id-ID').format(total);
     
-    // Simpan data untuk dikirim ke WA nanti
     selectedProduct = `${qty} ${document.getElementById('order-title').innerText}`;
     selectedPrice = `Rp${formattedTotal}`;
     
-    // Hapus tanda "Selected" pada kartu paket jika user mengetik manual
-    document.querySelectorAll('.product-card').forEach(c => c.classList.remove('selected'));
+    // Update tampilan harga di box kanan
+    display.innerText = `Rp${formattedTotal}`;
+}
+
+function selectItem(item, harga, el) {
+    // 1. Kosongkan input manual jika user pilih paket bundle
+    const manualInput = document.getElementById('custom-qty');
+    const displayManual = document.getElementById('display-harga-otomatis');
     
-    display.innerHTML = `
-        <div style="color:#2ecc71; font-size:12px; margin-bottom:4px;">✅ Jumlah sesuai aman!</div>
-        Total Tagihan: <span style="color:#ff85b3; font-size:16px; font-weight:bold;">Rp${formattedTotal}</span>
-    `;
+    if (manualInput) {
+        manualInput.value = ""; 
+        if (displayManual) displayManual.innerText = "Rp0";
+    }
+
+    // 2. Set data produk yang dipilih
+    selectedProduct = item; 
+    selectedPrice = harga;
+    
+    // 3. Tandai kartu yang dipilih
+    document.querySelectorAll('.product-card').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
 }
