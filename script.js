@@ -258,7 +258,7 @@ function prosesKeWA() {
 - QRIS: https://whatsapp.com/channel/0029VbB9bWGLNSa9K95BId3P/504
 ----------------------------
 [ CATATAN ADMIN ]
-Mohon bersabar jika admin belum membalas karena proses 100% Manual. Pesanan diproses sesuai antrean ya! 🙏
+Mohon bersabar jika admin belum membalas karena proses 100% Manual. Pesanan diproses sesuai antrean ya!
 ----------------------------
 
 _Silakan kirim bukti transfer agar segera diproses._`;
