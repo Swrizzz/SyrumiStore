@@ -158,11 +158,12 @@ function tampilkanKonfirmasi() {
 function prosesKeWA() {
     let val = document.getElementById('user-id').value.trim();
     const zone = document.getElementById('zone-id').value;
-    const namaKat = document.getElementById('order-title').innerText;
+    // Perbaikan: Hanya mengambil selectedProduct agar tidak dobel dengan kategori
+    const namaProdukFix = selectedProduct; 
+    
     let tujuan = (currentServiceId === 'ml' && zone) ? `${val} (${zone})` : val;
     const linkTesti = "https://whatsapp.com/channel/0029VbB9bWGLNSa9K95BId3P/504"; 
 
-    // Simbol Universal agar terbaca di semua HP
     const instruksi = 
         `----------------------------\n` +
         `[ CARA PENYELESAIAN ]\n` +
@@ -172,8 +173,7 @@ function prosesKeWA() {
         `----------------------------\n` +
         `[ METODE PEMBAYARAN ]\n` +
         `- DANA: 089507913948\n` +
-        `- QRIS: Cek di Pin Saluran WA\n` +
-        `${linkTesti}\n` +
+        `- QRIS: `${linkTesti}\n` +
         `----------------------------\n` +
         `[ CATATAN ADMIN ]\n` +
         `Mohon bersabar jika belum dibalas. Proses 100% Manual & Sesuai Antrean! 🙏\n` +
@@ -181,9 +181,9 @@ function prosesKeWA() {
 
     const pesan = window.encodeURIComponent(
         `*ORDER BARU SYRUMISTORE*\n\n` +
-        `*Produk:* ${selectedProduct} ${namaKat}\n` +
+        `*Produk:* ${namaProdukFix}\n` + 
         `*Tujuan:* ${tujuan}\n` +
-        `*TOTAL TAGIHAN: ${selectedPrice}*\n\n` +
+        `*Harga: ${selectedPrice}*\n\n` +
         `${instruksi}\n\n` +
         `_Silakan kirim bukti transfer agar segera diproses._`
     );
