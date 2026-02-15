@@ -111,21 +111,15 @@ document.addEventListener('keyup', function(e) {
     }
 });
 
-// MODIFIKASI: Render Produk Game dengan dukungan Label
+// GANTI renderProducts LAMA DENGAN INI
 function renderProducts(id) {
     const grid = document.getElementById('grid-produk');
     grid.innerHTML = pricelist[id] ? "" : "<p style='text-align:center; font-size:12px; color:#aaa; padding:20px;'>Paket segera hadir...</p>";
     if(pricelist[id]) {
         pricelist[id].forEach(p => {
-            // Logika Gabungan: Cek isPremium (untuk Game) atau label (untuk Pulsa)
-            let labelHTML = '';
-            if (p.isPremium) {
-                labelHTML = `<span class="badge-premium">👑 HOT</span>`;
-            } else if (p.label) {
-                labelHTML = `<span class="badge-premium">${p.label}</span>`;
-            }
-
-            // Tambahkan class 'premium' ke card jika isPremium bernilai true
+            // Logika: Ambil label dari data, jika tidak ada cek isPremium
+            let labelText = p.label ? p.label : (p.isPremium ? "👑 HOT" : "");
+            const labelHTML = labelText ? `<span class="badge-premium">${labelText}</span>` : '';
             const premiumClass = p.isPremium ? 'premium' : '';
             
             grid.innerHTML += `
@@ -137,7 +131,7 @@ function renderProducts(id) {
     }
 }
 
-// MODIFIKASI: Render Produk Pulsa dengan dukungan Label
+// GANTI renderProductsPulsa LAMA DENGAN INI
 function renderProductsPulsa(provider) {
     const grid = document.getElementById('grid-produk');
     if (pricelist.pulsa && pricelist.pulsa[provider]) {
@@ -152,7 +146,6 @@ function renderProductsPulsa(provider) {
         });
     }
 }
-
 function selectItem(item, harga, el) {
     selectedProduct = item; selectedPrice = harga;
     document.querySelectorAll('.product-card').forEach(c => c.classList.remove('selected'));
