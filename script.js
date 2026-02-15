@@ -231,15 +231,22 @@ function kirimTestiWA() {
     const pesanTesti = document.getElementById('input-testi').value.trim();
     
     if (!pesanTesti) {
-        return kustomAlert("Eits!", "Tulis dulu testimoninya ya kak!", "✍️");
+        // Tutup modal testi dulu supaya Alert "Eits" kelihatan jelas di depan
+        tutupTesti(); 
+        
+        // Kasih jeda sedikit supaya transisi modal tutup selesai baru alert muncul
+        setTimeout(() => {
+            kustomAlert("Eits!", "Tulis dulu testimoninya ya kak!", "✍️");
+        }, 300);
+        return;
     }
 
     const formatPesan = window.encodeURIComponent(
         `*TESTIMONI SYRUMI STORE*\n\n` +
-        `" ${pesanTesti} "\n\n` +
+        `"${pesanTesti}"\n\n` +
         `_Dikirim via Website Syrumi_`
     );
 
-    // Langsung arahkan ke WA kamu
+    // Buka WhatsApp
     window.location.href = `https://wa.me/6289507913948?text=${formatPesan}`;
 }
