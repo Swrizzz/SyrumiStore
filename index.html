@@ -20,29 +20,27 @@
     </div>
 
     <div id="testi-overlay" class="overlay">
-    <div class="modal-box" style="max-width: 400px;">
+    <div class="modal-box" style="max-width: 400px; padding: 20px;">
         <h2 style="color: #ff85b3; margin-bottom: 15px;">💬 Testimoni Pelanggan</h2>
         
-        <div class="testi-container" style="display: flex; flex-direction: column; gap: 10px; max-height: 300px; overflow-y: auto; text-align: left; padding: 10px;">
-            <div style="background: rgba(255,255,255,0.05); padding: 10px; border-radius: 10px; border-left: 3px solid #ff85b3;">
-                <small style="color: #ff85b3; display: block; margin-bottom: 5px;">User ID: 1293xxx</small>
-                <span style="font-size: 13px;">"Gila sih, beli 5 diamond aja dilayani secepat kilat. Recommended!"</span>
-            </div>
-            
-            <div style="background: rgba(255,255,255,0.05); padding: 10px; border-radius: 10px; border-left: 3px solid #ff85b3;">
-                <small style="color: #ff85b3; display: block; margin-bottom: 5px;">0895xxxx12</small>
-                <span style="font-size: 13px;">"Pulsa langsung masuk gak pake lama. Adminnya ramah biarpun order dikit."</span>
+        <div id="container-chat" style="display: flex; flex-direction: column; gap: 10px; text-align: left; padding: 5px; max-height: 250px; overflow-y: auto;">
             </div>
 
-            <div style="background: rgba(255,255,255,0.05); padding: 10px; border-radius: 10px; border-left: 3px solid #ff85b3;">
-                <small style="color: #ff85b3; display: block; margin-bottom: 5px;">User ID: 8821xxx</small>
-                <span style="font-size: 13px;">"Weekly Pass paling murah cuma disini. Amanah banget Syrumi Store."</span>
-            </div>
+        <hr style="border: 0.5px solid rgba(255,255,255,0.1); margin: 20px 0;">
+
+        <div style="text-align: left;">
+            <label style="font-size: 12px; color: #ff85b3; font-weight: bold;">Ceritakan Pengalamanmu :</label>
+            <textarea id="input-testi" placeholder="Contoh: Diamond masuk cuma 1 menit! Amanah banget..." style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid #444; border-radius: 10px; color: white; padding: 10px; font-size: 13px; margin-top: 8px; resize: none; font-family: sans-serif;" rows="3"></textarea>
+            
+            <button onclick="kirimTestiWA()" style="width: 100%; background: #25d366; color: white; border: none; padding: 12px; border-radius: 10px; font-size: 13px; margin-top: 10px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                <i class="fab fa-whatsapp"></i> Kirim Testi ke WhatsApp
+            </button>
         </div>
 
-        <p style="font-size: 12px; color: #777; margin: 15px 0;">Klik tombol di bawah untuk cek ribuan testi lainnya di Saluran WhatsApp.</p>
-        <button class="btn-confirm" onclick="konfirmasiSaluran()">Lihat Semua Testi</button>
-        <button class="btn-cancel" onclick="tutupTesti()">Tutup</button>
+        <div style="margin-top: 15px; display: flex; flex-direction: column; gap: 8px;">
+            <button class="btn-confirm" onclick="konfirmasiSaluran()" style="width: 100%;">Lihat Ratusan Testi Lainnya</button>
+            <button class="btn-cancel" onclick="tutupTesti()" style="width: 100%;">Tutup</button>
+        </div>
     </div>
 </div>
 
