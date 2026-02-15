@@ -13,15 +13,15 @@ const pricelistPPOB = {
         { item: 'Pulsa Telkomsel 300.000', harga: 'Rp294.500' }
     ],
     indosat: [
-        { item: 'Pulsa 5.000', harga: 'Rp7.800' },
-        { item: 'Pulsa 10.000', harga: 'Rp12.600', label: 'Populer' },
-        { item: 'Pulsa 12.000', harga: 'Rp15.000' },
-        { item: 'Pulsa 15.000', harga: 'Rp17.200' },
-        { item: 'Pulsa 20.000', harga: 'Rp22.100' },
-        { item: 'Pulsa 25.000', harga: 'Rp27.100' },
-        { item: 'Pulsa 50.000', harga: 'Rp51.000', label: 'Best Deal' },
-        { item: 'Pulsa 100.000', harga: 'Rp102.000' },
-        { item: 'Pulsa 200.000', harga: 'Rp199.000', label: '👑 Premium Price' }
+        { item: 'Pulsa Indosat 5.000', harga: 'Rp8.200' },
+        { item: 'Pulsa Indosat 10.000', harga: 'Rp13.000' },
+        { item: 'Pulsa Indosat 15.000', harga: 'Rp18.200' },
+        { item: 'Pulsa Indosat 25.000', harga: 'Rp28.200' },
+        { item: 'Pulsa Indosat 50.000', harga: 'Rp52.200', label: 'Terlaris' },
+        { item: 'Pulsa Indosat 80.000', harga: 'Rp80.500', label: '👑 BEST PRICE' },
+        { item: 'Pulsa Indosat 100.000', harga: 'Rp103.200' },
+        { item: 'Pulsa Indosat 150.000', harga: 'Rp148.800', label: '👑 HARGA GILA' },
+        { item: 'Pulsa Indosat 200.000', harga: 'Rp201.500' }
     ],
     xl_axis: [
         { item: 'Pulsa 5.000', harga: 'Rp7.200' },
