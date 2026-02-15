@@ -19,218 +19,74 @@ body {
     padding: 20px;
 }
 
-/* --- CONTAINER UTAMA --- */
-#app-container { 
-    width: 100%; 
-    max-width: 800px; 
-    position: relative;
-}
+#app-container { width: 100%; max-width: 800px; position: relative; }
 
-/* --- ANIMASI --- */
+.screen { display: none; width: 100%; }
+.screen.active { display: block; animation: slideFade 0.4s ease-out forwards; }
+
 @keyframes slideFade {
     from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
 }
 
-.screen { 
-    display: none; 
-    width: 100%;
-}
-
-.screen.active { 
-    display: block; 
-    animation: slideFade 0.4s ease-out forwards;
-}
-
-/* --- HEADER --- */
 .text-center { text-align: center; margin-bottom: 25px; }
 
 .logo-wrapper {
-    display: inline-flex; 
-    padding: 5px; 
-    background: white; 
-    border-radius: 50%; 
-    box-shadow: 0 8px 20px rgba(255, 133, 179, 0.2); 
-    border: 3px solid white;
-    width: 120px; height: 120px; 
-    overflow: hidden;
-    margin-bottom: 15px;
+    display: inline-flex; padding: 5px; background: white; border-radius: 50%; 
+    box-shadow: 0 8px 20px rgba(255, 133, 179, 0.2); border: 3px solid white;
+    width: 120px; height: 120px; overflow: hidden; margin-bottom: 15px;
 }
 .profile-img { width: 100%; height: 100%; object-fit: cover; }
 .brand-name { color: #ff85b3; font-size: 28px; font-weight: 700; }
 .brand-tagline { font-size: 14px; color: #777; margin-bottom: 30px; }
 
-/* --- GLASS EFFECT & MENU --- */
 .glass {
-    background: var(--glass-white);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
-    border: 1px solid var(--glass-border);
-    border-radius: 25px;
-    padding: 25px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    background: var(--glass-white); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+    border: 1px solid var(--glass-border); border-radius: 25px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.05);
 }
 
 .menu-item {
-    display: flex; 
-    align-items: center; 
-    padding: 18px 25px; 
-    background: white;
-    border-radius: 20px; 
-    margin-bottom: 15px; 
-    cursor: pointer; 
-    transition: all 0.3s ease;
-    border: 1px solid transparent;
+    display: flex; align-items: center; padding: 18px 25px; background: white;
+    border-radius: 20px; margin-bottom: 15px; cursor: pointer; transition: all 0.3s ease; border: 1px solid transparent;
 }
-
-.menu-item:hover { 
-    transform: scale(1.02); 
-    box-shadow: 0 8px 20px rgba(255, 133, 179, 0.15);
-    border-color: var(--accent-pink);
-}
-
+.menu-item:hover { transform: scale(1.02); box-shadow: 0 8px 20px rgba(255, 133, 179, 0.15); border-color: var(--accent-pink); }
 .menu-item img { width: 45px; height: 45px; border-radius: 12px; margin-right: 20px; object-fit: cover; }
 .menu-item span { font-weight: 600; color: #444; font-size: 16px; }
 
-/* --- GRID DIAMOND --- */
-.product-grid { 
-    display: grid; 
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); 
-    gap: 15px; 
-    margin-top: 20px; /* Jarak atas ditambah agar HOT tidak kepotong header */
-}
-
+.product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; margin-top: 20px; }
 .product-card {
-    background: white; 
-    border: 2px solid #f0f0f0; 
-    border-radius: 18px;
-    padding: 20px 10px; 
-    text-align: center; 
-    cursor: pointer; 
-    transition: 0.3s ease;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    min-height: 100px;
-    position: relative;
-    /* PENTING: overflow harus visible agar label HOT muncul */
-    overflow: visible !important; 
+    background: white; border: 2px solid #f0f0f0; border-radius: 18px; padding: 20px 10px; 
+    text-align: center; cursor: pointer; transition: 0.3s ease; display: flex;
+    flex-direction: column; justify-content: center; align-items: center; min-height: 100px; position: relative;
 }
+.product-card.selected { border-color: var(--accent-pink); background: #fffafa; transform: translateY(-5px); box-shadow: 0 8px 15px rgba(255, 133, 179, 0.2); }
 
-.product-card.selected { 
-    border-color: var(--accent-pink); 
-    background: #fffafa; 
-    transform: translateY(-5px);
-    box-shadow: 0 8px 15px rgba(255, 133, 179, 0.2);
-}
+.item-name { display: block; font-size: 14px; font-weight: 600; color: #444; margin-bottom: 8px; }
+.item-price { font-weight: 700; color: var(--accent-pink); font-size: 13px; background: #fff0f6; padding: 4px 12px; border-radius: 10px; }
 
-.item-name { 
-    display: block; 
-    font-size: 14px; 
-    font-weight: 600; 
-    color: #444; 
-    margin-bottom: 8px; 
-}
-
-.item-price { 
-    font-weight: 700; 
-    color: var(--accent-pink); 
-    font-size: 13px; 
-    background: #fff0f6;
-    padding: 4px 12px;
-    border-radius: 10px;
-    display: inline-block;
-}
-
-/* --- TAMPILAN PREMIUM (Weekly/Twilight) --- */
-.product-card.premium {
-    background: linear-gradient(145deg, #ffffff, #fdf2ff);
-    border: 2px solid #e0aaff !important;
-}
-
-.product-card.premium .item-name {
-    color: #6a0dad !important;
-}
-
-.product-card.premium .item-price {
-    background: #6a0dad !important;
-    color: white !important;
-}
-
-/* Label HOT - Biar nongol keluar kotak */
+.product-card.premium { background: linear-gradient(145deg, #ffffff, #fdf2ff); border: 2px solid #e0aaff !important; }
+.product-card.premium .item-name { color: #6a0dad !important; }
+.product-card.premium .item-price { background: #6a0dad !important; color: white !important; }
 .product-card.premium::after {
-    content: "HOT";
-    position: absolute;
-    top: -10px; 
-    right: -5px; 
-    background: linear-gradient(45deg, #ff4757, #ff6b81);
-    color: white;
-    font-size: 10px;
-    font-weight: bold;
-    padding: 3px 10px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(255, 71, 87, 0.3);
-    z-index: 10;
+    content: "HOT"; position: absolute; top: -10px; right: -5px; background: linear-gradient(45deg, #ff4757, #ff6b81);
+    color: white; font-size: 10px; font-weight: bold; padding: 3px 10px; border-radius: 8px; z-index: 10;
 }
 
-/* --- RESPONSIVE HP (2 KOLOM) --- */
 @media (max-width: 480px) {
-    .product-grid {
-        grid-template-columns: 1fr 1fr !important;
-        gap: 15px 12px !important; /* Jarak vertikal ditambah agar HOT tidak tumpang tindih */
-    }
-    
-    .product-card {
-        padding: 25px 10px !important;
-        min-height: 110px !important;
-    }
-
-    .item-name { font-size: 13px !important; }
-    .item-price { font-size: 13px !important; width: 90%; }
+    .product-grid { grid-template-columns: 1fr 1fr !important; gap: 15px 12px !important; }
+    .product-card { padding: 25px 10px !important; min-height: 110px !important; }
 }
 
-/* --- TOMBOL --- */
-.btn-order {
-    width: 100%; 
-    background: var(--accent-pink); 
-    color: white; 
-    padding: 18px;
-    border-radius: 20px; 
-    border: none; 
-    font-weight: 700; 
-    font-size: 18px;
-    margin-top: 25px; 
-    cursor: pointer; 
-    box-shadow: 0 10px 20px rgba(255, 133, 179, 0.3);
-}
+.btn-order { width: 100%; background: var(--accent-pink); color: white; padding: 18px; border-radius: 20px; border: none; font-weight: 700; font-size: 18px; margin-top: 25px; cursor: pointer; }
+.btn-back { background: white; border: none; color: var(--accent-pink); font-weight: 700; padding: 10px 20px; border-radius: 12px; cursor: pointer; margin-bottom: 20px; display: inline-flex; align-items: center; gap: 8px; }
 
-.btn-back {
-    background: white; border: none; color: var(--accent-pink); font-weight: 700; 
-    padding: 10px 20px; border-radius: 12px; cursor: pointer; margin-bottom: 20px; 
-    display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-}
-
-/* --- MODAL --- */
-.overlay {
-    display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-    z-index: 9999; justify-content: center; align-items: center; padding: 20px;
-}
-
-.modal-box {
-    background: white; padding: 30px; border-radius: 30px; text-align: center;
-    width: 100%; max-width: 380px; box-shadow: 0 15px 35px rgba(0,0,0,0.2);
-    animation: popIn 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-}
+.overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(8px); z-index: 9999; justify-content: center; align-items: center; padding: 20px; }
+.modal-box { background: white; padding: 30px; border-radius: 30px; text-align: center; width: 100%; max-width: 380px; animation: popIn 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); }
 
 @keyframes popIn { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
 
 .btn-confirm { background: var(--accent-pink); color: white; border: none; padding: 12px 25px; border-radius: 12px; font-weight: 700; cursor: pointer; margin: 5px; }
 .btn-cancel { background: #f0f0f0; color: #777; border: none; padding: 12px 25px; border-radius: 12px; font-weight: 700; cursor: pointer; margin: 5px; }
 
-/* --- INPUT --- */
-input { width: 100%; padding: 14px; border-radius: 15px; border: 1px solid #ddd; outline: none; margin: 10px 0; font-size: 15px; }
-.input-label { font-size: 12px; font-weight: 700; color: #ff85b3; display: block; margin-top: 10px; }
-
-.copyright { text-align: center; font-size: 12px; color: #888; margin-top: 40px; padding-bottom: 20px; }
+input { width: 100%; padding: 14px; border-radius: 15px; border: 1px solid #ddd; outline: none; font-size: 15px; background: white; }
+.input-label { font-size: 12px; font-weight: 700; color: #ff85b3; display: block; margin-bottom: 5px; }
