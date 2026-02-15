@@ -226,3 +226,20 @@ function prosesKeWA() {
 
     window.location.href = `https://wa.me/6289507913948?text=${pesan}`;
 }
+
+function kirimTestiWA() {
+    const pesanTesti = document.getElementById('input-testi').value.trim();
+    
+    if (!pesanTesti) {
+        return kustomAlert("Eits!", "Tulis dulu testimoninya ya kak!", "✍️");
+    }
+
+    const formatPesan = window.encodeURIComponent(
+        `*TESTIMONI SYRUMI STORE*\n\n` +
+        `" ${pesanTesti} "\n\n` +
+        `_Dikirim via Website Syrumi_`
+    );
+
+    // Langsung arahkan ke WA kamu
+    window.location.href = `https://wa.me/6289507913948?text=${formatPesan}`;
+}
