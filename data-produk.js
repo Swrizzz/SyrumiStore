@@ -19,18 +19,18 @@ const databaseLayanan = {
     ppob: [{ id: 'pulsa', name: 'Pulsa & Data', icon: 'https://cdn-icons-png.flaticon.com/512/3059/3059502.png', label: 'NOMOR HP' }],
     sosmed_apps: {
         tiktok: [
-            { id: 'tk_fol', name: 'TikTok Followers', label: 'USERNAME TIKTOK', note: 'Maks 3x24 Jam' },
-            { id: 'tk_view', name: 'TikTok Viewers', label: 'LINK VIDEO', note: 'Maks 3x24 Jam' },
-            { id: 'tk_like', name: 'TikTok Likes', label: 'LINK VIDEO', note: 'Maks 3x24 Jam' }
+            { id: 'tk_fol', name: 'TikTok Followers', label: 'USERNAME TIKTOK', note: 'Maks 3x24 Jam', pattern: 'tiktok|tt.com' },
+            { id: 'tk_view', name: 'TikTok Viewers', label: 'LINK VIDEO', note: 'Maks 3x24 Jam', pattern: 'tiktok|tt.com' },
+            { id: 'tk_like', name: 'TikTok Likes', label: 'LINK VIDEO', note: 'Maks 3x24 Jam', pattern: 'tiktok|tt.com' }
         ],
         instagram: [
-            { id: 'ig_fol_indo', name: 'Followers Indonesia', label: 'USERNAME INSTAGRAM', note: 'Proses Cepat' },
-            { id: 'ig_fol_mix', name: 'Followers Acak/Asing', label: 'USERNAME INSTAGRAM', note: 'Harga Ekonomis' },
-            { id: 'ig_like', name: 'Instagram Likes', label: 'LINK POSTINGAN' },
-            { id: 'ig_view', name: 'Instagram Viewers', label: 'LINK REELS/VIDEO' }
+            { id: 'ig_fol_indo', name: 'Followers Indonesia', label: 'USERNAME INSTAGRAM', note: 'Proses Cepat', pattern: 'instagram|ig.me' },
+            { id: 'ig_fol_mix', name: 'Followers Acak/Asing', label: 'USERNAME INSTAGRAM', note: 'Harga Ekonomis', pattern: 'instagram|ig.me' },
+            { id: 'ig_like', name: 'Instagram Likes', label: 'LINK POSTINGAN', pattern: 'instagram|ig.me' },
+            { id: 'ig_view', name: 'Instagram Viewers', label: 'LINK REELS/VIDEO', pattern: 'instagram|ig.me' }
         ],
         shopee: [
-            { id: 'shp_fol', name: 'Shopee Followers', label: 'LINK TOKO' }
+            { id: 'shp_fol', name: 'Shopee Followers', label: 'LINK TOKO', pattern: 'shopee' }
         ]
     }
 };
@@ -69,7 +69,6 @@ const pricelist = {
         { item: '1440 Diamonds', harga: 'Rp188.000' },
         { item: '7290 Diamonds', harga: 'Rp945.000' }
     ],
-    // Contoh harga sosmed (Silakan ubah harganya)
     tk_fol: [
         { item: '100 Followers', harga: 'Rp5.000' },
         { item: '500 Followers', harga: 'Rp20.000' },
