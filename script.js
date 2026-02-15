@@ -272,3 +272,44 @@ function kirimTestiWA() {
     if(!t) return kustomAlert("Kosong", "Tulis testimoninya dulu!", "✍️");
     window.location.href = `https://wa.me/6289507913948?text=*TESTIMONI SYRUMI*\n"${t}"`;
 }
+
+// FUNGSI BARU: HITUNG HARGA REAL-TIME UNTUK INPUT BEBAS
+function hitungHargaOtomatis(qty, id) {
+    const display = document.getElementById('display-harga-otomatis');
+    const data = hargaSatuan[id];
+    
+    // Jika input kosong
+    if (!qty || qty <= 0) {
+        display.innerHTML = `<small style="color:#aaa;">Min: ${data.min.toLocaleString()} | Max: ${data.max.toLocaleString()}</small>`;
+        selectedProduct = ""; selectedPrice = "";
+        return;
+    }
+
+    // Validasi Batasan Order
+    if (qty < data.min) {
+        display.innerHTML = `<span style="color:#ff4d4d; font-size:12px;">❌ Minimal order ${data.min.toLocaleString()}!</span>`;
+        selectedProduct = ""; selectedPrice = "";
+        return;
+    } 
+    if (qty > data.max) {
+        display.innerHTML = `<span style="color:#ff4d4d; font-size:12px;">❌ Maksimal order ${data.max.toLocaleString()}!</span>`;
+        selectedProduct = ""; selectedPrice = "";
+        return;
+    }
+
+    // Hitung Harga jika lolos validasi
+    const total = Math.ceil(qty * data.price);
+    const formattedTotal = new Intl.NumberFormat('id-ID').format(total);
+    
+    // Simpan data untuk dikirim ke WA nanti
+    selectedProduct = `${qty} ${document.getElementById('order-title').innerText}`;
+    selectedPrice = `Rp${formattedTotal}`;
+    
+    // Hapus tanda "Selected" pada kartu paket jika user mengetik manual
+    document.querySelectorAll('.product-card').forEach(c => c.classList.remove('selected'));
+    
+    display.innerHTML = `
+        <div style="color:#2ecc71; font-size:12px; margin-bottom:4px;">✅ Jumlah sesuai aman!</div>
+        Total Tagihan: <span style="color:#ff85b3; font-size:16px; font-weight:bold;">Rp${formattedTotal}</span>
+    `;
+}
