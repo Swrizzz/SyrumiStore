@@ -49,11 +49,8 @@ function openOrder(id, name, label, manual, unitName = "Pcs") {
     
     const inputTujuan = document.getElementById('user-id');
     inputTujuan.value = "";
-    
-    // Reset Logo saat ganti layanan
     document.getElementById('operator-logo-container').style.display = 'none';
 
-    // Pengaturan Placeholder & Filter Input
     if (id === 'pulsa') {
         inputTujuan.placeholder = "Contoh: 08123456789";
         inputTujuan.oninput = function() { this.value = this.value.replace(/[^0-9]/g, ''); };
@@ -71,11 +68,10 @@ function openOrder(id, name, label, manual, unitName = "Pcs") {
     
     const grid = document.getElementById('grid-produk');
     if (id === 'pulsa') {
-        grid.innerHTML = "<p style='text-align:center; font-size:12px; color:#aaa; padding:20px;'>Masukkan nomor HP untuk melihat harga...</p>";
+        grid.innerHTML = "<p style='text-align:center; font-size:12px; color:#aaa; padding:20px;'>Masukkan nomor HP...</p>";
     } else {
         renderProducts(id);
     }
-    
     switchScreen('screen-order');
 }
 
@@ -90,16 +86,14 @@ function deteksiOperator(nomor) {
     return null;
 }
 
-// --- BAGIAN UPDATE LOGO OPERATOR DENGAN LINK MANUAL ---
 document.addEventListener('keyup', function(e) {
     if (e.target && e.target.id === 'user-id' && currentServiceId === 'pulsa') {
         const provider = deteksiOperator(e.target.value);
         const logoCont = document.getElementById('operator-logo-container');
         const logoImg = document.getElementById('operator-logo');
 
-        // MASUKKAN LINK GAMBAR/HREF KAMU DI SINI
         const daftarLogo = {
-            "telkomsel": "images/telkomsel.jfif", // Ganti dengan link/nama filemu
+            "telkomsel": "images/telkomsel.jfif", 
             "indosat":   "images/indosat.jfif",
             "xl_axis":   "images/XL.jfif",
             "three":     "images/three.jfif",
@@ -123,11 +117,7 @@ function renderProducts(id) {
     if(pricelist[id]) {
         pricelist[id].forEach(p => {
             const premiumClass = p.isPremium ? 'premium' : '';
-            grid.innerHTML += `
-                <div onclick="selectItem('${p.item}', '${p.harga}', this)" class="product-card ${premiumClass}">
-                    <span class="item-name">${p.item}</span>
-                    <span class="item-price">${p.harga}</span>
-                </div>`;
+            grid.innerHTML += `<div onclick="selectItem('${p.item}', '${p.harga}', this)" class="product-card ${premiumClass}"><span class="item-name">${p.item}</span><span class="item-price">${p.harga}</span></div>`;
         });
     }
 }
@@ -137,11 +127,7 @@ function renderProductsPulsa(provider) {
     if (pricelist.pulsa && pricelist.pulsa[provider]) {
         grid.innerHTML = "";
         pricelist.pulsa[provider].forEach(p => {
-            grid.innerHTML += `
-                <div onclick="selectItem('${p.item}', '${p.harga}', this)" class="product-card">
-                    <span class="item-name">${p.item}</span>
-                    <span class="item-price">${p.harga}</span>
-                </div>`;
+            grid.innerHTML += `<div onclick="selectItem('${p.item}', '${p.harga}', this)" class="product-card"><span class="item-name">${p.item}</span><span class="item-price">${p.harga}</span></div>`;
         });
     }
 }
@@ -152,15 +138,14 @@ function selectItem(item, harga, el) {
     el.classList.add('selected');
 }
 
+function hitungHargaManual() { /* Logika manual jika ada */ }
+
 function tampilkanKonfirmasi() {
     const val = document.getElementById('user-id').value;
     if(!val) return kustomAlert("Data Kosong", "Isi nomor/ID tujuan!", "❌");
     if(!selectedProduct) return kustomAlert("Pilihan Kosong", "Pilih nominal dulu!", "🛒");
-
     const d = new Date();
-    const tglBln = String(d.getDate()).padStart(2, '0') + String(d.getMonth() + 1).padStart(2, '0');
-    const jamMnt = String(d.getHours()).padStart(2, '0') + String(d.getMinutes()).padStart(2, '0');
-    activeOrderID = `SYR-${tglBln}-${jamMnt}`;
+    activeOrderID = `SYR-${String(d.getDate()).padStart(2,'0')}${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getHours()).padStart(2,'0')}${String(d.getMinutes()).padStart(2,'0')}`;
     document.getElementById('generated-id').innerText = activeOrderID;
     document.getElementById('confirm-overlay').style.display = 'flex';
 }
@@ -170,15 +155,7 @@ function prosesKeWA() {
     const zone = document.getElementById('zone-id').value;
     const namaProduk = document.getElementById('order-title').innerText;
     let tujuan = (currentServiceId === 'ml' && zone) ? `${val} (${zone})` : val;
-
-    const pesan = window.encodeURIComponent(
-        `*ORDER BARU SYRUMISTORE*\n\n` +
-        `ID: ${activeOrderID}\n` +
-        `Barang: ${selectedProduct} ${namaProduk}\n` +
-        `Tujuan: ${tujuan}\n` +
-        `Total: ${selectedPrice}\n\n` +
-        `_Halo admin, silakan proses pesanan saya_`
-    );
+    const pesan = window.encodeURIComponent(`*ORDER BARU SYRUMISTORE*\n\nID: ${activeOrderID}\nBarang: ${selectedProduct} ${namaProduk}\nTujuan: ${tujuan}\nTotal: ${selectedPrice}\n\n_Halo admin, silakan proses pesanan saya_`);
     window.location.href = `https://wa.me/6289507913948?text=${pesan}`;
 }
 
