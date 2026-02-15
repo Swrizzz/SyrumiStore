@@ -169,7 +169,36 @@ function prosesKeWA() {
     const zone = document.getElementById('zone-id').value;
     const namaProduk = document.getElementById('order-title').innerText;
     let tujuan = (currentServiceId === 'ml' && zone) ? `${val} (${zone})` : val;
-    const pesan = window.encodeURIComponent(`*ORDER BARU SYRUMISTORE*\n\nID: ${activeOrderID}\nBarang: ${selectedProduct} ${namaProduk}\nTujuan: ${tujuan}\nTotal: ${selectedPrice}\n\n_Halo admin, silakan proses pesanan saya_`);
+
+    // Link Saluran Testimoni/QRIS kamu
+    const linkTesti = "https://whatsapp.com/channel/LinkSaluranKamu"; 
+
+    const instruksi = 
+        `----------------------------\n` +
+        `📝 *CARA PENYELESAIAN*\n` +
+        `1. *Transfer* sesuai total di bawah.\n` +
+        `2. *Kirim Bukti Bayar* di chat ini.\n` +
+        `3. Pesanan akan segera *Diproses*.\n` +
+        `----------------------------\n` +
+        `💳 *METODE PEMBAYARAN*\n` +
+        `• *DANA:* 089507913948 (A/n Syrumi)\n` +
+        `• *QRIS:* Cek di Pin Saluran Testi\n` +
+        `🔗 *Link QRIS:* ${linkTesti}\n` +
+        `----------------------------\n` +
+        `⚠️ *CATATAN ADMIN*\n` +
+        `Mohon bersabar jika admin belum membalas karena proses *100% Manual*. Pesanan diproses sesuai antrean ya Kak! 🙏✨\n` +
+        `----------------------------`;
+
+    const pesan = window.encodeURIComponent(
+        `*ORDER BARU SYRUMISTORE*\n\n` +
+        `🆔 *ID Order:* ${activeOrderID}\n` +
+        `📦 *Produk:* ${selectedProduct} ${namaProduk}\n` +
+        `🎯 *Tujuan:* ${tujuan}\n` +
+        `💰 *TOTAL TAGIHAN: ${selectedPrice}*\n\n` +
+        `${instruksi}\n\n` +
+        `_Silakan kirim bukti transfer agar segera diproses._`
+    );
+
     window.location.href = `https://wa.me/6289507913948?text=${pesan}`;
 }
 
