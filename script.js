@@ -1,4 +1,4 @@
-let selectedProduct = "", selectedPrice = "", currentServiceId = "", currentUnitName = "Pcs", activeOrderID = "";
+let selectedProduct = "", selectedPrice = "", currentServiceId = "", currentUnitName = "Pcs";
 
 function kustomAlert(title, message, icon = "⚠️") {
     document.getElementById('alert-icon').innerText = icon;
@@ -8,6 +8,18 @@ function kustomAlert(title, message, icon = "⚠️") {
 }
 
 function tutupAlert() { document.getElementById('alert-overlay').style.display = 'none'; }
+
+// Fungsi Testimoni
+function bukaTesti() { document.getElementById('testi-overlay').style.display = 'flex'; }
+function tutupTesti() { document.getElementById('testi-overlay').style.display = 'none'; }
+
+function konfirmasiSaluran() {
+    tutupTesti();
+    kustomAlert("Dialihkan!", "Kamu akan diarahkan ke Saluran WhatsApp Syrumi Store untuk melihat testimoni lengkap.", "🚀");
+    setTimeout(() => {
+        window.location.href = "https://whatsapp.com/channel/0029VbB9bWGLNSa9K95BId3P/504";
+    }, 2000);
+}
 
 function switchScreen(id) {
     document.querySelectorAll('.screen').forEach(s => {
@@ -43,29 +55,21 @@ function openOrder(id, name, label, manual, unitName = "Pcs") {
     currentUnitName = unitName;
     selectedProduct = ""; 
     selectedPrice = "";
-    
     document.getElementById('order-title').innerText = name;
     document.getElementById('label-input').innerText = label;
-    
     const inputTujuan = document.getElementById('user-id');
     inputTujuan.value = "";
     document.getElementById('operator-logo-container').style.display = 'none';
 
     if (id === 'pulsa') {
         inputTujuan.placeholder = "Contoh: 08123456789";
-        inputTujuan.oninput = function() { this.value = this.value.replace(/[^0-9]/g, ''); };
     } else if (id === 'ml' || id === 'ff') {
         inputTujuan.placeholder = "Masukkan ID";
-        inputTujuan.oninput = function() { this.value = this.value.replace(/[^0-9]/g, ''); };
     } else {
         inputTujuan.placeholder = "Masukkan Link / Username";
-        inputTujuan.oninput = null; 
     }
     
     document.getElementById('zone-id').style.display = (id === 'ml') ? 'block' : 'none';
-    document.getElementById('wrapper-manual').style.display = manual ? 'block' : 'none';
-    document.getElementById('wrapper-grid').style.display = manual ? 'none' : 'block';
-    
     const grid = document.getElementById('grid-produk');
     if (id === 'pulsa') {
         grid.innerHTML = "<p style='text-align:center; font-size:12px; color:#aaa; padding:20px;'>Masukkan nomor HP...</p>";
@@ -91,7 +95,6 @@ document.addEventListener('keyup', function(e) {
         const provider = deteksiOperator(e.target.value);
         const logoCont = document.getElementById('operator-logo-container');
         const logoImg = document.getElementById('operator-logo');
-
         const daftarLogo = {
             "telkomsel": "images/telkomsel.jfif", 
             "indosat":   "images/indosat.jfif",
@@ -99,14 +102,12 @@ document.addEventListener('keyup', function(e) {
             "three":     "images/three.jfif",
             "smartfren": "images/smartfren.jfif"
         };
-
         if (provider) {
             renderProductsPulsa(provider);
             logoImg.src = daftarLogo[provider]; 
             logoCont.style.display = 'block';
         } else {
             logoCont.style.display = 'none';
-            document.getElementById('grid-produk').innerHTML = "<p style='text-align:center; font-size:12px; color:#aaa; padding:20px;'>Menunggu operator...</p>";
         }
     }
 });
@@ -118,10 +119,8 @@ function renderProducts(id) {
         pricelist[id].forEach(p => {
             let labelText = p.label ? p.label : (p.isPremium ? "👑 HOT" : "");
             const labelHTML = labelText ? `<span class="badge-premium">${labelText}</span>` : '';
-            const premiumClass = p.isPremium ? 'premium' : '';
-            
             grid.innerHTML += `
-                <div onclick="selectItem('${p.item}', '${p.harga}', this)" class="product-card ${premiumClass}">
+                <div onclick="selectItem('${p.item}', '${p.harga}', this)" class="product-card ${p.isPremium ? 'premium' : ''}">
                     <span class="item-name">${p.item} ${labelHTML}</span>
                     <span class="item-price">${p.harga}</span>
                 </div>`;
@@ -134,10 +133,9 @@ function renderProductsPulsa(provider) {
     if (pricelist.pulsa && pricelist.pulsa[provider]) {
         grid.innerHTML = "";
         pricelist.pulsa[provider].forEach(p => {
-            const labelHTML = p.label ? `<span class="badge-premium">${p.label}</span>` : '';
             grid.innerHTML += `
                 <div onclick="selectItem('${p.item}', '${p.harga}', this)" class="product-card">
-                    <span class="item-name">${p.item} ${labelHTML}</span>
+                    <span class="item-name">${p.item}</span>
                     <span class="item-price">${p.harga}</span>
                 </div>`;
         });
@@ -154,43 +152,38 @@ function tampilkanKonfirmasi() {
     const val = document.getElementById('user-id').value;
     if(!val) return kustomAlert("Data Kosong", "Isi nomor/ID tujuan!", "❌");
     if(!selectedProduct) return kustomAlert("Pilihan Kosong", "Pilih nominal dulu!", "🛒");
-    const d = new Date();
-    activeOrderID = `SYR-${String(d.getDate()).padStart(2,'0')}${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getHours()).padStart(2,'0')}${String(d.getMinutes()).padStart(2,'0')}`;
-    document.getElementById('generated-id').innerText = activeOrderID;
     document.getElementById('confirm-overlay').style.display = 'flex';
 }
 
 function prosesKeWA() {
     let val = document.getElementById('user-id').value.trim();
     const zone = document.getElementById('zone-id').value;
-    const namaKategori = document.getElementById('order-title').innerText;
+    const namaKat = document.getElementById('order-title').innerText;
     let tujuan = (currentServiceId === 'ml' && zone) ? `${val} (${zone})` : val;
-
     const linkTesti = "https://whatsapp.com/channel/0029VbB9bWGLNSa9K95BId3P/504"; 
 
-    // Perbaikan syntax error pada instruksi
+    // Simbol Universal agar terbaca di semua HP
     const instruksi = 
         `----------------------------\n` +
-        `📝 *CARA PENYELESAIAN*\n` +
-        `1. *Transfer* sesuai total di atas.\n` +
-        `2. *Kirim Bukti Bayar* di chat ini.\n` +
-        `3. Pesanan akan segera *Diproses*.\n` +
+        `[ CARA PENYELESAIAN ]\n` +
+        `1. Transfer sesuai total di atas.\n` +
+        `2. Kirim Bukti Bayar di chat ini.\n` +
+        `3. Pesanan akan segera Diproses.\n` +
         `----------------------------\n` +
-        `💳 *METODE PEMBAYARAN*\n` +
-        `• *DANA:* 089507913948\n` +
-        `• *QRIS:* ${linkTesti}\n` + 
+        `[ METODE PEMBAYARAN ]\n` +
+        `- DANA: 089507913948\n` +
+        `- QRIS: Cek di Pin Saluran WA\n` +
+        `${linkTesti}\n` +
         `----------------------------\n` +
-        `⚠️ *CATATAN ADMIN*\n` +
-        `Mohon bersabar jika admin belum membalas karena proses *100% Manual*. Pesanan diproses sesuai antrean ya! 🙏\n` +
+        `[ CATATAN ADMIN ]\n` +
+        `Mohon bersabar jika belum dibalas. Proses 100% Manual & Sesuai Antrean! 🙏\n` +
         `----------------------------`;
 
-    // Bagian Produk hanya menampilkan Nama Item + Nama Kategori (Misal: 5.000 Pulsa Telkomsel)
     const pesan = window.encodeURIComponent(
         `*ORDER BARU SYRUMISTORE*\n\n` +
-        `🆔 *ID Order:* ${activeOrderID}\n` +
-        `📦 *Produk:* ${selectedProduct} ${namaKategori}\n` +
-        `🎯 *Tujuan:* ${tujuan}\n` +
-        `💰 *TOTAL TAGIHAN: ${selectedPrice}*\n\n` +
+        `*Produk:* ${selectedProduct} ${namaKat}\n` +
+        `*Tujuan:* ${tujuan}\n` +
+        `*TOTAL TAGIHAN: ${selectedPrice}*\n\n` +
         `${instruksi}\n\n` +
         `_Silakan kirim bukti transfer agar segera diproses._`
     );
