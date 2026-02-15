@@ -77,7 +77,7 @@ function openSubSosmed(appId) {
     });
 }
 
-// FUNGSI OPEN ORDER (SUDAH DIPERBAIKI)
+// FUNGSI OPEN ORDER (DENGAN LOGIKA PEMBATAS KARAKTER & BY.U)
 function openOrder(id, name, label, isSosmed, extraNote = "", pattern = "") {
     currentServiceId = id; 
     requiredPattern = pattern;
@@ -96,22 +96,33 @@ function openOrder(id, name, label, isSosmed, extraNote = "", pattern = "") {
     inputTujuan.value = "";
     inputZona.value = ""; 
     if(logoCont) logoCont.style.display = 'none';
-    
-    // Reset Kalkulator
     if(kalkulatorCont) {
         kalkulatorCont.style.display = 'none';
         kalkulatorCont.innerHTML = "";
     }
 
-    if (id === 'pulsa' || id === 'ml' || id === 'ff') {
+    // --- LOGIKA VALIDASI INPUT (LINKGUARD & MAX LENGTH) ---
+    if (id === 'ml') {
+        inputTujuan.maxLength = 12;
+        inputZona.maxLength = 5;
+        inputTujuan.placeholder = "User ID (Maks 12)";
+        inputZona.placeholder = "Zona (5)";
+        inputTujuan.oninput = function() { this.value = this.value.replace(/[^0-9]/g, ''); };
+    } else if (id === 'ff') {
+        inputTujuan.maxLength = 12;
+        inputTujuan.placeholder = "Player ID (Maks 12)";
+        inputTujuan.oninput = function() { this.value = this.value.replace(/[^0-9]/g, ''); };
+    } else if (id === 'pulsa') {
+        inputTujuan.maxLength = 15;
+        inputTujuan.placeholder = "0812xxxx (Min 10 Digit)";
         inputTujuan.oninput = function() {
             this.value = this.value.replace(/[^0-9]/g, ''); 
-            if (currentServiceId === 'pulsa') handleDeteksiOperator(this.value);
+            handleDeteksiOperator(this.value);
         };
-        inputTujuan.placeholder = "Masukkan angka...";
     } else {
-        inputTujuan.oninput = null; 
+        inputTujuan.maxLength = 500;
         inputTujuan.placeholder = "Masukkan Link / Username...";
+        inputTujuan.oninput = null;
     }
     
     inputZona.style.display = (id === 'ml') ? 'block' : 'none';
@@ -155,7 +166,8 @@ function handleDeteksiOperator(nomor) {
         "indosat":   "images/indosat.jfif",
         "xl_axis":   "images/XL.jfif",
         "three":      "images/three.jfif",
-        "smartfren": "images/smartfren.jfif"
+        "smartfren": "images/smartfren.jfif",
+        "byu":       "images/byu.jfif"
     };
 
     if (provider) {
@@ -171,7 +183,9 @@ function handleDeteksiOperator(nomor) {
 function deteksiOperator(nomor) {
     if (nomor.length < 4) return null;
     const prefix = nomor.slice(0, 4);
-    if (/^0811|0812|0813|0821|0822|0823|0851|0852|0853$/.test(prefix)) return "telkomsel";
+    
+    if (/^0851$/.test(prefix)) return "byu"; 
+    if (/^0811|0812|0813|0821|0822|0823|0852|0853$/.test(prefix)) return "telkomsel";
     if (/^0814|0815|0816|0855|0856|0857|0858$/.test(prefix)) return "indosat";
     if (/^0817|0818|0819|0859|0877|0878|0831|0832|0833|0838$/.test(prefix)) return "xl_axis";
     if (/^0895|0896|0897|0898|0899$/.test(prefix)) return "three";
@@ -212,7 +226,6 @@ function renderProductsPulsa(provider) {
 }
 
 function selectItem(item, harga, el) {
-    // 1. Kosongkan input manual jika user pilih paket bundle
     const manualInput = document.getElementById('custom-qty');
     const displayManual = document.getElementById('display-harga-otomatis');
     
@@ -230,6 +243,12 @@ function selectItem(item, harga, el) {
 function tampilkanKonfirmasi() {
     const val = document.getElementById('user-id').value.toLowerCase().trim();
     if (!val) return kustomAlert("Data Kosong", "Isi nomor/ID tujuan!", "❌");
+    
+    // --- LINKGUARD PULSA MIN 10 DIGIT ---
+    if (currentServiceId === 'pulsa' && val.length < 10) {
+        return kustomAlert("Nomor Tidak Valid", "Nomor HP minimal harus 10 digit!", "📱");
+    }
+
     if (!selectedProduct) return kustomAlert("Pilihan Kosong", "Pilih nominal paket!", "🛒");
 
     if (requiredPattern) {
