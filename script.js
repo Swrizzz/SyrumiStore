@@ -77,7 +77,7 @@ function openSubSosmed(appId) {
     });
 }
 
-// FUNGSI OPEN ORDER (DENGAN LOGIKA PEMBATAS KARAKTER & BY.U)
+// FUNGSI OPEN ORDER (FIXED: KUNCI ANGKA ZONA & ID)
 function openOrder(id, name, label, isSosmed, extraNote = "", pattern = "") {
     currentServiceId = id; 
     requiredPattern = pattern;
@@ -101,13 +101,18 @@ function openOrder(id, name, label, isSosmed, extraNote = "", pattern = "") {
         kalkulatorCont.innerHTML = "";
     }
 
-    // --- LOGIKA VALIDASI INPUT (LINKGUARD & MAX LENGTH) ---
+    // --- RESET & LOGIKA VALIDASI INPUT ---
+    inputTujuan.oninput = null;
+    inputZona.oninput = null;
+
     if (id === 'ml') {
         inputTujuan.maxLength = 12;
         inputZona.maxLength = 5;
         inputTujuan.placeholder = "User ID";
         inputZona.placeholder = "Zona";
+        // Kunci Angka ID & Zona
         inputTujuan.oninput = function() { this.value = this.value.replace(/[^0-9]/g, ''); };
+        inputZona.oninput = function() { this.value = this.value.replace(/[^0-9]/g, ''); };
     } else if (id === 'ff') {
         inputTujuan.maxLength = 12;
         inputTujuan.placeholder = "Player ID";
@@ -122,7 +127,6 @@ function openOrder(id, name, label, isSosmed, extraNote = "", pattern = "") {
     } else {
         inputTujuan.maxLength = 500;
         inputTujuan.placeholder = "Masukkan Link/Username";
-        inputTujuan.oninput = null;
     }
     
     inputZona.style.display = (id === 'ml') ? 'block' : 'none';
@@ -183,7 +187,6 @@ function handleDeteksiOperator(nomor) {
 function deteksiOperator(nomor) {
     if (nomor.length < 4) return null;
     const prefix = nomor.slice(0, 4);
-    
     if (/^0851$/.test(prefix)) return "byu"; 
     if (/^0811|0812|0813|0821|0822|0823|0852|0853$/.test(prefix)) return "telkomsel";
     if (/^0814|0815|0816|0855|0856|0857|0858$/.test(prefix)) return "indosat";
@@ -244,7 +247,6 @@ function tampilkanKonfirmasi() {
     const val = document.getElementById('user-id').value.toLowerCase().trim();
     if (!val) return kustomAlert("Data Kosong", "Isi nomor/ID tujuan!", "❌");
     
-    // --- LINKGUARD PULSA MIN 10 DIGIT ---
     if (currentServiceId === 'pulsa' && val.length < 10) {
         return kustomAlert("Nomor Tidak Valid", "Nomor HP minimal harus 10 digit!", "📱");
     }
@@ -312,10 +314,13 @@ _Silakan kirim bukti transfer agar segera diproses._`;
     window.location.href = `https://wa.me/6289507913948?text=${pesanEncoded}`;
 }
 
+// FIX TESTIMONI (TIDAK DEMPET)
 function kirimTestiWA() {
     const t = document.getElementById('input-testi').value.trim();
     if(!t) return kustomAlert("Kosong", "Tulis testimoninya dulu!", "✍️");
-    window.location.href = `https://wa.me/6289507913948?text=*TESTIMONI SYRUMI*\n"${t}"`;
+    
+    const pesanTesti = `*TESTIMONI SYRUMI STORE*%0A%0A"${t}"%0A%0A_Terima kasih sudah belanja di Syrumi Store!_`;
+    window.location.href = `https://wa.me/6289507913948?text=${pesanTesti}`;
 }
 
 function hitungHargaOtomatis(qty, id) {
