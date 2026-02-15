@@ -25,7 +25,7 @@ const databaseLayanan = {
         ],
         instagram: [
             { id: 'ig_fol_indo', name: 'Followers Indonesia', label: 'USERNAME INSTAGRAM', isFollowers: true, note: 'Proses Cepat', pattern: 'instagram|ig.me' },
-            { id: 'ig_fol_mix', name: 'Followers Acak/Asing', label: 'USERNAME INSTAGRAM', note: 'Harga Ekonomis', pattern: 'instagram|ig.me' },
+            { id: 'ig_fol_mix', name: 'Followers Acak/Asing', label: 'USERNAME INSTAGRAM', isFollowers: true, note: 'Harga Ekonomis', pattern: 'instagram|ig.me' },
             { id: 'ig_like', name: 'Instagram Likes', label: 'LINK POSTINGAN', pattern: 'instagram|ig.me' },
             { id: 'ig_view', name: 'Instagram Viewers', label: 'LINK REELS/VIDEO', pattern: 'instagram|ig.me' }
         ],
