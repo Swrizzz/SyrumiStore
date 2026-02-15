@@ -69,29 +69,27 @@ function openOrder(id, name, label, manual, unitName = "Pcs") {
     inputTujuan.value = "";
     document.getElementById('operator-logo-container').style.display = 'none';
 
-    // LOGIKA ANTI-HURUF (Otomatis hapus jika bukan angka untuk Pulsa & Game)
+    // CEK DISINI: Jika pulsa/game pakai angka, jika sosmed pakai teks
     if (id === 'pulsa' || id === 'ml' || id === 'ff') {
+        inputTujuan.type = "tel"; 
         inputTujuan.oninput = function() {
             this.value = this.value.replace(/[^0-9]/g, ''); 
-            // Trigger deteksi operator jika ini menu pulsa
-            if (currentServiceId === 'pulsa') {
-                handleDeteksiOperator(this.value);
-            }
+            if (currentServiceId === 'pulsa') handleDeteksiOperator(this.value);
         };
-        inputTujuan.placeholder = id === 'pulsa' ? "Minimal 10 angka..." : "Masukkan ID...";
+        inputTujuan.placeholder = "Masukkan angka...";
     } else {
+        inputTujuan.type = "text"; 
         inputTujuan.oninput = null; 
         inputTujuan.placeholder = "Masukkan Link / Username...";
     }
     
     document.getElementById('zone-id').style.display = (id === 'ml') ? 'block' : 'none';
     const grid = document.getElementById('grid-produk');
-    grid.innerHTML = (id === 'pulsa') ? "<p style='text-align:center; font-size:12px; color:#aaa; padding:20px;'>Masukkan nomor HP...</p>" : "";
+    grid.innerHTML = (id === 'pulsa') ? "<p style='text-align:center; padding:20px;'>Masukkan nomor...</p>" : "";
     
     if (id !== 'pulsa') renderProducts(id);
     switchScreen('screen-order');
 }
-
 // --- DETEKSI OPERATOR PULSA ---
 function handleDeteksiOperator(nomor) {
     const provider = deteksiOperator(nomor);
