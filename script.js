@@ -212,8 +212,32 @@ function tampilkanKonfirmasi() {
 }
 
 function prosesKeWA() {
-    const val = document.getElementById('user-id').value.trim();
+    let val = document.getElementById('user-id').value.trim();
     const zone = document.getElementById('zone-id').value;
+    
+    // Logika cari status isFollowers dari databaseLayanan
+    let isFollowers = false;
+    for (let app in databaseLayanan.sosmed_apps) {
+        let found = databaseLayanan.sosmed_apps[app].find(s => s.id === currentServiceId);
+        if (found && found.isFollowers) {
+            isFollowers = true;
+            break;
+        }
+    }
+
+    // Jika layanan followers, ubah username jadi link profil
+    if (isFollowers && !val.includes('http')) {
+        let username = val.replace('@', ''); // Bersihkan karakter @ jika ada
+        
+        if (currentServiceId.includes('tk_')) {
+            val = `https://www.tiktok.com/@${username}`;
+        } else if (currentServiceId.includes('ig_')) {
+            val = `https://www.instagram.com/${username}`;
+        } else if (currentServiceId.includes('shp_')) {
+            val = `https://shopee.co.id/${username}`;
+        }
+    }
+
     const tujuan = (currentServiceId === 'ml' && zone) ? `${val} (${zone})` : val;
     const pesan = window.encodeURIComponent(`*ORDER SYRUMI*\n\nProduk: ${selectedProduct}\nTujuan: ${tujuan}\nTotal: ${selectedPrice}`);
     window.location.href = `https://wa.me/6289507913948?text=${pesan}`;
