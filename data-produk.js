@@ -1,7 +1,12 @@
-const hargaKonstanta = {
-    tiktokFollowers: 50,
-    tiktokLikes: 10,
-    igFollowers: 50
+const hargaSatuan = {
+    tk_fol: { price: 65, min: 100, max: 1000000 },
+    tk_like: { price: 22, min: 100, max: 5000000 },
+    tk_view: { price: 1, min: 1000, max: 100000000 },
+    ig_fol_indo: { price: 85, min: 100, max: 2000 },
+    ig_fol_mix: { price: 60, min: 100, max: 10000000 },
+    ig_like: { price: 20, min: 100, max: 5000 },
+    ig_view: { price: 1, min: 1000, max: 2000000000 },
+    shp_fol: { price: 75, min: 100, max: 2000 }
 };
 
 const databaseLayanan = {
