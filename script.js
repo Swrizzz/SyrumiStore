@@ -99,11 +99,11 @@ document.addEventListener('keyup', function(e) {
 
         // MASUKKAN LINK GAMBAR/HREF KAMU DI SINI
         const daftarLogo = {
-            "telkomsel": "images/telkomsel.png", // Ganti dengan link/nama filemu
-            "indosat":   "images/indosat.png",
-            "xl_axis":   "images/xl.png",
-            "three":     "images/three.png",
-            "smartfren": "images/smartfren.png"
+            "telkomsel": "images/telkomsel.jfif", // Ganti dengan link/nama filemu
+            "indosat":   "images/indosat.jfif",
+            "xl_axis":   "images/XL.jfif",
+            "three":     "images/three.jfif",
+            "smartfren": "images/smartfren.jfif"
         };
 
         if (provider) {
