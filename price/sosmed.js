@@ -34,7 +34,7 @@ const pricelistSosmed = {
         { item: '5.000 Views', harga: 'Rp4.800' },
         { item: '10.000 Views', harga: 'Rp9.000' },
         { item: '15.000 Views', harga: 'Rp13.000' },
-        { item: '20.000 Views = Rp17.500', harga: 'Rp17.500' },
+        { item: '20.000 Views', harga: 'Rp17.500' },
         { item: '30.000 Views', harga: 'Rp26.000' },
         { item: '50.000 Views', harga: 'Rp43.000', isPremium: true },
         { item: '100.000 Views', harga: 'Rp85.000', label: 'VIRAL' },
