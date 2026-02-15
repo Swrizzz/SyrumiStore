@@ -45,10 +45,13 @@ const pricelistPPOB = {
         { item: 'Pulsa 100.000', harga: 'Rp100.500', label: '👑 Premium Price' }
     ],
     byu: [
-        { item: 'Pulsa By.U 5.000', harga: 'Rp6.500' },
-        { item: 'Pulsa By.U 10.000', harga: 'Rp11.500', label: 'Terlaris' },
-        { item: 'Pulsa By.U 20.000', harga: 'Rp21.500' },
-        { item: 'Pulsa By.U 50.000', harga: 'Rp51.500' },
-        { item: 'Pulsa By.U 100.000', harga: 'Rp101.000' }
-    ]
+        { item: 'Pulsa By.U 5.000', harga: 'Rp6.900' },
+        { item: 'Pulsa By.U 10.000', harga: 'Rp12.200' },
+        { item: 'Pulsa By.U 25.000', harga: 'Rp27.200' },
+        { item: 'Pulsa By.U 50.000', harga: 'Rp51.800', label: 'Terlaris' },
+        { item: 'Pulsa By.U 75.000', harga: 'Rp75.200' },
+        { item: 'Pulsa By.U 80.000', harga: 'Rp81.300' },
+        { item: 'Pulsa By.U 100.000', harga: 'Rp99.800', label: '👑 HARGA GILA' },
+        { item: 'Pulsa By.U 200.000', harga: 'Rp198.000' }
+    ],
 };
