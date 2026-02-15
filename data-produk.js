@@ -19,7 +19,7 @@ const databaseLayanan = {
         { id: 'instagram', name: 'Instagram', icon: 'images/ig.jfif', isAppGroup: true },
         { id: 'shopee', name: 'Shopee', icon: 'images/shopee.png', isAppGroup: true },
         { id: 'youtube', name: 'YouTube', icon: 'images/yt.jfif', comingSoon: true },
-        { id: 'facebook', name: 'Facebook', icon: 'images/fb.jfif', comingSoon: true }
+        { id: 'facebook', name: 'Facebook', icon: 'images/facebook.png', comingSoon: true }
     ],
     ppob: [{ id: 'pulsa', name: 'Pulsa', icon: 'https://cdn-icons-png.flaticon.com/512/3059/3059502.png', label: 'NOMOR HP' }],
     sosmed_apps: {
