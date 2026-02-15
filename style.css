@@ -59,7 +59,7 @@ body {
     background: white; border: 2px solid #f0f0f0; border-radius: 18px; padding: 20px 10px; 
     text-align: center; cursor: pointer; transition: 0.3s ease; display: flex;
     flex-direction: column; justify-content: center; align-items: center; min-height: 100px; position: relative;
-    overflow: visible; /* Biar badge mahkota nggak terpotong */
+    overflow: visible;
 }
 
 .product-card.selected { border-color: var(--accent-pink); background: #fffafa; transform: translateY(-5px); box-shadow: 0 8px 15px rgba(255, 133, 179, 0.2); }
@@ -68,7 +68,7 @@ body {
 
 .item-price { font-weight: 700; color: var(--accent-pink); font-size: 13px; background: #fff0f6; padding: 4px 12px; border-radius: 10px; }
 
-/* MODIFIKASI: Styling Badge Baru Syrumi Store */
+/* MODIFIKASI: Styling Badge Baru */
 .badge-premium {
     background: linear-gradient(45deg, var(--accent-pink), #ff4d94);
     color: white;
@@ -92,19 +92,24 @@ body {
     100% { transform: scale(1); opacity: 1; }
 }
 
-/* Khusus jika ada kata "Premium" atau Emoji Mahkota di datanya */
-.badge-premium:contains("👑") {
+/* KARTU PREMIUM: Glowing Pink (Anti-Dobel) */
+.product-card.premium { 
+    background: linear-gradient(145deg, #ffffff, #fff0f6); 
+    border: 2px solid var(--accent-pink) !important;
+}
+
+.product-card.premium .item-name { color: #ff4d94 !important; }
+
+.product-card.premium .item-price { 
+    background: #ff4d94 !important; 
+    color: white !important; 
+}
+
+/* Badge khusus Emas jika ada di kartu premium */
+.product-card.premium .badge-premium {
     background: linear-gradient(45deg, #FFD700, #FFA500);
     color: #333;
     border-color: #ffd700;
-}
-
-.product-card.premium { background: linear-gradient(145deg, #ffffff, #fdf2ff); border: 2px solid #e0aaff !important; }
-.product-card.premium .item-name { color: #6a0dad !important; }
-.product-card.premium .item-price { background: #6a0dad !important; color: white !important; }
-.product-card.premium::after {
-    content: "HOT"; position: absolute; top: -10px; right: -5px; background: linear-gradient(45deg, #ff4757, #ff6b81);
-    color: white; font-size: 10px; font-weight: bold; padding: 3px 10px; border-radius: 8px; z-index: 10;
 }
 
 @media (max-width: 480px) {
