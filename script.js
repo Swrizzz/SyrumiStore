@@ -42,7 +42,14 @@ function openKategori(cat) {
     const listDiv = document.getElementById('list-layanan');
     listDiv.innerHTML = "";
     databaseLayanan[cat].forEach(item => {
-        const func = item.isAppGroup ? `openSubSosmed('${item.id}')` : `openOrder('${item.id}', '${item.name}', '${item.label}', false)`;
+        let func;
+        if (item.comingSoon) {
+            func = `kustomAlert('Segera Hadir', 'Layanan ${item.name} akan segera tersedia di Syrumi Store! Stay tuned.', '⏳')`;
+        } else if (item.isAppGroup) {
+            func = `openSubSosmed('${item.id}')`;
+        } else {
+            func = `openOrder('${item.id}', '${item.name}', '${item.label}', false)`;
+        }
         listDiv.innerHTML += `<div onclick="${func}" class="glass menu-item"><img src="${item.icon}"><span>${item.name}</span></div>`;
     });
     switchScreen('screen-kategori');
@@ -50,15 +57,22 @@ function openKategori(cat) {
 
 function openSubSosmed(appId) {
     const listDiv = document.getElementById('list-layanan');
-    listDiv.innerHTML = "";
+    listDiv.innerHTML = `<p style="text-align:center; font-size:11px; color:#ff85b3; margin-bottom:15px; padding:0 10px;">⚠️ Pastikan akun TIDAK DI-PRIVATE. Kami tidak menerima komplain apabila akun diprivate saat proses.</p>`;
+    
     databaseLayanan.sosmed_apps[appId].forEach(sub => {
-        listDiv.innerHTML += `<div onclick="openOrder('${sub.id}', '${sub.name}', '${sub.label}', true, '${sub.unit}')" class="glass menu-item"><i class="fas fa-chevron-right" style="margin-right:15px; color:#ff85b3;"></i><span>${sub.name}</span></div>`;
+        listDiv.innerHTML += `
+            <div onclick="openOrder('${sub.id}', '${sub.name}', '${sub.label}', true, '${sub.note || ""}')" class="glass menu-item">
+                <i class="fas fa-chevron-right" style="margin-right:15px; color:#ff85b3;"></i>
+                <div style="display:flex; flex-direction:column; text-align:left;">
+                    <span>${sub.name}</span>
+                    ${sub.note ? `<small style="font-size:10px; color:#aaa;">${sub.note}</small>` : ''}
+                </div>
+            </div>`;
     });
 }
 
-function openOrder(id, name, label, manual, unitName = "Pcs") {
+function openOrder(id, name, label, isSosmed, extraNote = "") {
     currentServiceId = id; 
-    currentUnitName = unitName;
     selectedProduct = ""; 
     selectedPrice = "";
     
@@ -72,7 +86,6 @@ function openOrder(id, name, label, manual, unitName = "Pcs") {
     inputZona.value = ""; 
     document.getElementById('operator-logo-container').style.display = 'none';
 
-    // Logika Input ID Utama
     if (id === 'pulsa' || id === 'ml' || id === 'ff') {
         inputTujuan.type = "tel"; 
         inputTujuan.oninput = function() {
@@ -86,7 +99,6 @@ function openOrder(id, name, label, manual, unitName = "Pcs") {
         inputTujuan.placeholder = "Masukkan Link / Username...";
     }
     
-    // Logika Kolom Zona (Khusus ML)
     if (id === 'ml') {
         inputZona.style.display = 'block';
         inputZona.type = "tel"; 
@@ -100,11 +112,19 @@ function openOrder(id, name, label, manual, unitName = "Pcs") {
     const grid = document.getElementById('grid-produk');
     grid.innerHTML = (id === 'pulsa') ? "<p style='text-align:center; padding:20px;'>Masukkan nomor...</p>" : "";
     
-    if (id !== 'pulsa') renderProducts(id);
+    // Tambah Peringatan Jika Sosmed
+    if(isSosmed) {
+        grid.innerHTML = `
+            <div style="background:rgba(255,133,179,0.1); border:1px solid #ff85b3; padding:10px; border-radius:8px; font-size:11px; margin-bottom:15px; color:#eee; text-align:left;">
+                <strong>INFO:</strong> Akun dilarang private. ${extraNote ? `Catatan: ${extraNote}` : ''}
+            </div>
+        `;
+    }
+
+    renderProducts(id);
     switchScreen('screen-order');
 }
 
-// --- DETEKSI OPERATOR PULSA ---
 function handleDeteksiOperator(nomor) {
     const provider = deteksiOperator(nomor);
     const logoCont = document.getElementById('operator-logo-container');
@@ -113,7 +133,7 @@ function handleDeteksiOperator(nomor) {
         "telkomsel": "images/telkomsel.jfif", 
         "indosat":   "images/indosat.jfif",
         "xl_axis":   "images/XL.jfif",
-        "three":     "images/three.jfif",
+        "three":      "images/three.jfif",
         "smartfren": "images/smartfren.jfif"
     };
 
@@ -138,12 +158,11 @@ function deteksiOperator(nomor) {
     return null;
 }
 
-// --- RENDER PRODUK ---
 function renderProducts(id) {
     const grid = document.getElementById('grid-produk');
-    grid.innerHTML = pricelist[id] ? "" : "<p style='text-align:center; font-size:12px; color:#aaa; padding:20px;'>Paket segera hadir...</p>";
-    if(pricelist[id]) {
-        pricelist[id].forEach(p => {
+    const data = pricelist[id];
+    if(data) {
+        data.forEach(p => {
             let labelText = p.label ? p.label : (p.isPremium ? "👑 HOT" : "");
             const labelHTML = labelText ? `<span class="badge-premium">${labelText}</span>` : '';
             grid.innerHTML += `
@@ -152,6 +171,8 @@ function renderProducts(id) {
                     <span class="item-price">${p.harga}</span>
                 </div>`;
         });
+    } else if (id !== 'pulsa') {
+        grid.innerHTML += "<p style='text-align:center; font-size:12px; color:#aaa; padding:20px;'>Paket segera hadir...</p>";
     }
 }
 
@@ -176,20 +197,11 @@ function selectItem(item, harga, el) {
     el.classList.add('selected');
 }
 
-// --- KONFIRMASI & PROSES ---
 function tampilkanKonfirmasi() {
     const val = document.getElementById('user-id').value.trim();
-    
-    // Validasi Minimal 10 Angka khusus Pulsa
-    if (currentServiceId === 'pulsa') {
-        if (val.length < 10) {
-            return kustomAlert("Nomor Kurang", "Nomor HP minimal harus 10 angka!", "❌");
-        }
-    }
-
+    if (currentServiceId === 'pulsa' && val.length < 10) return kustomAlert("Nomor Kurang", "Nomor HP minimal harus 10 angka!", "❌");
     if (!val) return kustomAlert("Data Kosong", "Isi nomor/ID tujuan!", "❌");
     if (!selectedProduct) return kustomAlert("Pilihan Kosong", "Pilih nominal dulu!", "🛒");
-    
     document.getElementById('confirm-overlay').style.display = 'flex';
 }
 
@@ -212,7 +224,7 @@ function prosesKeWA() {
         `- QRIS: ${linkTesti}\n` + 
         `----------------------------\n` +
         `[ CATATAN ADMIN ]\n` +
-        `Mohon bersabar jika admin belum membalas karena proses 100% Manual. Pesanan diproses sesuai antrean ya! 🙏\n` +
+        `Mohon bersabar karena proses manual. Akun dilarang private!\n` +
         `----------------------------`;
 
     const pesan = window.encodeURIComponent(
@@ -220,33 +232,18 @@ function prosesKeWA() {
         `*Produk:* ${namaProdukFix}\n` + 
         `*Tujuan:* ${tujuan}\n` +
         `*TOTAL TAGIHAN: ${selectedPrice}*\n\n` +
-        `${instruksi}\n\n` +
-        `_Silakan kirim bukti transfer agar segera diproses._`
+        `${instruksi}`
     );
-
     window.location.href = `https://wa.me/6289507913948?text=${pesan}`;
 }
 
 function kirimTestiWA() {
     const pesanTesti = document.getElementById('input-testi').value.trim();
-    
     if (!pesanTesti) {
-        // Tutup modal testi dulu supaya Alert "Eits" kelihatan jelas di depan
         tutupTesti(); 
-        
-        // Kasih jeda sedikit supaya transisi modal tutup selesai baru alert muncul
-        setTimeout(() => {
-            kustomAlert("Eits!", "Tulis dulu testimoninya ya kak!", "✍️");
-        }, 300);
+        setTimeout(() => { kustomAlert("Eits!", "Tulis dulu testimoninya ya kak!", "✍️"); }, 300);
         return;
     }
-
-    const formatPesan = window.encodeURIComponent(
-        `*TESTIMONI SYRUMI STORE*\n\n` +
-        `"${pesanTesti}"\n\n` +
-        `_Dikirim via Website Syrumi_`
-    );
-
-    // Buka WhatsApp
+    const formatPesan = window.encodeURIComponent(`*TESTIMONI SYRUMI STORE*\n\n"${pesanTesti}"`);
     window.location.href = `https://wa.me/6289507913948?text=${formatPesan}`;
 }
