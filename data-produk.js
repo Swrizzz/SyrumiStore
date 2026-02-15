@@ -27,20 +27,24 @@ const databaseLayanan = {
 
 const pricelist = {
     ml: [
-        { item: 'Weekly Diamond Pass', harga: 'Rp27.500', isPremium: true },
-        { item: 'Twilight Pass', harga: 'Rp145.000', isPremium: true },
-        { item: '5 Diamonds', harga: 'Rp1.560' },
-        { item: '17 Diamonds', harga: 'Rp4.900' },
+        { item: 'Weekly Diamond Pass', harga: 'Rp28.000', isPremium: true },
+        { item: 'Weekly Elite Bundle', harga: 'Rp15.000', isPremium: true },
+        { item: 'Monthly Epic Bundle', harga: 'Rp75.000', isPremium: true },
+        { item: '5 Diamonds', harga: 'Rp1.500' },
+        { item: '12 Diamonds', harga: 'Rp3.500' },
+        { item: '19 Diamonds', harga: 'Rp5.500' },
         { item: '28 Diamonds', harga: 'Rp8.000' },
         { item: '44 Diamonds', harga: 'Rp12.000' },
         { item: '59 Diamonds', harga: 'Rp16.000' },
-        { item: '86 Diamonds', harga: 'Rp23.000' },
-        { item: '172 Diamonds', harga: 'Rp46.000' },
-        { item: '257 Diamonds', harga: 'Rp72.000' },
-        { item: '706 Diamonds', harga: 'Rp185.000' },
-        { item: '2195 Diamonds', harga: 'Rp545.000' },
-        { item: '5532 Diamonds', harga: 'Rp1.350.000' },
-        { item: '9288 Diamonds', harga: 'Rp2.300.000' }
+        { item: '85 Diamonds', harga: 'Rp23.000' },
+        { item: '170 Diamonds', harga: 'Rp46.000' },
+        { item: '240 Diamonds', harga: 'Rp65.000' },
+        { item: '296 Diamonds', harga: 'Rp80.000' },
+        { item: '408 Diamonds', harga: 'Rp110.000' },
+        { item: '568 Diamonds', harga: 'Rp150.000' },
+        { item: '875 Diamonds', harga: 'Rp230.000' },
+        { item: '2010 Diamonds', harga: 'Rp500.000', isPremium: true },
+        { item: '4830 Diamonds', harga: 'Rp1.200.000', isPremium: true }
     ],
     ff: [
         { item: 'Membership Mingguan', harga: 'Rp29.000', isPremium: true },
