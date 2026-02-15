@@ -167,7 +167,7 @@ function handleDeteksiOperator(nomor) {
         "xl_axis":   "images/XL.jfif",
         "three":      "images/three.jfif",
         "smartfren": "images/smartfren.jfif",
-        "byu":       "images/byu.jfif"
+        "byu":       "images/by-u.jfif"
     };
 
     if (provider) {
