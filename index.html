@@ -84,17 +84,22 @@
             <div class="glass">
                 <h2 id="order-title" class="text-center mb-4" style="color: #ff85b3;">Top Up</h2>
                 <label id="label-input" class="input-label">DATA PEMESANAN</label>
-                <div class="input-wrapper" style="position: relative; display: flex; align-items: center; margin-bottom: 20px;">
+                
+                <div class="input-wrapper" style="position: relative; display: flex; align-items: center; margin-bottom: 10px;">
                     <div id="operator-logo-container" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); display: none; z-index: 10;">
                         <img id="operator-logo" src="" style="width: 45px; height: 45px; object-fit: contain;">
                     </div>
                     <input type="text" id="user-id" placeholder="Masukkan Link/ID" class="glass input-field" style="width: 100%; padding-right: 60px; height: 55px; background: white !important; color: black !important;">
                     <input type="text" id="zone-id" placeholder="Zone" style="display: none; width: 100px; margin-left: 10px; height: 55px; background: white !important; color: black !important;">
                 </div>
+
+                <div id="kalkulator-sosmed-container" style="display: none; margin-bottom: 20px;"></div>
+
                 <div id="wrapper-grid">
                     <label class="input-label">PILIH NOMINAL</label>
                     <div id="grid-produk" class="product-grid"></div>
                 </div>
+                
                 <button class="btn-order" onclick="tampilkanKonfirmasi()">
                     <i class="fab fa-whatsapp"></i> Pesan Sekarang
                 </button>
