@@ -1,4 +1,4 @@
-let selectedProduct = "", selectedPrice = "", currentServiceId = "", currentUnitName = "Pcs";
+let selectedProduct = "", selectedPrice = "", currentServiceId = "", requiredPattern = "";
 
 // --- FUNGSI ALERT & MODAL ---
 function kustomAlert(title, message, icon = "⚠️") {
@@ -9,13 +9,12 @@ function kustomAlert(title, message, icon = "⚠️") {
 }
 
 function tutupAlert() { document.getElementById('alert-overlay').style.display = 'none'; }
-
 function bukaTesti() { document.getElementById('testi-overlay').style.display = 'flex'; }
 function tutupTesti() { document.getElementById('testi-overlay').style.display = 'none'; }
 
 function konfirmasiSaluran() {
     tutupTesti();
-    kustomAlert("Dialihkan!", "Kamu akan diarahkan ke Saluran WhatsApp Syrumi Store untuk melihat testimoni lengkap.", "🚀");
+    kustomAlert("Dialihkan!", "Kamu akan diarahkan ke Saluran WhatsApp Syrumi Store.", "🚀");
     setTimeout(() => {
         window.location.href = "https://whatsapp.com/channel/0029VbB9bWGLNSa9K95BId3P/504";
     }, 2000);
@@ -44,7 +43,7 @@ function openKategori(cat) {
     databaseLayanan[cat].forEach(item => {
         let func;
         if (item.comingSoon) {
-            func = `kustomAlert('Segera Hadir', 'Layanan ${item.name} akan segera tersedia di Syrumi Store! Stay tuned.', '⏳')`;
+            func = `kustomAlert('Segera Hadir', 'Layanan ${item.name} akan segera tersedia!', '⏳')`;
         } else if (item.isAppGroup) {
             func = `openSubSosmed('${item.id}')`;
         } else {
@@ -57,11 +56,11 @@ function openKategori(cat) {
 
 function openSubSosmed(appId) {
     const listDiv = document.getElementById('list-layanan');
-    listDiv.innerHTML = `<p style="text-align:center; font-size:11px; color:#ff85b3; margin-bottom:15px; padding:0 10px;">⚠️ Pastikan akun TIDAK DI-PRIVATE. Kami tidak menerima komplain apabila akun diprivate saat proses.</p>`;
+    listDiv.innerHTML = `<p style="text-align:center; font-size:11px; color:#ff85b3; margin-bottom:15px; padding:0 10px;">⚠️ Akun dilarang private!</p>`;
     
     databaseLayanan.sosmed_apps[appId].forEach(sub => {
         listDiv.innerHTML += `
-            <div onclick="openOrder('${sub.id}', '${sub.name}', '${sub.label}', true, '${sub.note || ""}')" class="glass menu-item">
+            <div onclick="openOrder('${sub.id}', '${sub.name}', '${sub.label}', true, '${sub.note || ""}', '${sub.pattern || ""}')" class="glass menu-item">
                 <i class="fas fa-chevron-right" style="margin-right:15px; color:#ff85b3;"></i>
                 <div style="display:flex; flex-direction:column; text-align:left;">
                     <span>${sub.name}</span>
@@ -71,8 +70,9 @@ function openSubSosmed(appId) {
     });
 }
 
-function openOrder(id, name, label, isSosmed, extraNote = "") {
+function openOrder(id, name, label, isSosmed, extraNote = "", pattern = "") {
     currentServiceId = id; 
+    requiredPattern = pattern;
     selectedProduct = ""; 
     selectedPrice = "";
     
@@ -82,29 +82,29 @@ function openOrder(id, name, label, isSosmed, extraNote = "") {
     const inputTujuan = document.getElementById('user-id');
     const inputZona = document.getElementById('zone-id');
     
+    // RESET & WARNA TEKS (BIAR KELIHATAN)
     inputTujuan.value = "";
+    inputTujuan.style.background = "#ffffff";
+    inputTujuan.style.color = "#000000";
     inputZona.value = ""; 
     document.getElementById('operator-logo-container').style.display = 'none';
 
     if (id === 'pulsa' || id === 'ml' || id === 'ff') {
-        inputTujuan.type = "tel"; 
         inputTujuan.oninput = function() {
             this.value = this.value.replace(/[^0-9]/g, ''); 
             if (currentServiceId === 'pulsa') handleDeteksiOperator(this.value);
         };
         inputTujuan.placeholder = "Masukkan angka...";
     } else {
-        inputTujuan.type = "text"; 
         inputTujuan.oninput = null; 
         inputTujuan.placeholder = "Masukkan Link / Username...";
     }
     
     if (id === 'ml') {
         inputZona.style.display = 'block';
-        inputZona.type = "tel"; 
-        inputZona.oninput = function() {
-            this.value = this.value.replace(/[^0-9]/g, '').slice(0, 5); 
-        };
+        inputZona.style.background = "#ffffff";
+        inputZona.style.color = "#000000";
+        inputZona.oninput = function() { this.value = this.value.replace(/[^0-9]/g, '').slice(0, 5); };
     } else {
         inputZona.style.display = 'none';
     }
@@ -112,11 +112,10 @@ function openOrder(id, name, label, isSosmed, extraNote = "") {
     const grid = document.getElementById('grid-produk');
     grid.innerHTML = (id === 'pulsa') ? "<p style='text-align:center; padding:20px;'>Masukkan nomor...</p>" : "";
     
-    // Tambah Peringatan Jika Sosmed
     if(isSosmed) {
         grid.innerHTML = `
             <div style="background:rgba(255,133,179,0.1); border:1px solid #ff85b3; padding:10px; border-radius:8px; font-size:11px; margin-bottom:15px; color:#eee; text-align:left;">
-                <strong>INFO:</strong> Akun dilarang private. ${extraNote ? `Catatan: ${extraNote}` : ''}
+                <strong>INFO:</strong> Akun dilarang private. ${extraNote}
             </div>
         `;
     }
@@ -163,32 +162,27 @@ function renderProducts(id) {
     const data = pricelist[id];
     if(data) {
         data.forEach(p => {
-            let labelText = p.label ? p.label : (p.isPremium ? "👑 HOT" : "");
-            const labelHTML = labelText ? `<span class="badge-premium">${labelText}</span>` : '';
+            const labelHTML = (p.label || p.isPremium) ? `<span class="badge-premium">${p.label || '👑 HOT'}</span>` : '';
             grid.innerHTML += `
                 <div onclick="selectItem('${p.item}', '${p.harga}', this)" class="product-card ${p.isPremium ? 'premium' : ''}">
                     <span class="item-name">${p.item} ${labelHTML}</span>
                     <span class="item-price">${p.harga}</span>
                 </div>`;
         });
-    } else if (id !== 'pulsa') {
-        grid.innerHTML += "<p style='text-align:center; font-size:12px; color:#aaa; padding:20px;'>Paket segera hadir...</p>";
     }
 }
 
 function renderProductsPulsa(provider) {
     const grid = document.getElementById('grid-produk');
-    if (pricelist.pulsa && pricelist.pulsa[provider]) {
-        grid.innerHTML = "";
-        pricelist.pulsa[provider].forEach(p => {
-            const labelHTML = p.label ? `<span class="badge-premium">${p.label}</span>` : '';
-            grid.innerHTML += `
-                <div onclick="selectItem('${p.item}', '${p.harga}', this)" class="product-card">
-                    <span class="item-name">${p.item} ${labelHTML}</span>
-                    <span class="item-price">${p.harga}</span>
-                </div>`;
-        });
-    }
+    grid.innerHTML = "";
+    pricelist.pulsa[provider].forEach(p => {
+        const labelHTML = p.label ? `<span class="badge-premium">${p.label}</span>` : '';
+        grid.innerHTML += `
+            <div onclick="selectItem('${p.item}', '${p.harga}', this)" class="product-card">
+                <span class="item-name">${p.item} ${labelHTML}</span>
+                <span class="item-price">${p.harga}</span>
+            </div>`;
+    });
 }
 
 function selectItem(item, harga, el) {
@@ -198,52 +192,28 @@ function selectItem(item, harga, el) {
 }
 
 function tampilkanKonfirmasi() {
-    const val = document.getElementById('user-id').value.trim();
-    if (currentServiceId === 'pulsa' && val.length < 10) return kustomAlert("Nomor Kurang", "Nomor HP minimal harus 10 angka!", "❌");
+    const val = document.getElementById('user-id').value.toLowerCase().trim();
     if (!val) return kustomAlert("Data Kosong", "Isi nomor/ID tujuan!", "❌");
-    if (!selectedProduct) return kustomAlert("Pilihan Kosong", "Pilih nominal dulu!", "🛒");
+    if (!selectedProduct) return kustomAlert("Pilihan Kosong", "Pilih nominal paket!", "🛒");
+
+    if (requiredPattern) {
+        const keys = requiredPattern.split('|');
+        const isValid = keys.some(k => val.includes(k));
+        if (!isValid) return kustomAlert("Link Salah!", `Format salah. Harus mengandung: ${keys.join(' atau ')}`, "🚫");
+    }
     document.getElementById('confirm-overlay').style.display = 'flex';
 }
 
 function prosesKeWA() {
-    let val = document.getElementById('user-id').value.trim();
+    const val = document.getElementById('user-id').value.trim();
     const zone = document.getElementById('zone-id').value;
-    const namaProdukFix = selectedProduct; 
-    let tujuan = (currentServiceId === 'ml' && zone) ? `${val} (${zone})` : val;
-    const linkTesti = "https://whatsapp.com/channel/0029VbB9bWGLNSa9K95BId3P/504"; 
-
-    const instruksi = 
-        `----------------------------\n` +
-        `[ CARA PENYELESAIAN ]\n` +
-        `1. Transfer sesuai total di atas.\n` +
-        `2. Kirim Bukti Bayar di chat ini.\n` +
-        `3. Pesanan akan segera Diproses.\n` +
-        `----------------------------\n` +
-        `[ METODE PEMBAYARAN ]\n` +
-        `- DANA: 089507913948\n` +
-        `- QRIS: ${linkTesti}\n` + 
-        `----------------------------\n` +
-        `[ CATATAN ADMIN ]\n` +
-        `Mohon bersabar karena proses manual. Akun dilarang private!\n` +
-        `----------------------------`;
-
-    const pesan = window.encodeURIComponent(
-        `*ORDER SYRUMI STORE*\n\n` +
-        `*Produk:* ${namaProdukFix}\n` + 
-        `*Tujuan:* ${tujuan}\n` +
-        `*TOTAL TAGIHAN: ${selectedPrice}*\n\n` +
-        `${instruksi}`
-    );
+    const tujuan = (currentServiceId === 'ml' && zone) ? `${val} (${zone})` : val;
+    const pesan = window.encodeURIComponent(`*ORDER SYRUMI*\n\nProduk: ${selectedProduct}\nTujuan: ${tujuan}\nTotal: ${selectedPrice}`);
     window.location.href = `https://wa.me/6289507913948?text=${pesan}`;
 }
 
 function kirimTestiWA() {
-    const pesanTesti = document.getElementById('input-testi').value.trim();
-    if (!pesanTesti) {
-        tutupTesti(); 
-        setTimeout(() => { kustomAlert("Eits!", "Tulis dulu testimoninya ya kak!", "✍️"); }, 300);
-        return;
-    }
-    const formatPesan = window.encodeURIComponent(`*TESTIMONI SYRUMI STORE*\n\n"${pesanTesti}"`);
-    window.location.href = `https://wa.me/6289507913948?text=${formatPesan}`;
+    const t = document.getElementById('input-testi').value.trim();
+    if(!t) return kustomAlert("Kosong", "Tulis testimoninya dulu!", "✍️");
+    window.location.href = `https://wa.me/6289507913948?text=*TESTIMONI SYRUMI*\n"${t}"`;
 }
