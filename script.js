@@ -81,14 +81,16 @@ function openOrder(id, name, label, isSosmed, extraNote = "", pattern = "") {
     
     const inputTujuan = document.getElementById('user-id');
     const inputZona = document.getElementById('zone-id');
+    const grid = document.getElementById('grid-produk');
     
-    // RESET & WARNA TEKS (BIAR KELIHATAN)
+    // RESET INPUT
     inputTujuan.value = "";
     inputTujuan.style.background = "#ffffff";
     inputTujuan.style.color = "#000000";
     inputZona.value = ""; 
     document.getElementById('operator-logo-container').style.display = 'none';
 
+    // LOGIKA INPUT ANGKA ATAU TEKS
     if (id === 'pulsa' || id === 'ml' || id === 'ff') {
         inputTujuan.oninput = function() {
             this.value = this.value.replace(/[^0-9]/g, ''); 
@@ -109,17 +111,37 @@ function openOrder(id, name, label, isSosmed, extraNote = "", pattern = "") {
         inputZona.style.display = 'none';
     }
 
-    const grid = document.getElementById('grid-produk');
-    grid.innerHTML = (id === 'pulsa') ? "<p style='text-align:center; padding:20px;'>Masukkan nomor...</p>" : "";
-    
-    // Ganti bagian ini:
-if(isSosmed) {
-    grid.innerHTML = `
-        <div style="background:rgba(255,133,179,0.1); border:1px solid #ff85b3; padding:10px; border-radius:8px; font-size:11px; margin-bottom:15px; color:#333; text-align:left;">
-            <strong>INFO:</strong> Akun dilarang private. ${extraNote}
-        </div>
-    `;
-}
+    // LOGIKA TAMPILAN GRID & KALKULATOR OTOMATIS
+    grid.innerHTML = ""; // Bersihkan dulu
+
+    if (isSosmed) {
+        // Tampilkan Info Akun
+        grid.innerHTML = `
+            <div style="background:rgba(255,133,179,0.1); border:1px solid #ff85b3; padding:10px; border-radius:8px; font-size:11px; margin-bottom:15px; color:#333; text-align:left;">
+                <strong>INFO:</strong> Akun dilarang private. ${extraNote}
+            </div>
+        `;
+
+        // Tambahkan Kalkulator jika ada di data-produk.js
+        if (typeof hargaSatuan !== 'undefined' && hargaSatuan[id]) {
+            const data = hargaSatuan[id];
+            grid.innerHTML += `
+                <div class="glass" style="margin-bottom:20px; padding:15px; border:1px solid #ff85b3; background: rgba(255,255,255,0.1);">
+                    <label style="font-size:12px; color:#ff85b3; font-weight:bold;">BELI JUMLAH BEBAS:</label>
+                    <input type="number" id="custom-qty" placeholder="Contoh: 1234" 
+                        style="width:100%; padding:12px; margin-top:8px; border-radius:8px; border:none; background:#fff; color:#000;"
+                        oninput="hitungHargaOtomatis(this.value, '${id}')">
+                    <div id="display-harga-otomatis" style="margin-top:10px;">
+                        <small style="color:#aaa;">Min: ${data.min.toLocaleString()} | Max: ${data.max.toLocaleString()}</small>
+                    </div>
+                </div>
+                <p style="font-size:11px; color:#ff85b3; margin-bottom:10px; text-align:center;">--- ATAU PILIH PAKET TETAP ---</p>
+            `;
+        }
+    } else if (id === 'pulsa') {
+        grid.innerHTML = "<p style='text-align:center; padding:20px;'>Masukkan nomor...</p>";
+    }
+
     renderProducts(id);
     switchScreen('screen-order');
 }
