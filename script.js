@@ -105,16 +105,16 @@ function openOrder(id, name, label, isSosmed, extraNote = "", pattern = "") {
     if (id === 'ml') {
         inputTujuan.maxLength = 12;
         inputZona.maxLength = 5;
-        inputTujuan.placeholder = "User ID (Maks 12)";
-        inputZona.placeholder = "Zona (5)";
+        inputTujuan.placeholder = "User ID";
+        inputZona.placeholder = "Zona";
         inputTujuan.oninput = function() { this.value = this.value.replace(/[^0-9]/g, ''); };
     } else if (id === 'ff') {
         inputTujuan.maxLength = 12;
-        inputTujuan.placeholder = "Player ID (Maks 12)";
+        inputTujuan.placeholder = "Player ID";
         inputTujuan.oninput = function() { this.value = this.value.replace(/[^0-9]/g, ''); };
     } else if (id === 'pulsa') {
         inputTujuan.maxLength = 15;
-        inputTujuan.placeholder = "0812xxxx (Min 10 Digit)";
+        inputTujuan.placeholder = "0812xxxx";
         inputTujuan.oninput = function() {
             this.value = this.value.replace(/[^0-9]/g, ''); 
             handleDeteksiOperator(this.value);
