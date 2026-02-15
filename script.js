@@ -112,14 +112,14 @@ function openOrder(id, name, label, isSosmed, extraNote = "", pattern = "") {
     const grid = document.getElementById('grid-produk');
     grid.innerHTML = (id === 'pulsa') ? "<p style='text-align:center; padding:20px;'>Masukkan nomor...</p>" : "";
     
-    if(isSosmed) {
-        grid.innerHTML = `
-            <div style="background:rgba(255,133,179,0.1); border:1px solid #ff85b3; padding:10px; border-radius:8px; font-size:11px; margin-bottom:15px; color:#eee; text-align:left;">
-                <strong>INFO:</strong> Akun dilarang private. ${extraNote}
-            </div>
-        `;
-    }
-
+    // Ganti bagian ini:
+if(isSosmed) {
+    grid.innerHTML = `
+        <div style="background:rgba(255,133,179,0.1); border:1px solid #ff85b3; padding:10px; border-radius:8px; font-size:11px; margin-bottom:15px; color:#333; text-align:left;">
+            <strong>INFO:</strong> Akun dilarang private. ${extraNote}
+        </div>
+    `;
+}
     renderProducts(id);
     switchScreen('screen-order');
 }
@@ -157,32 +157,39 @@ function deteksiOperator(nomor) {
     return null;
 }
 
+// EDIT Fungsi renderProducts agar cari di pricelistGame & pricelistSosmed
 function renderProducts(id) {
     const grid = document.getElementById('grid-produk');
-    const data = pricelist[id];
+    // Gabungkan data game dan sosmed
+    const allData = { ...pricelistGame, ...pricelistSosmed };
+    const data = allData[id];
+    
     if(data) {
         data.forEach(p => {
             const labelHTML = (p.label || p.isPremium) ? `<span class="badge-premium">${p.label || '👑 HOT'}</span>` : '';
             grid.innerHTML += `
                 <div onclick="selectItem('${p.item}', '${p.harga}', this)" class="product-card ${p.isPremium ? 'premium' : ''}">
-                    <span class="item-name">${p.item} ${labelHTML}</span>
+                    <span class="item-name" style="color:#000 !important;">${p.item} ${labelHTML}</span>
                     <span class="item-price">${p.harga}</span>
                 </div>`;
         });
     }
 }
 
+// EDIT Fungsi renderProductsPulsa agar ambil dari pricelistPPOB
 function renderProductsPulsa(provider) {
     const grid = document.getElementById('grid-produk');
     grid.innerHTML = "";
-    pricelist.pulsa[provider].forEach(p => {
-        const labelHTML = p.label ? `<span class="badge-premium">${p.label}</span>` : '';
-        grid.innerHTML += `
-            <div onclick="selectItem('${p.item}', '${p.harga}', this)" class="product-card">
-                <span class="item-name">${p.item} ${labelHTML}</span>
-                <span class="item-price">${p.harga}</span>
-            </div>`;
-    });
+    if(pricelistPPOB[provider]) {
+        pricelistPPOB[provider].forEach(p => {
+            const labelHTML = p.label ? `<span class="badge-premium">${p.label}</span>` : '';
+            grid.innerHTML += `
+                <div onclick="selectItem('${p.item}', '${p.harga}', this)" class="product-card">
+                    <span class="item-name" style="color:#000 !important;">${p.item} ${labelHTML}</span>
+                    <span class="item-price">${p.harga}</span>
+                </div>`;
+        });
+    }
 }
 
 function selectItem(item, harga, el) {
