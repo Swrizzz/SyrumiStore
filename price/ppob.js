@@ -16,9 +16,11 @@ const pricelistPPOB = {
         { item: 'Pulsa Indosat 5.000', harga: 'Rp8.200' },
         { item: 'Pulsa Indosat 10.000', harga: 'Rp13.000' },
         { item: 'Pulsa Indosat 15.000', harga: 'Rp18.200' },
+        { item: 'Pulsa Indosat 20.000', harga: 'Rp23.200' },
         { item: 'Pulsa Indosat 25.000', harga: 'Rp28.200' },
         { item: 'Pulsa Indosat 50.000', harga: 'Rp52.200', label: 'Terlaris' },
         { item: 'Pulsa Indosat 80.000', harga: 'Rp80.500', label: '👑 BEST PRICE' },
+        { item: 'Pulsa Indosat 90.000', harga: 'Rp91.000' },
         { item: 'Pulsa Indosat 100.000', harga: 'Rp103.200' },
         { item: 'Pulsa Indosat 150.000', harga: 'Rp148.800', label: '👑 HARGA GILA' },
         { item: 'Pulsa Indosat 200.000', harga: 'Rp201.500' }
