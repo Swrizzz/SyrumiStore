@@ -20,29 +20,23 @@
     </div>
 
     <div id="testi-overlay" class="overlay">
-    <div class="modal-box" style="max-width: 400px; padding: 20px;">
-        <h2 style="color: #ff85b3; margin-bottom: 15px;">💬 Testimoni Pelanggan</h2>
-        
-        <div id="container-chat" style="display: flex; flex-direction: column; gap: 10px; text-align: left; padding: 5px; max-height: 250px; overflow-y: auto;">
+        <div class="modal-box" style="max-width: 400px; padding: 20px;">
+            <h2 style="color: #ff85b3; margin-bottom: 15px;">💬 Testimoni Pelanggan</h2>
+            <div id="container-chat" style="display: flex; flex-direction: column; gap: 10px; text-align: left; padding: 5px; max-height: 250px; overflow-y: auto;"></div>
+            <hr style="border: 0.5px solid rgba(255,255,255,0.1); margin: 20px 0;">
+            <div style="text-align: left;">
+                <label style="font-size: 12px; color: #ff85b3; font-weight: bold;">Ceritakan Pengalamanmu :</label>
+                <textarea id="input-testi" placeholder="Contoh: Diamond masuk cuma 1 menit! Amanah banget..." style="width: 100%; background: #ffffff; border: 1px solid #ddd; border-radius: 10px; color: #333333; padding: 10px; font-size: 13px; margin-top: 8px; resize: none; font-family: sans-serif;" rows="3"></textarea>
+                <button onclick="kirimTestiWA()" style="width: 100%; background: #25d366; color: white; border: none; padding: 12px; border-radius: 10px; font-size: 13px; margin-top: 10px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                    <i class="fab fa-whatsapp"></i> Kirim Testi ke WhatsApp
+                </button>
             </div>
-
-        <hr style="border: 0.5px solid rgba(255,255,255,0.1); margin: 20px 0;">
-
-        <div style="text-align: left;">
-            <label style="font-size: 12px; color: #ff85b3; font-weight: bold;">Ceritakan Pengalamanmu :</label>
-           <textarea id="input-testi" placeholder="Contoh: Diamond masuk cuma 1 menit! Amanah banget..." style="width: 100%; background: #ffffff; border: 1px solid #ddd; border-radius: 10px; color: #333333; padding: 10px; font-size: 13px; margin-top: 8px; resize: none; font-family: sans-serif;" rows="3"></textarea>
-            
-            <button onclick="kirimTestiWA()" style="width: 100%; background: #25d366; color: white; border: none; padding: 12px; border-radius: 10px; font-size: 13px; margin-top: 10px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
-                <i class="fab fa-whatsapp"></i> Kirim Testi ke WhatsApp
-            </button>
-        </div>
-
-        <div style="margin-top: 15px; display: flex; flex-direction: column; gap: 8px;">
-            <button class="btn-confirm" onclick="konfirmasiSaluran()" style="width: 100%;">Lihat Ratusan Testi Lainnya</button>
-            <button class="btn-cancel" onclick="tutupTesti()" style="width: 100%;">Tutup</button>
+            <div style="margin-top: 15px; display: flex; flex-direction: column; gap: 8px;">
+                <button class="btn-confirm" onclick="konfirmasiSaluran()" style="width: 100%;">Lihat Ratusan Testi Lainnya</button>
+                <button class="btn-cancel" onclick="tutupTesti()" style="width: 100%;">Tutup</button>
+            </div>
         </div>
     </div>
-</div>
 
     <div id="confirm-overlay" class="overlay">
         <div class="modal-box">
@@ -91,22 +85,18 @@
             <button class="btn-back" onclick="backToKategori()"><i class="fas fa-arrow-left"></i> Kembali</button>
             <div class="glass">
                 <h2 id="order-title" class="text-center mb-4" style="color: #ff85b3;">Top Up</h2>
-                
                 <label id="label-input" class="input-label">DATA PEMESANAN</label>
                 <div class="input-wrapper" style="position: relative; display: flex; align-items: center; margin-bottom: 20px;">
                     <div id="operator-logo-container" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); display: none; z-index: 10;">
                         <img id="operator-logo" src="" style="width: 45px; height: 45px; object-fit: contain;">
                     </div>
-                    
                     <input type="tel" id="user-id" placeholder="Masukkan Link/ID" class="glass input-field" style="width: 100%; padding-right: 60px; height: 55px;">
                     <input type="text" id="zone-id" placeholder="Zone" style="display: none; width: 100px; margin-left: 10px; height: 55px;">
                 </div>
-
                 <div id="wrapper-grid">
                     <label class="input-label">PILIH NOMINAL</label>
                     <div id="grid-produk" class="product-grid"></div>
                 </div>
-
                 <button class="btn-order" onclick="tampilkanKonfirmasi()">
                     <i class="fab fa-whatsapp"></i> Pesan Sekarang
                 </button>
@@ -115,6 +105,6 @@
     </div>
 
     <script src="data-produk.js?v=1.4"></script>
-<script src="script.js?v=1.4"></script>
+    <script src="script.js?v=1.4"></script>
 </body>
 </html>
