@@ -134,3 +134,28 @@ body {
 input { width: 100%; padding: 14px; border-radius: 15px; border: 1px solid #ddd; outline: none; font-size: 15px; background: white; }
 
 .input-label { font-size: 12px; font-weight: 700; color: #ff85b3; display: block; margin-bottom: 5px; }
+
+/* --- PERBAIKAN LOGO OPERATOR --- */
+
+#operator-logo-container {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    line-height: 0;
+    display: none; /* Muncul otomatis lewat script nanti */
+}
+
+#operator-logo {
+    width: 35px !important;
+    height: 35px !important;
+    object-fit: contain;
+    border-radius: 5px;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+}
+
+/* Pastikan input tidak tertutup logo */
+#user-id {
+    padding-right: 55px !important;
+}
