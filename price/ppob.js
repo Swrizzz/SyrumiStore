@@ -1,13 +1,16 @@
 const pricelistPPOB = {
     telkomsel: [
-        { item: 'Pulsa 2.000', harga: 'Rp4.200' },
-        { item: 'Pulsa 5.000', harga: 'Rp6.400', label: 'Hemat' },
-        { item: 'Pulsa 10.000', harga: 'Rp11.400', label: 'Terlaris' },
-        { item: 'Pulsa 20.000', harga: 'Rp21.000' },
-        { item: 'Pulsa 50.000', harga: 'Rp51.200' },
-        { item: 'Pulsa 100.000', harga: 'Rp98.500', label: '👑 Premium Price' },
-        { item: 'Pulsa 200.000', harga: 'Rp194.800', label: '👑 Premium Price' },
-        { item: 'Pulsa 300.000', harga: 'Rp292.000', label: 'Super Murah' }
+        { item: 'Pulsa Telkomsel 5.000', harga: 'Rp7.000' },
+        { item: 'Pulsa Telkomsel 10.000', harga: 'Rp12.400' },
+        { item: 'Pulsa Telkomsel 15.000', harga: 'Rp17.200' },
+        { item: 'Pulsa Telkomsel 20.000', harga: 'Rp22.000' },
+        { item: 'Pulsa Telkomsel 25.000', harga: 'Rp27.200' },
+        { item: 'Pulsa Telkomsel 50.000', harga: 'Rp52.300', label: 'Terlaris' },
+        { item: 'Pulsa Telkomsel 75.000', harga: 'Rp75.500', label: '👑 PROMO' },
+        { item: 'Pulsa Telkomsel 100.000', harga: 'Rp99.700', label: '👑 HARGA GILA' },
+        { item: 'Pulsa Telkomsel 150.000', harga: 'Rp151.500' },
+        { item: 'Pulsa Telkomsel 200.000', harga: 'Rp196.500' },
+        { item: 'Pulsa Telkomsel 300.000', harga: 'Rp294.500' }
     ],
     indosat: [
         { item: 'Pulsa 5.000', harga: 'Rp7.800' },
