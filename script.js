@@ -2,10 +2,15 @@ let selectedProduct = "", selectedPrice = "", currentServiceId = "", requiredPat
 
 // --- FUNGSI ALERT & MODAL ---
 function kustomAlert(title, message, icon = "⚠️") {
-    document.getElementById('alert-icon').innerText = icon;
-    document.getElementById('alert-title').innerText = title;
-    document.getElementById('alert-message').innerText = message;
-    document.getElementById('alert-overlay').style.display = 'flex';
+    const iconEl = document.getElementById('alert-icon');
+    const titleEl = document.getElementById('alert-title');
+    const msgEl = document.getElementById('alert-message');
+    const overlay = document.getElementById('alert-overlay');
+    
+    if(iconEl) iconEl.innerText = icon;
+    if(titleEl) titleEl.innerText = title;
+    if(msgEl) msgEl.innerText = message;
+    if(overlay) overlay.style.display = 'flex';
 }
 
 function tutupAlert() { document.getElementById('alert-overlay').style.display = 'none'; }
@@ -27,8 +32,10 @@ function switchScreen(id) {
         s.style.display = 'none';
     });
     const target = document.getElementById(id);
-    target.style.display = 'block';
-    setTimeout(() => { target.classList.add('active'); }, 10);
+    if(target) {
+        target.style.display = 'block';
+        setTimeout(() => { target.classList.add('active'); }, 10);
+    }
     window.scrollTo(0, 0);
 }
 
@@ -70,10 +77,8 @@ function openSubSosmed(appId) {
     });
 }
 
+// FUNGSI OPEN ORDER (SUDAH DIPERBAIKI)
 function openOrder(id, name, label, isSosmed, extraNote = "", pattern = "") {
-    currentServiceId = id; 
-    requiredPattern = pattern;
-    selfunction openOrder(id, name, label, isSosmed, extraNote = "", pattern = "") {
     currentServiceId = id; 
     requiredPattern = pattern;
     selectedProduct = ""; 
@@ -90,9 +95,13 @@ function openOrder(id, name, label, isSosmed, extraNote = "", pattern = "") {
     
     inputTujuan.value = "";
     inputZona.value = ""; 
-    logoCont.style.display = 'none';
-    kalkulatorCont.style.display = 'none';
-    kalkulatorCont.innerHTML = "";
+    if(logoCont) logoCont.style.display = 'none';
+    
+    // Reset Kalkulator
+    if(kalkulatorCont) {
+        kalkulatorCont.style.display = 'none';
+        kalkulatorCont.innerHTML = "";
+    }
 
     if (id === 'pulsa' || id === 'ml' || id === 'ff') {
         inputTujuan.oninput = function() {
@@ -106,13 +115,12 @@ function openOrder(id, name, label, isSosmed, extraNote = "", pattern = "") {
     }
     
     inputZona.style.display = (id === 'ml') ? 'block' : 'none';
-
     grid.innerHTML = ""; 
 
     if (isSosmed) {
         grid.innerHTML = `<div style="background:rgba(255,133,179,0.1); border:1px solid #ff85b3; padding:10px; border-radius:12px; font-size:11px; margin-bottom:15px; color:#333; text-align:left;"><strong>INFO:</strong> Akun dilarang private. ${extraNote}</div>`;
 
-        if (typeof hargaSatuan !== 'undefined' && hargaSatuan[id]) {
+        if (typeof hargaSatuan !== 'undefined' && hargaSatuan[id] && kalkulatorCont) {
             const data = hargaSatuan[id];
             kalkulatorCont.style.display = 'block';
             kalkulatorCont.innerHTML = `
@@ -171,10 +179,8 @@ function deteksiOperator(nomor) {
     return null;
 }
 
-// EDIT Fungsi renderProducts agar cari di pricelistGame & pricelistSosmed
 function renderProducts(id) {
     const grid = document.getElementById('grid-produk');
-    // Gabungkan data game dan sosmed
     const allData = { ...pricelistGame, ...pricelistSosmed };
     const data = allData[id];
     
@@ -190,7 +196,6 @@ function renderProducts(id) {
     }
 }
 
-// EDIT Fungsi renderProductsPulsa agar ambil dari pricelistPPOB
 function renderProductsPulsa(provider) {
     const grid = document.getElementById('grid-produk');
     grid.innerHTML = "";
@@ -207,7 +212,17 @@ function renderProductsPulsa(provider) {
 }
 
 function selectItem(item, harga, el) {
-    selectedProduct = item; selectedPrice = harga;
+    // 1. Kosongkan input manual jika user pilih paket bundle
+    const manualInput = document.getElementById('custom-qty');
+    const displayManual = document.getElementById('display-harga-otomatis');
+    
+    if (manualInput) {
+        manualInput.value = ""; 
+        if (displayManual) displayManual.innerText = "Rp0";
+    }
+
+    selectedProduct = item; 
+    selectedPrice = harga;
     document.querySelectorAll('.product-card').forEach(c => c.classList.remove('selected'));
     el.classList.add('selected');
 }
@@ -229,7 +244,6 @@ function prosesKeWA() {
     let val = document.getElementById('user-id').value.trim();
     const zone = document.getElementById('zone-id').value;
     
-    // Logika cari status isFollowers dari databaseLayanan
     let isFollowers = false;
     for (let app in databaseLayanan.sosmed_apps) {
         let found = databaseLayanan.sosmed_apps[app].find(s => s.id === currentServiceId);
@@ -239,7 +253,6 @@ function prosesKeWA() {
         }
     }
 
-    // Jika layanan followers, ubah username jadi link profil
     if (isFollowers && !val.includes('http')) {
         let username = val.replace('@', ''); 
         if (currentServiceId.includes('tk_')) {
@@ -253,7 +266,6 @@ function prosesKeWA() {
 
     const tujuan = (currentServiceId === 'ml' && zone) ? `${val} (${zone})` : val;
 
-    // --- STRUKTUR CHAT WHATSAPP BARU ---
     const textWA = 
 `*ORDER SYRUMI STORE*
 
@@ -287,13 +299,10 @@ function kirimTestiWA() {
     window.location.href = `https://wa.me/6289507913948?text=*TESTIMONI SYRUMI*\n"${t}"`;
 }
 
-// --- LOGIKA KUNCI: KALKULATOR VS PAKET BUNDLE ---
-
 function hitungHargaOtomatis(qty, id) {
     const display = document.getElementById('display-harga-otomatis');
     const data = hargaSatuan[id];
     
-    // 1. Matikan pilihan paket bundle di bawah jika user mengetik manual
     document.querySelectorAll('.product-card').forEach(c => c.classList.remove('selected'));
 
     if (!qty || qty <= 0) {
@@ -303,7 +312,6 @@ function hitungHargaOtomatis(qty, id) {
         return;
     }
 
-    // 2. Validasi Minimal Order
     if (qty < data.min) {
         display.innerHTML = `<span style="color:#ff4d4d; font-size:10px;">Min: ${data.min.toLocaleString()}</span>`;
         selectedProduct = ""; 
@@ -311,7 +319,6 @@ function hitungHargaOtomatis(qty, id) {
         return;
     } 
     
-    // 3. Validasi Maksimal Order
     if (qty > data.max) {
         display.innerHTML = `<span style="color:#ff4d4d; font-size:10px;">Limit!</span>`;
         selectedProduct = ""; 
@@ -319,32 +326,10 @@ function hitungHargaOtomatis(qty, id) {
         return;
     }
 
-    // 4. Hitung & Simpan Data
     const total = Math.ceil(qty * data.price);
     const formattedTotal = new Intl.NumberFormat('id-ID').format(total);
     
     selectedProduct = `${qty} ${document.getElementById('order-title').innerText}`;
     selectedPrice = `Rp${formattedTotal}`;
-    
-    // Update tampilan harga di box kanan
     display.innerText = `Rp${formattedTotal}`;
-}
-
-function selectItem(item, harga, el) {
-    // 1. Kosongkan input manual jika user pilih paket bundle
-    const manualInput = document.getElementById('custom-qty');
-    const displayManual = document.getElementById('display-harga-otomatis');
-    
-    if (manualInput) {
-        manualInput.value = ""; 
-        if (displayManual) displayManual.innerText = "Rp0";
-    }
-
-    // 2. Set data produk yang dipilih
-    selectedProduct = item; 
-    selectedPrice = harga;
-    
-    // 3. Tandai kartu yang dipilih
-    document.querySelectorAll('.product-card').forEach(c => c.classList.remove('selected'));
-    el.classList.add('selected');
 }
