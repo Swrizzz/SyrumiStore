@@ -111,23 +111,34 @@ document.addEventListener('keyup', function(e) {
     }
 });
 
+// MODIFIKASI: Render Produk Game dengan dukungan Label
 function renderProducts(id) {
     const grid = document.getElementById('grid-produk');
     grid.innerHTML = pricelist[id] ? "" : "<p style='text-align:center; font-size:12px; color:#aaa; padding:20px;'>Paket segera hadir...</p>";
     if(pricelist[id]) {
         pricelist[id].forEach(p => {
-            const premiumClass = p.isPremium ? 'premium' : '';
-            grid.innerHTML += `<div onclick="selectItem('${p.item}', '${p.harga}', this)" class="product-card ${premiumClass}"><span class="item-name">${p.item}</span><span class="item-price">${p.harga}</span></div>`;
+            const labelHTML = p.label ? `<span class="badge-premium">${p.label}</span>` : '';
+            grid.innerHTML += `
+                <div onclick="selectItem('${p.item}', '${p.harga}', this)" class="product-card">
+                    <span class="item-name">${p.item} ${labelHTML}</span>
+                    <span class="item-price">${p.harga}</span>
+                </div>`;
         });
     }
 }
 
+// MODIFIKASI: Render Produk Pulsa dengan dukungan Label
 function renderProductsPulsa(provider) {
     const grid = document.getElementById('grid-produk');
     if (pricelist.pulsa && pricelist.pulsa[provider]) {
         grid.innerHTML = "";
         pricelist.pulsa[provider].forEach(p => {
-            grid.innerHTML += `<div onclick="selectItem('${p.item}', '${p.harga}', this)" class="product-card"><span class="item-name">${p.item}</span><span class="item-price">${p.harga}</span></div>`;
+            const labelHTML = p.label ? `<span class="badge-premium">${p.label}</span>` : '';
+            grid.innerHTML += `
+                <div onclick="selectItem('${p.item}', '${p.harga}', this)" class="product-card">
+                    <span class="item-name">${p.item} ${labelHTML}</span>
+                    <span class="item-price">${p.harga}</span>
+                </div>`;
         });
     }
 }
