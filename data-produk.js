@@ -11,16 +11,26 @@ const databaseLayanan = {
     ],
     sosmed: [
         { id: 'tiktok', name: 'TikTok', icon: 'https://cdn-icons-png.flaticon.com/512/3046/3046121.png', isAppGroup: true },
-        { id: 'instagram', name: 'Instagram', icon: 'https://cdn-icons-png.flaticon.com/512/174/174855.png', isAppGroup: true }
+        { id: 'instagram', name: 'Instagram', icon: 'https://cdn-icons-png.flaticon.com/512/174/174855.png', isAppGroup: true },
+        { id: 'shopee', name: 'Shopee', icon: 'https://cdn-icons-png.flaticon.com/512/5968/5968600.png', isAppGroup: true },
+        { id: 'youtube', name: 'YouTube', icon: 'https://cdn-icons-png.flaticon.com/512/1384/1384060.png', comingSoon: true },
+        { id: 'facebook', name: 'Facebook', icon: 'https://cdn-icons-png.flaticon.com/512/5968/5968764.png', comingSoon: true }
     ],
     ppob: [{ id: 'pulsa', name: 'Pulsa & Data', icon: 'https://cdn-icons-png.flaticon.com/512/3059/3059502.png', label: 'NOMOR HP' }],
     sosmed_apps: {
         tiktok: [
-            { id: 'tk_fol', name: 'TikTok Followers', label: 'USERNAME TIKTOK', isManual: true, unit: 'Fol' },
-            { id: 'tk_like', name: 'TikTok Likes', label: 'LINK VIDEO', isManual: true, unit: 'Likes' }
+            { id: 'tk_fol', name: 'TikTok Followers', label: 'USERNAME TIKTOK', note: 'Maks 3x24 Jam' },
+            { id: 'tk_view', name: 'TikTok Viewers', label: 'LINK VIDEO', note: 'Maks 3x24 Jam' },
+            { id: 'tk_like', name: 'TikTok Likes', label: 'LINK VIDEO', note: 'Maks 3x24 Jam' }
         ],
         instagram: [
-            { id: 'ig_fol', name: 'IG Followers', label: 'USERNAME INSTAGRAM', isManual: true, unit: 'Fol' }
+            { id: 'ig_fol_indo', name: 'Followers Indonesia', label: 'USERNAME INSTAGRAM', note: 'Proses Cepat' },
+            { id: 'ig_fol_mix', name: 'Followers Acak/Asing', label: 'USERNAME INSTAGRAM', note: 'Harga Ekonomis' },
+            { id: 'ig_like', name: 'Instagram Likes', label: 'LINK POSTINGAN' },
+            { id: 'ig_view', name: 'Instagram Viewers', label: 'LINK REELS/VIDEO' }
+        ],
+        shopee: [
+            { id: 'shp_fol', name: 'Shopee Followers', label: 'LINK TOKO' }
         ]
     }
 };
@@ -59,6 +69,20 @@ const pricelist = {
         { item: '1440 Diamonds', harga: 'Rp188.000' },
         { item: '7290 Diamonds', harga: 'Rp945.000' }
     ],
+    // Contoh harga sosmed (Silakan ubah harganya)
+    tk_fol: [
+        { item: '100 Followers', harga: 'Rp5.000' },
+        { item: '500 Followers', harga: 'Rp20.000' },
+        { item: '1000 Followers', harga: 'Rp38.000' }
+    ],
+    ig_fol_indo: [
+        { item: '100 Fol Indo', harga: 'Rp10.000' },
+        { item: '500 Fol Indo', harga: 'Rp45.000' }
+    ],
+    ig_fol_mix: [
+        { item: '100 Fol Asing', harga: 'Rp4.000' },
+        { item: '1000 Fol Asing', harga: 'Rp28.000' }
+    ],
     pulsa: {
         telkomsel: [
             { item: 'Pulsa 2.000', harga: 'Rp4.200' },
@@ -66,7 +90,7 @@ const pricelist = {
             { item: 'Pulsa 10.000', harga: 'Rp11.400', label: 'Terlaris' },
             { item: 'Pulsa 20.000', harga: 'Rp21.000' },
             { item: 'Pulsa 50.000', harga: 'Rp51.200' },
-            { item: 'Pulsa 100.000', harga: 'Rp98.500', label: '👑 Premium Price' }, // Harga di bawah nominal!
+            { item: 'Pulsa 100.000', harga: 'Rp98.500', label: '👑 Premium Price' },
             { item: 'Pulsa 200.000', harga: 'Rp194.800', label: '👑 Premium Price' },
             { item: 'Pulsa 300.000', harga: 'Rp292.000', label: 'Super Murah' }
         ],
