@@ -51,6 +51,7 @@ const pricelistPPOB = {
         { item: 'Pulsa By.U 5.000', harga: 'Rp6.900' },
         { item: 'Pulsa By.U 10.000', harga: 'Rp12.200' },
         { item: 'Pulsa By.U 25.000', harga: 'Rp27.200' },
+        { item: 'Pulsa By.U 30.000', harga: 'Rp32.100' },
         { item: 'Pulsa By.U 50.000', harga: 'Rp51.800', label: 'Terlaris' },
         { item: 'Pulsa By.U 75.000', harga: 'Rp75.200' },
         { item: 'Pulsa By.U 80.000', harga: 'Rp81.300' },
