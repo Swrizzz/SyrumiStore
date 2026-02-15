@@ -227,8 +227,7 @@ function prosesKeWA() {
 
     // Jika layanan followers, ubah username jadi link profil
     if (isFollowers && !val.includes('http')) {
-        let username = val.replace('@', ''); // Bersihkan karakter @ jika ada
-        
+        let username = val.replace('@', ''); 
         if (currentServiceId.includes('tk_')) {
             val = `https://www.tiktok.com/@${username}`;
         } else if (currentServiceId.includes('ig_')) {
@@ -239,8 +238,33 @@ function prosesKeWA() {
     }
 
     const tujuan = (currentServiceId === 'ml' && zone) ? `${val} (${zone})` : val;
-    const pesan = window.encodeURIComponent(`*ORDER SYRUMI*\n\nProduk: ${selectedProduct}\nTujuan: ${tujuan}\nTotal: ${selectedPrice}`);
-    window.location.href = `https://wa.me/6289507913948?text=${pesan}`;
+
+    // --- STRUKTUR CHAT WHATSAPP BARU ---
+    const textWA = 
+`*ORDER SYRUMI STORE*
+
+*Produk:* ${selectedProduct}
+*Tujuan:* ${tujuan}
+*Harga: ${selectedPrice}*
+
+----------------------------
+[ CARA PENYELESAIAN ]
+1. Transfer sesuai total di atas.
+2. Kirim Bukti Bayar di chat ini.
+3. Pesanan akan segera Diproses.
+----------------------------
+[ METODE PEMBAYARAN ]
+- DANA: 089507913948
+- QRIS: https://whatsapp.com/channel/0029VbB9bWGLNSa9K95BId3P/504
+----------------------------
+[ CATATAN ADMIN ]
+Mohon bersabar jika admin belum membalas karena proses 100% Manual. Pesanan diproses sesuai antrean ya! 🙏
+----------------------------
+
+_Silakan kirim bukti transfer agar segera diproses._`;
+
+    const pesanEncoded = window.encodeURIComponent(textWA);
+    window.location.href = `https://wa.me/6289507913948?text=${pesanEncoded}`;
 }
 
 function kirimTestiWA() {
