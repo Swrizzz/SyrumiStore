@@ -111,13 +111,11 @@ document.addEventListener('keyup', function(e) {
     }
 });
 
-// GANTI renderProducts LAMA DENGAN INI
 function renderProducts(id) {
     const grid = document.getElementById('grid-produk');
     grid.innerHTML = pricelist[id] ? "" : "<p style='text-align:center; font-size:12px; color:#aaa; padding:20px;'>Paket segera hadir...</p>";
     if(pricelist[id]) {
         pricelist[id].forEach(p => {
-            // Logika: Ambil label dari data, jika tidak ada cek isPremium
             let labelText = p.label ? p.label : (p.isPremium ? "👑 HOT" : "");
             const labelHTML = labelText ? `<span class="badge-premium">${labelText}</span>` : '';
             const premiumClass = p.isPremium ? 'premium' : '';
@@ -131,7 +129,6 @@ function renderProducts(id) {
     }
 }
 
-// GANTI renderProductsPulsa LAMA DENGAN INI
 function renderProductsPulsa(provider) {
     const grid = document.getElementById('grid-produk');
     if (pricelist.pulsa && pricelist.pulsa[provider]) {
@@ -146,13 +143,12 @@ function renderProductsPulsa(provider) {
         });
     }
 }
+
 function selectItem(item, harga, el) {
     selectedProduct = item; selectedPrice = harga;
     document.querySelectorAll('.product-card').forEach(c => c.classList.remove('selected'));
     el.classList.add('selected');
 }
-
-function hitungHargaManual() { /* Logika manual jika ada */ }
 
 function tampilkanKonfirmasi() {
     const val = document.getElementById('user-id').value;
@@ -167,12 +163,12 @@ function tampilkanKonfirmasi() {
 function prosesKeWA() {
     let val = document.getElementById('user-id').value.trim();
     const zone = document.getElementById('zone-id').value;
-    const namaProduk = document.getElementById('order-title').innerText;
+    const namaKategori = document.getElementById('order-title').innerText;
     let tujuan = (currentServiceId === 'ml' && zone) ? `${val} (${zone})` : val;
 
-    // Link Saluran Testimoni/QRIS kamu
     const linkTesti = "https://whatsapp.com/channel/0029VbB9bWGLNSa9K95BId3P/504"; 
 
+    // Perbaikan syntax error pada instruksi
     const instruksi = 
         `----------------------------\n` +
         `📝 *CARA PENYELESAIAN*\n` +
@@ -182,16 +178,17 @@ function prosesKeWA() {
         `----------------------------\n` +
         `💳 *METODE PEMBAYARAN*\n` +
         `• *DANA:* 089507913948\n` +
-        `• *QRIS:* ${linkTesti}\n`\n`  +
+        `• *QRIS:* ${linkTesti}\n` + 
         `----------------------------\n` +
         `⚠️ *CATATAN ADMIN*\n` +
         `Mohon bersabar jika admin belum membalas karena proses *100% Manual*. Pesanan diproses sesuai antrean ya! 🙏\n` +
         `----------------------------`;
 
+    // Bagian Produk hanya menampilkan Nama Item + Nama Kategori (Misal: 5.000 Pulsa Telkomsel)
     const pesan = window.encodeURIComponent(
         `*ORDER BARU SYRUMISTORE*\n\n` +
         `🆔 *ID Order:* ${activeOrderID}\n` +
-        `📦 *Produk:* ${selectedProduct}\n` +
+        `📦 *Produk:* ${selectedProduct} ${namaKategori}\n` +
         `🎯 *Tujuan:* ${tujuan}\n` +
         `💰 *TOTAL TAGIHAN: ${selectedPrice}*\n\n` +
         `${instruksi}\n\n` +
