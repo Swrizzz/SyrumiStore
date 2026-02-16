@@ -22,7 +22,7 @@ function getCurrentAdmin() {
         return { 
             nomor: ADMIN_B, 
             label: "ADMIN B", 
-            noteBayar: "- DANA/E-WALLET: Minta ke Admin\n- QRIS: Minta ke Admin (Pajak 0 - 1.500)" 
+            noteBayar: "- DANA: 085924527083\n- QRIS: Minta ke Admin\n(Pajak 0 - 1.500)" 
         };
     }
 }
