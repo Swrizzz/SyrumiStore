@@ -5,14 +5,14 @@ const ADMIN_A = "6289507913948"; // Nomor Kamu
 const ADMIN_B = "6285924527083"; // Nomor Teman
 const isManualClose = false; 
 
-// --- FUNGSI PEMBAGI TUGAS (50:50) ---
+// --- FUNGSI PEMBAGI TUGAS (ANTI-MANIPULASI) ---
 function getCurrentAdmin() {
-    let lastAdmin = localStorage.getItem('lastAdminIndex');
-    // Jika belum ada atau terakhir Admin B (1), maka sekarang giliran Admin A (0)
-    let currentAdmin = (lastAdmin === null || lastAdmin === "1") ? "0" : "1";
-    localStorage.setItem('lastAdminIndex', currentAdmin);
+    // Mengambil detik saat ini (0-59)
+    // Sistem ini tidak bisa dicurangi karena temanmu tidak tahu kapan pelanggan akan klik
+    const detik = new Date().getSeconds();
+    const isAdminA = detik % 2 === 0; // Jika detik genap ke kamu, ganjil ke teman
     
-    if (currentAdmin === "0") {
+    if (isAdminA) {
         return { 
             nomor: ADMIN_A, 
             label: "ADMIN A", 
