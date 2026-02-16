@@ -1,5 +1,10 @@
 let selectedProduct = "", selectedPrice = "", currentServiceId = "", requiredPattern = "";
 
+// --- PENGATURAN MANUAL LAYANAN PULSA ---
+// Ubah ke true jika ingin menutup pulsa secara manual (kapan saja)
+// Ubah ke false untuk mengikuti jam operasional otomatis (04:00 - 22:00)
+const isManualClose = false; 
+
 // --- FUNGSI ALERT & MODAL ---
 function kustomAlert(title, message, icon = "⚠️") {
     const iconEl = document.getElementById('alert-icon');
@@ -77,7 +82,6 @@ function openSubSosmed(appId) {
     });
 }
 
-// FUNGSI OPEN ORDER (FIXED: KUNCI ANGKA ZONA & ID)
 function openOrder(id, name, label, isSosmed, extraNote = "", pattern = "") {
     currentServiceId = id; 
     requiredPattern = pattern;
@@ -92,16 +96,17 @@ function openOrder(id, name, label, isSosmed, extraNote = "", pattern = "") {
     const grid = document.getElementById('grid-produk');
     const logoCont = document.getElementById('operator-logo-container');
     const kalkulatorCont = document.getElementById('kalkulator-sosmed-container');
+    const btnOrder = document.querySelector('.btn-order');
     
     inputTujuan.value = "";
     inputZona.value = ""; 
     if(logoCont) logoCont.style.display = 'none';
+    if(btnOrder) btnOrder.style.display = 'block';
     if(kalkulatorCont) {
         kalkulatorCont.style.display = 'none';
         kalkulatorCont.innerHTML = "";
     }
 
-    // --- RESET & LOGIKA VALIDASI INPUT ---
     inputTujuan.oninput = null;
     inputZona.oninput = null;
 
@@ -110,7 +115,6 @@ function openOrder(id, name, label, isSosmed, extraNote = "", pattern = "") {
         inputZona.maxLength = 5;
         inputTujuan.placeholder = "User ID";
         inputZona.placeholder = "Zona";
-        // Kunci Angka ID & Zona
         inputTujuan.oninput = function() { this.value = this.value.replace(/[^0-9]/g, ''); };
         inputZona.oninput = function() { this.value = this.value.replace(/[^0-9]/g, ''); };
     } else if (id === 'ff') {
@@ -165,6 +169,8 @@ function handleDeteksiOperator(nomor) {
     const provider = deteksiOperator(nomor);
     const logoCont = document.getElementById('operator-logo-container');
     const logoImg = document.getElementById('operator-logo');
+    const grid = document.getElementById('grid-produk');
+    const btnOrder = document.querySelector('.btn-order');
     const daftarLogo = {
         "telkomsel": "images/telkomsel.jfif", 
         "indosat":   "images/indosat.jfif",
@@ -175,12 +181,30 @@ function handleDeteksiOperator(nomor) {
     };
 
     if (provider) {
+        const jam = new Date().getHours();
+        // Logika Tutup: Manual AKTIF atau sedang Jam Cut Off (22-04)
+        const isTutup = isManualClose || (jam >= 22 || jam < 4);
+
+        if (isTutup) {
+            logoCont.style.display = 'none';
+            if(btnOrder) btnOrder.style.display = 'none';
+            grid.innerHTML = `
+                <div style="grid-column: 1/-1; text-align: center; padding: 25px 15px; border: 2px solid #ff85b3; border-radius: 20px; background: rgba(255,255,255,0.4);">
+                    <p style="font-size: 35px; margin-bottom: 10px;">🕒</p>
+                    <h3 style="color: #ff85b3; margin-bottom: 5px;">LAYANAN PULSA TUTUP</h3>
+                    <p style="font-size: 12px; color: #444; line-height: 1.5;">
+                        Mohon maaf, layanan pengisian pulsa hanya beroperasi pada pukul <b>04:00 - 22:00 WIB</b>.
+                    </p>
+                </div>`;
+            return;
+        }
         renderProductsPulsa(provider);
         logoImg.src = daftarLogo[provider]; 
         logoCont.style.display = 'block';
+        if(btnOrder) btnOrder.style.display = 'block';
     } else {
         logoCont.style.display = 'none';
-        document.getElementById('grid-produk').innerHTML = "<p style='text-align:center; font-size:12px; color:#aaa; padding:20px;'>Menunggu operator...</p>";
+        grid.innerHTML = "<p style='text-align:center; font-size:12px; color:#aaa; padding:20px;'>Menunggu operator...</p>";
     }
 }
 
@@ -244,6 +268,12 @@ function selectItem(item, harga, el) {
 }
 
 function tampilkanKonfirmasi() {
+    const jam = new Date().getHours();
+    // Proteksi Tombol Pesan: Manual atau Jam Malam
+    if (currentServiceId === 'pulsa' && (isManualClose || (jam >= 22 || jam < 4))) {
+        return kustomAlert("LAYANAN TUTUP", "Mohon maaf, layanan pengisian pulsa hanya beroperasi pada pukul 04:00 - 22:00 WIB.", "🕒");
+    }
+
     const val = document.getElementById('user-id').value.toLowerCase().trim();
     if (!val) return kustomAlert("Data Kosong", "Isi nomor/ID tujuan!", "❌");
     
@@ -314,7 +344,6 @@ _Silakan kirim bukti transfer agar segera diproses._`;
     window.location.href = `https://wa.me/6289507913948?text=${pesanEncoded}`;
 }
 
-// FIX TESTIMONI (TIDAK DEMPET)
 function kirimTestiWA() {
     const t = document.getElementById('input-testi').value.trim();
     if(!t) return kustomAlert("Kosong", "Tulis testimoninya dulu!", "✍️");
