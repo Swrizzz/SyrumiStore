@@ -233,7 +233,7 @@ function selectItem(item, harga, el) {
 
 function tampilkanKonfirmasi() {
     const jam = new Date().getHours();
-    if (currentServiceId === 'pulsa' && (isManualClose || (jam >= 22 || jam < 4))) {
+    if (currentServiceId === 'pulsa' && (isManualClose || (jam >= 23 || jam < 23))) {
         return kustomAlert("LAYANAN TUTUP", "Mohon maaf, layanan pengisian pulsa hanya beroperasi pada pukul 04:00 - 22:00 WIB.", "🕒");
     }
     const val = document.getElementById('user-id').value.toLowerCase().trim();
