@@ -1,15 +1,30 @@
 let selectedProduct = "", selectedPrice = "", currentServiceId = "";
 let currentValidation = {}; 
 
-// --- KONFIGURASI ADMIN ---
+// --- KONFIGURASI ADMIN & SISTEM LEMPAR KOIN 50:50 ---
 const ADMIN_A = "6289507913948"; 
 const ADMIN_B = "6285924527083"; 
+const LINK_QRIS_A = "https://whatsapp.com/channel/0029VbB9bWGLNSa9K95BId3P/504";
 
 function getCurrentAdmin() {
-    const detik = new Date().getSeconds();
-    return (detik % 2 === 0) ? 
-        { nomor: ADMIN_A, label: "ADMIN A", note: "- DANA: 089507913948\n- QRIS: Cek Profil WA" } : 
-        { nomor: ADMIN_B, label: "ADMIN B", note: "- DANA: 085924527083\n- QRIS: Minta Admin" };
+    // Logika Lempar Koin (50% peluang)
+    const lemparKoin = Math.random(); 
+    
+    if (lemparKoin < 0.5) {
+        // HASIL: ADMIN A
+        return { 
+            nomor: ADMIN_A, 
+            label: "ADMIN A", 
+            note: `- DANA: 089507913948\n- QRIS: ${LINK_QRIS_A}` 
+        };
+    } else {
+        // HASIL: ADMIN B
+        return { 
+            nomor: ADMIN_B, 
+            label: "ADMIN B", 
+            note: `- DANA: 085924527083\n- QRIS: Minta ke Admin\n- (admin 0 - 1.500)` 
+        };
+    }
 }
 
 // --- UI NAVIGATION ---
@@ -24,7 +39,7 @@ function backToKategori() { switchScreen('screen-kategori'); }
 function tutupAlert() { document.getElementById('alert-overlay').style.display = 'none'; }
 function tutupKonfirmasi() { document.getElementById('confirm-overlay').style.display = 'none'; }
 
-// --- SISTEM TESTIMONI (FIX MASALAH 1) ---
+// --- SISTEM TESTIMONI ---
 function bukaTesti() { document.getElementById('testi-overlay').style.display = 'flex'; }
 function tutupTesti() { document.getElementById('testi-overlay').style.display = 'none'; }
 function konfirmasiSaluran() { window.open('https://whatsapp.com/channel/0029ValpDofKGGGN066VIn1H', '_blank'); }
@@ -73,7 +88,7 @@ function openSubSosmed(appId) {
     });
 }
 
-// --- ORDER LOGIC ---
+// --- ORDER LOGIC (DENGAN LINKGUARD KETAT) ---
 function openOrder(id, name, label) {
     currentServiceId = id;
     selectedProduct = ""; selectedPrice = "";
@@ -97,15 +112,20 @@ function openOrder(id, name, label) {
     wrapperGrid.style.display = 'block';
     grid.innerHTML = "";
 
-    // FIX MASALAH 3: Hanya Izinkan Angka untuk PPOB & Game (Bukan Sosmed)
     const isSosmed = (id.includes('fol') || id.includes('view') || id.includes('like') || config.price);
     
+    // Validasi Real-time (LinkGuard)
     inputMain.oninput = function() {
-        if (!isSosmed) this.value = this.value.replace(/[^0-9]/g, ''); // Filter Angka
+        if (!isSosmed) {
+            this.value = this.value.replace(/[^0-9]/g, ''); // Hanya Angka
+            if (this.value.length > 13) this.value = this.value.slice(0, 13); // Max 13 digit
+        }
         if (id === 'pulsa') handleDeteksiOperator(this.value);
     };
+
     inputZone.oninput = function() {
-        this.value = this.value.replace(/[^0-9]/g, ''); // Filter Angka
+        this.value = this.value.replace(/[^0-9]/g, ''); // Hanya Angka
+        if (this.value.length > 5) this.value = this.value.slice(0, 5); // Max 5 digit
     };
 
     if (id === 'pulsa') {
@@ -203,7 +223,17 @@ function hitungSosmed(qty, id) {
     const data = hargaSatuan[id];
     const display = document.getElementById('hasil-kalkulasi');
     const val = parseInt(qty);
-    if (!val || val < data.min) { display.innerText = "Rp0"; selectedProduct = ""; return; }
+    
+    if (!val || val < data.min) { 
+        display.innerHTML = `<span style="color:#aaa;">Min: ${data.min}</span>`; 
+        selectedProduct = ""; return; 
+    }
+    
+    if (val > data.max) {
+        display.innerHTML = `<span style="color:red;">Maksimal ${data.max}!</span>`;
+        selectedProduct = ""; return;
+    }
+
     const total = Math.ceil(val * data.price);
     selectedPrice = `Rp${total.toLocaleString('id-ID')}`;
     selectedProduct = `${val} ${document.getElementById('order-title').innerText}`;
@@ -219,28 +249,32 @@ function selectItem(item, harga, el) {
     if(calcInput) { calcInput.value = ""; document.getElementById('hasil-kalkulasi').innerText = "Rp0"; }
 }
 
-// FIX MASALAH 2: Validasi LinkGuard / Minimal Karakter
+// --- VALIDASI KONFIRMASI (LINKGUARD) ---
 function tampilkanKonfirmasi() {
     const userId = document.getElementById('user-id').value.trim();
     const zoneId = document.getElementById('zone-id').value.trim();
-    const config = hargaSatuan[currentServiceId] || {};
+    const isSosmed = (currentServiceId.includes('fol') || currentServiceId.includes('view') || currentServiceId.includes('like') || hargaSatuan[currentServiceId]?.price);
 
     if (!userId) return kustomAlert("Data Kosong", "Data tujuan belum diisi!");
 
-    // Validasi PPOB & Pulsa (Min 10 angka)
-    const isPPOB = (['pulsa', 'dana', 'gopay', 'ovo', 'shopeepay'].includes(currentServiceId));
-    if (isPPOB && userId.length < 10) return kustomAlert("Nomor Salah", "Nomor HP minimal 10 digit!");
-
-    // Validasi Game (Min 5 angka)
-    const isGame = (typeof pricelistGame !== 'undefined' && pricelistGame[currentServiceId]);
-    if (isGame && userId.length < 5) return kustomAlert("ID Salah", "ID minimal harus 5 digit!");
-
-    // Validasi ML (ID & Zone)
-    if (currentServiceId === 'ml' && (userId.length < 5 || zoneId.length < 4)) {
-        return kustomAlert("ML Error", "ID atau Zone ML belum lengkap!");
+    if (!isSosmed) {
+        // Validasi ID Game/Topup
+        if (userId.length < 5) return kustomAlert("ID Salah", "ID minimal 5 digit!");
+        
+        // Validasi PPOB (Nomor HP)
+        const isPPOB = (['pulsa', 'dana', 'gopay', 'ovo', 'shopeepay'].includes(currentServiceId));
+        if (isPPOB && userId.length < 10) return kustomAlert("Nomor Salah", "Nomor HP minimal 10 digit!");
+    } else {
+        // Validasi Link/Username
+        if (userId.length < 3) return kustomAlert("Target Salah", "Username/Link minimal 3 karakter!");
     }
 
-    if (!selectedProduct) return kustomAlert("Belum Pilih", "Silakan pilih produk!");
+    // Validasi Khusus Mobile Legends
+    if (currentServiceId === 'ml' && (userId.length < 5 || zoneId.length < 4)) {
+        return kustomAlert("ML Error", "ID (min 5) atau Zone (min 4) belum lengkap!");
+    }
+
+    if (!selectedProduct) return kustomAlert("Belum Pilih", "Silakan pilih produk/jumlah!");
     document.getElementById('confirm-overlay').style.display = 'flex';
 }
 
