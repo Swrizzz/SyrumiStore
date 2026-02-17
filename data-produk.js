@@ -26,13 +26,6 @@ const databaseLayanan = {
         // --- TAMBAHAN MENU E-WALLET DI SINI ---
         { id: 'sub_ewallet', name: 'Top Up E-Wallet', icon: 'images/wallet.jfif', label: 'PILIH DOMPET' }
     ],
-    // --- DAFTAR VENDOR DI DALAM E-WALLET ---
-    sub_ewallet: [
-        { id: 'dana', name: 'DANA', icon: 'images/dana.jfif', label: 'NOMOR DANA' },
-        { id: 'gopay', name: 'GoPay', icon: 'images/gopay.jfif', label: 'NOMOR GOPAY' },
-        { id: 'ovo', name: 'OVO', icon: 'images/ovo.jfif', label: 'NOMOR OVO' },
-        { id: 'shopeepay', name: 'ShopeePay', icon: 'images/spay.jfif', label: 'NOMOR SHOPEEPAY' }
-    ],
     sosmed_apps: {
         tiktok: [
             { id: 'tk_fol', name: 'TikTok Followers', label: 'USERNAME TIKTOK', isFollowers: true, note: 'Maks 3x24 Jam', pattern: '' },
