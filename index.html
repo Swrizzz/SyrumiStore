@@ -6,7 +6,7 @@
     <title>Syrumi Store</title>
     <link rel="icon" type="image/png" href="images/syrumi.jpeg">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/all.min.css">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=1.4">
 </head>
 <body>
 
@@ -24,12 +24,14 @@
             <h2 style="color: #ff85b3; margin-bottom: 15px;">💬 Kirim Testimoni</h2>
             <div style="text-align: left;">
                 <label style="font-size: 12px; color: #ff85b3; font-weight: bold;">Ceritakan Pengalamanmu :</label>
-                <textarea id="input-testi" placeholder="Contoh: Diamond masuk cuma 1 menit!" style="width: 100%; border: 1px solid #ddd; border-radius: 10px; padding: 10px; margin-top: 8px; resize: none;" rows="3"></textarea>
-                <button onclick="kirimTestiWA()" style="width: 100%; background: #25d366; color: white; border: none; padding: 12px; border-radius: 10px; margin-top: 10px; font-weight: bold;">Kirim Testi ke WhatsApp</button>
+                <textarea id="input-testi" placeholder="Contoh: Diamond masuk cuma 1 menit! Amanah banget..." style="width: 100%; background: #ffffff; border: 1px solid #ddd; border-radius: 10px; color: #333333; padding: 10px; font-size: 13px; margin-top: 8px; resize: none; font-family: sans-serif;" rows="3"></textarea>
+                <button onclick="kirimTestiWA()" style="width: 100%; background: #25d366; color: white; border: none; padding: 12px; border-radius: 10px; font-size: 13px; margin-top: 10px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                    <i class="fab fa-whatsapp"></i> Kirim Testi ke WhatsApp
+                </button>
             </div>
             <div style="margin-top: 15px; display: flex; flex-direction: column; gap: 8px;">
-                <button class="btn-confirm" onclick="konfirmasiSaluran()">Lihat Testi Lainnya</button>
-                <button class="btn-cancel" onclick="tutupTesti()">Tutup</button>
+                <button class="btn-confirm" onclick="konfirmasiSaluran()" style="width: 100%;">Lihat Ratusan Testi Lainnya</button>
+                <button class="btn-cancel" onclick="tutupTesti()" style="width: 100%;">Tutup</button>
             </div>
         </div>
     </div>
@@ -38,7 +40,7 @@
         <div class="modal-box">
             <div style="font-size: 50px;">📲</div>
             <h2>Konfirmasi Pesanan</h2>
-            <p style="font-size: 13px; color: #666; margin-bottom: 15px;">Data sudah benar? Klik lanjutkan untuk ke WhatsApp.</p>
+            <p style="font-size: 13px; color: #666; margin-bottom: 15px;">Data sudah benar? Klik lanjutkan untuk terhubung ke WhatsApp Admin.</p>
             <button class="btn-confirm" onclick="prosesKeWA()">Lanjutkan ke WA</button>
             <button class="btn-cancel" onclick="tutupKonfirmasi()">Batal</button>
         </div>
@@ -51,15 +53,30 @@
                 <h1 class="brand-name">Syrumi Store</h1>
                 <p class="brand-tagline">Topup Game & Sosmed Tercepat ✨</p>
             </div>
-            <div onclick="openKategori('game')" class="glass menu-item"><img src="images/game.jfif"><span>Top Up Game</span></div>
-            <div onclick="openKategori('sosmed')" class="glass menu-item"><img src="images/suntik.jfif"><span>Suntik Sosmed</span></div>
-            <div onclick="openKategori('ppob')" class="glass menu-item"><img src="https://cdn-icons-png.flaticon.com/512/3059/3059502.png"><span>Pulsa & Tagihan</span></div>
-            <div onclick="bukaTesti()" class="glass menu-item" style="border: 1px solid #ff85b3;"><img src="https://cdn-icons-png.flaticon.com/512/2107/2107957.png"><span>Testimoni Syrumi</span></div>
+            <div onclick="openKategori('game')" class="glass menu-item">
+                <img src="images/game.jfif" onerror="this.src='https://cdn-icons-png.flaticon.com/512/686/686589.png'">
+                <span>Top Up Game</span>
+            </div>
+            <div onclick="openKategori('sosmed')" class="glass menu-item">
+                <img src="images/suntik.jfif" onerror="this.src='https://cdn-icons-png.flaticon.com/512/174/174876.png'">
+                <span>Suntik Sosmed</span>
+            </div>
+            <div onclick="openKategori('ppob')" class="glass menu-item">
+                <img src="https://cdn-icons-png.flaticon.com/512/3059/3059502.png">
+                <span>Pulsa & Tagihan</span>
+            </div>
+            <div onclick="bukaTesti()" class="glass menu-item" style="border: 1px solid #ff85b3;">
+                <img src="https://cdn-icons-png.flaticon.com/512/2107/2107957.png">
+                <span>Testimoni Syrumi</span>
+            </div>
         </section>
 
         <section id="screen-kategori" class="screen">
             <button class="btn-back" onclick="goToLobby()"><i class="fas fa-arrow-left"></i> Kembali</button>
-            <div class="glass"><div id="list-layanan"></div></div>
+            <div class="glass">
+                <h2 id="kategori-title" style="text-align: center; margin-bottom: 20px; color: #ff85b3;">Pilih Layanan</h2>
+                <div id="list-layanan"></div>
+            </div>
         </section>
 
         <section id="screen-order" class="screen">
@@ -67,27 +84,33 @@
             <div class="glass">
                 <h2 id="order-title" class="text-center mb-4" style="color: #ff85b3;">Top Up</h2>
                 <label id="label-input" class="input-label">DATA PEMESANAN</label>
+                
                 <div class="input-wrapper" style="position: relative; display: flex; align-items: center; margin-bottom: 10px;">
                     <div id="operator-logo-container" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); display: none; z-index: 10;">
                         <img id="operator-logo" src="" style="width: 45px; height: 45px; object-fit: contain;">
                     </div>
-                    <input type="text" id="user-id" placeholder="Masukkan Link/ID" class="glass input-field" style="width: 100%; color: black !important; background: white !important;">
-                    <input type="text" id="zone-id" placeholder="Zone" style="display: none; width: 100px; margin-left: 10px; color: black !important; background: white !important;">
+                    <input type="text" id="user-id" placeholder="Masukkan Link/ID" class="glass input-field" style="width: 100%; padding-right: 60px; height: 55px; background: white !important; color: black !important;">
+                    <input type="text" id="zone-id" placeholder="Zone" style="display: none; width: 100px; margin-left: 10px; height: 55px; background: white !important; color: black !important;">
                 </div>
+
                 <div id="kalkulator-sosmed-container" style="display: none; margin-bottom: 20px;"></div>
+
                 <div id="wrapper-grid">
                     <label class="input-label">PILIH NOMINAL</label>
                     <div id="grid-produk" class="product-grid"></div>
                 </div>
-                <button class="btn-order" onclick="tampilkanKonfirmasi()"><i class="fab fa-whatsapp"></i> Pesan Sekarang</button>
+                
+                <button class="btn-order" onclick="tampilkanKonfirmasi()">
+                    <i class="fab fa-whatsapp"></i> Pesan Sekarang
+                </button>
             </div>
         </section>
     </div>
 
-    <script src="price/ppob.js"></script>
-    <script src="price/sosmed.js"></script>
-    <script src="price/game/games.js"></script>
-    <script src="data-produk.js"></script>
-    <script src="script.js"></script>
+   <script src="data-produk.js?v=1.4"></script>
+   <script src="price/game/games.js"></script>
+   <script src="price/sosmed.js"></script>
+   <script src="price/ppob.js"></script>
+   <script src="script.js?v=1.4"></script>
 </body>
 </html>
