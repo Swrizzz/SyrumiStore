@@ -93,5 +93,78 @@ const pricelistPPOB = {
         { item: 'Pulsa By.U 50.000', harga: 'Rp50.500', label: 'Terlaris' },
         { item: 'Pulsa By.U 100.000', harga: 'Rp99.800', label: '👑 HARGA GILA' },
         { item: 'Pulsa By.U 200.000', harga: 'Rp198.500' }
+    ]
+};
+
+const pricelistEwallet = {
+    dana: [
+        { item: 'DANA 5.000', harga: 'Rp6.500' },
+        { item: 'DANA 10.000', harga: 'Rp11.500' },
+        { item: 'DANA 15.000', harga: 'Rp16.500' },
+        { item: 'DANA 20.000', harga: 'Rp21.500' },
+        { item: 'DANA 25.000', harga: 'Rp26.500' },
+        { item: 'DANA 30.000', harga: 'Rp31.500' },
+        { item: 'DANA 40.000', harga: 'Rp41.500' },
+        { item: 'DANA 50.000', harga: 'Rp51.500', isPremium: true, label: 'HOT' },
+        { item: 'DANA 60.000', harga: 'Rp61.500' },
+        { item: 'DANA 70.000', harga: 'Rp71.500' },
+        { item: 'DANA 75.000', harga: 'Rp76.500' },
+        { item: 'DANA 80.000', harga: 'Rp81.500' },
+        { item: 'DANA 90.000', harga: 'Rp91.500' },
+        { item: 'DANA 100.000', harga: 'Rp101.500', isPremium: true, label: 'BEST' }
     ],
+    gopay: [
+        { item: 'GoPay 5.000', harga: 'Rp6.500' },
+        { item: 'GoPay 10.000', harga: 'Rp11.500' },
+        { item: 'GoPay 15.000', harga: 'Rp16.500' },
+        { item: 'GoPay 20.000', harga: 'Rp21.500' },
+        { item: 'GoPay 25.000', harga: 'Rp26.500' },
+        { item: 'GoPay 30.000', harga: 'Rp31.500' },
+        { item: 'GoPay 35.000', harga: 'Rp36.500' },
+        { item: 'GoPay 40.000', harga: 'Rp41.500' },
+        { item: 'GoPay 45.000', harga: 'Rp46.500' },
+        { item: 'GoPay 50.000', harga: 'Rp51.500' },
+        { item: 'GoPay 55.000', harga: 'Rp56.500' },
+        { item: 'GoPay 60.000', harga: 'Rp61.500' },
+        { item: 'GoPay 65.000', harga: 'Rp66.500' },
+        { item: 'GoPay 70.000', harga: 'Rp71.500' },
+        { item: 'GoPay 75.000', harga: 'Rp76.500' },
+        { item: 'GoPay 80.000', harga: 'Rp81.500' },
+        { item: 'GoPay 85.000', harga: 'Rp86.500' },
+        { item: 'GoPay 90.000', harga: 'Rp91.500' },
+        { item: 'GoPay 95.000', harga: 'Rp96.500' },
+        { item: 'GoPay 100.000', harga: 'Rp101.500' }
+    ],
+    ovo: [
+        { item: 'OVO 10.000', harga: 'Rp11.500' },
+        { item: 'OVO 15.000', harga: 'Rp16.500' },
+        { item: 'OVO 20.000', harga: 'Rp21.500' },
+        { item: 'OVO 25.000', harga: 'Rp26.500' },
+        { item: 'OVO 30.000', harga: 'Rp31.500' },
+        { item: 'OVO 40.000', harga: 'Rp41.500' },
+        { item: 'OVO 50.000', harga: 'Rp51.500' },
+        { item: 'OVO 60.000', harga: 'Rp61.500' },
+        { item: 'OVO 70.000', harga: 'Rp71.500' },
+        { item: 'OVO 75.000', harga: 'Rp76.500' },
+        { item: 'OVO 80.000', harga: 'Rp81.500' },
+        { item: 'OVO 90.000', harga: 'Rp91.500' },
+        { item: 'OVO 100.000', harga: 'Rp101.500' }
+    ],
+    shopeepay: [
+        { item: 'ShopeePay 5.000', harga: 'Rp6.500' },
+        { item: 'ShopeePay 10.000', harga: 'Rp11.500' },
+        { item: 'ShopeePay 15.000', harga: 'Rp16.500' },
+        { item: 'ShopeePay 20.000', harga: 'Rp21.500' },
+        { item: 'ShopeePay 35.000', harga: 'Rp36.500' },
+        { item: 'ShopeePay 40.000', harga: 'Rp41.500' },
+        { item: 'ShopeePay 45.000', harga: 'Rp46.500' },
+        { item: 'ShopeePay 50.000', harga: 'Rp51.500' },
+        { item: 'ShopeePay 55.000', harga: 'Rp56.500' },
+        { item: 'ShopeePay 60.000', harga: 'Rp61.500' },
+        { item: 'ShopeePay 65.000', harga: 'Rp66.500' },
+        { item: 'ShopeePay 75.000', harga: 'Rp76.500' },
+        { item: 'ShopeePay 90.000', harga: 'Rp91.500' },
+        { item: 'ShopeePay 95.000', harga: 'Rp96.500' },
+        { item: 'ShopeePay 100.000', harga: 'Rp101.500' }
+    ]
 };
