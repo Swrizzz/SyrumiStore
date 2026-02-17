@@ -27,8 +27,8 @@ const pricelistSosmed = {
         { item: '1.000 Followers Indo', harga: 'Rp70.000', isPremium: true, label: 'REAL INDO' }
     ],
     ig_like: [
-        { item: '100 Likes Real', harga: 'Rp1.000' },
-        { item: '1.000 Likes Real', harga: 'Rp10.000', isPremium: true }
+        { item: '100 Likes', harga: 'Rp1.000' },
+        { item: '1.000 Likes', harga: 'Rp10.000', isPremium: true }
     ],
     ig_view: [
         { item: '1.500 Views', harga: 'Rp1.000' },
