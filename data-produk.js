@@ -23,23 +23,22 @@ const databaseLayanan = {
     ],
     ppob: [
         { id: 'pulsa', name: 'Pulsa', icon: 'https://cdn-icons-png.flaticon.com/512/3059/3059502.png', label: 'NOMOR HP' },
-        // --- TAMBAHAN MENU E-WALLET DI SINI ---
         { id: 'sub_ewallet', name: 'Top Up E-Wallet', icon: 'images/wallet.jfif', label: 'PILIH DOMPET' }
     ],
     sosmed_apps: {
         tiktok: [
-            { id: 'tk_fol', name: 'TikTok Followers', label: 'USERNAME TIKTOK', isFollowers: true, note: 'Maks 3x24 Jam', pattern: '' },
-            { id: 'tk_view', name: 'TikTok Viewers', label: 'LINK VIDEO', note: 'Maks 3x24 Jam', pattern: 'tiktok|tt.com' },
-            { id: 'tk_like', name: 'TikTok Likes', label: 'LINK VIDEO', note: 'Maks 3x24 Jam', pattern: 'tiktok|tt.com' }
+            { id: 'tk_fol', name: 'TikTok Followers', label: 'USERNAME TIKTOK', isFollowers: true, note: 'Maks 3x24 Jam' },
+            { id: 'tk_view', name: 'TikTok Viewers', label: 'LINK VIDEO', note: 'Maks 3x24 Jam' },
+            { id: 'tk_like', name: 'TikTok Likes', label: 'LINK VIDEO', note: 'Maks 3x24 Jam' }
         ],
         instagram: [
-            { id: 'ig_fol_indo', name: 'Followers Indonesia', label: 'USERNAME INSTAGRAM', isFollowers: true, note: 'Proses Cepat', pattern: '' },
-            { id: 'ig_fol_mix', name: 'Followers Acak/Asing', label: 'USERNAME INSTAGRAM', isFollowers: true, note: 'Harga Ekonomis', pattern: '' },
-            { id: 'ig_like', name: 'Instagram Likes', label: 'LINK POSTINGAN', pattern: 'instagram|ig.me' },
-            { id: 'ig_view', name: 'Instagram Viewers', label: 'LINK REELS/VIDEO', pattern: 'instagram|ig.me' }
+            { id: 'ig_fol_indo', name: 'Followers Indonesia', label: 'USERNAME INSTAGRAM', isFollowers: true, note: 'Proses Cepat' },
+            { id: 'ig_fol_mix', name: 'Followers Acak/Asing', label: 'USERNAME INSTAGRAM', isFollowers: true, note: 'Harga Ekonomis' },
+            { id: 'ig_like', name: 'Instagram Likes', label: 'LINK POSTINGAN' },
+            { id: 'ig_view', name: 'Instagram Viewers', label: 'LINK REELS/VIDEO' }
         ],
         shopee: [
-            { id: 'shp_fol', name: 'Shopee Followers', label: 'LINK TOKO', isFollowers: true, pattern: '' }
+            { id: 'shp_fol', name: 'Shopee Followers', label: 'LINK TOKO', isFollowers: true }
         ]
     }
 };
