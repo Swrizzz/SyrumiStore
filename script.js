@@ -42,7 +42,7 @@ function tutupKonfirmasi() { document.getElementById('confirm-overlay').style.di
 // --- SISTEM TESTIMONI ---
 function bukaTesti() { document.getElementById('testi-overlay').style.display = 'flex'; }
 function tutupTesti() { document.getElementById('testi-overlay').style.display = 'none'; }
-function konfirmasiSaluran() { window.open('https://whatsapp.com/channel/0029ValpDofKGGGN066VIn1H', '_blank'); }
+function konfirmasiSaluran() { window.open('https://whatsapp.com/channel/0029VbB9bWGLNSa9K95BId3P', '_blank'); }
 
 function kirimTestiWA() {
     const msg = document.getElementById('input-testi').value.trim();
