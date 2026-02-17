@@ -24,6 +24,19 @@ function backToKategori() { switchScreen('screen-kategori'); }
 function tutupAlert() { document.getElementById('alert-overlay').style.display = 'none'; }
 function tutupKonfirmasi() { document.getElementById('confirm-overlay').style.display = 'none'; }
 
+// --- SISTEM TESTIMONI (FIX MASALAH 1) ---
+function bukaTesti() { document.getElementById('testi-overlay').style.display = 'flex'; }
+function tutupTesti() { document.getElementById('testi-overlay').style.display = 'none'; }
+function konfirmasiSaluran() { window.open('https://whatsapp.com/channel/0029ValpDofKGGGN066VIn1H', '_blank'); }
+
+function kirimTestiWA() {
+    const msg = document.getElementById('input-testi').value.trim();
+    if(!msg) return kustomAlert("Kosong", "Tulis testimoni dulu ya!");
+    const text = `*TESTIMONI SYRUMI STORE*\n\n"${msg}"\n\n_Kirim dari Website_`;
+    window.open(`https://wa.me/${ADMIN_A}?text=${encodeURIComponent(text)}`, '_blank');
+    tutupTesti();
+}
+
 function kustomAlert(title, msg, icon="⚠️") {
     document.getElementById('alert-icon').innerText = icon;
     document.getElementById('alert-title').innerText = title;
@@ -35,7 +48,6 @@ function kustomAlert(title, msg, icon="⚠️") {
 function openKategori(cat) {
     const listDiv = document.getElementById('list-layanan');
     listDiv.innerHTML = "";
-    
     if (cat === 'sub_ewallet') {
         ['dana', 'gopay', 'ovo', 'shopeepay'].forEach(w => {
             listDiv.innerHTML += `<div onclick="openOrder('${w}', '${w.toUpperCase()}', 'NOMOR HP')" class="glass menu-item"><span>${w.toUpperCase()}</span></div>`;
@@ -47,7 +59,6 @@ function openKategori(cat) {
             else if(item.isAppGroup) action = `openSubSosmed('${item.id}')`;
             else if(item.id === 'sub_ewallet') action = `openKategori('sub_ewallet')`;
             else action = `openOrder('${item.id}', '${item.name}', '${item.label || 'DATA TUJUAN'}')`;
-            
             listDiv.innerHTML += `<div onclick="${action}" class="glass menu-item"><img src="${item.icon}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/686/686589.png'"><span>${item.name}</span></div>`;
         });
     }
@@ -80,37 +91,38 @@ function openOrder(id, name, label) {
     const wrapperGrid = document.getElementById('wrapper-grid');
     
     inputMain.value = ""; inputZone.value = ""; 
-    inputMain.oninput = null;
     logoArea.style.display = 'none';
     kalkulator.style.display = 'none';
     inputZone.style.display = 'none';
     wrapperGrid.style.display = 'block';
     grid.innerHTML = "";
 
+    // FIX MASALAH 3: Hanya Izinkan Angka untuk PPOB & Game (Bukan Sosmed)
+    const isSosmed = (id.includes('fol') || id.includes('view') || id.includes('like') || config.price);
+    
+    inputMain.oninput = function() {
+        if (!isSosmed) this.value = this.value.replace(/[^0-9]/g, ''); // Filter Angka
+        if (id === 'pulsa') handleDeteksiOperator(this.value);
+    };
+    inputZone.oninput = function() {
+        this.value = this.value.replace(/[^0-9]/g, ''); // Filter Angka
+    };
+
     if (id === 'pulsa') {
         inputMain.placeholder = "08xxxxxxxx";
-        inputMain.oninput = function() {
-            this.value = this.value.replace(/[^0-9]/g, '');
-            handleDeteksiOperator(this.value);
-        };
         grid.innerHTML = "<p style='text-align:center; padding:20px; color:#aaa;'>Masukkan nomor...</p>";
-    }
-    else if (['dana', 'gopay', 'ovo', 'shopeepay'].includes(id)) {
+    } else if (['dana', 'gopay', 'ovo', 'shopeepay'].includes(id)) {
         inputMain.placeholder = "08xxxxxxxx";
-        inputMain.oninput = function() { this.value = this.value.replace(/[^0-9]/g, ''); };
         renderPPOB(id);
-    }
-    else if (id === 'ml') {
+    } else if (id === 'ml') {
         inputZone.style.display = 'block';
         inputMain.placeholder = "User ID";
         inputZone.placeholder = "Zone";
         renderGame(id);
-    }
-    else if (!config.price) { // Game Biasa
+    } else if (!config.price) { 
         inputMain.placeholder = label || "Player ID / UID";
         renderGame(id);
-    }
-    else { // SOSMED
+    } else { 
         inputMain.placeholder = config.label || "Link / Username";
         kalkulator.style.display = 'block';
         renderKalkulatorSosmed(id);
@@ -171,7 +183,6 @@ function handleDeteksiOperator(nomor) {
     const logoImg = document.getElementById('operator-logo');
     const grid = document.getElementById('grid-produk');
     if (nomor.length < 4) { logoArea.style.display = 'none'; return; }
-
     const prefix = nomor.slice(0, 4);
     let prov = "";
     if (/^0811|0812|0813|0821|0822|0852|0853|0823/.test(prefix)) prov = "telkomsel";
@@ -180,7 +191,6 @@ function handleDeteksiOperator(nomor) {
     else if (/^0895|0896|0897|0898|0899/.test(prefix)) prov = "three";
     else if (/^0881|0882|0883|0884|0885|0886|0887|0888/.test(prefix)) prov = "smartfren";
     else if (/^0851/.test(prefix)) prov = "byu";
-
     if (prov && typeof pricelistPPOB !== 'undefined' && pricelistPPOB[prov]) {
         logoImg.src = `images/${prov}.jfif`;
         logoArea.style.display = 'block';
@@ -194,12 +204,10 @@ function hitungSosmed(qty, id) {
     const display = document.getElementById('hasil-kalkulasi');
     const val = parseInt(qty);
     if (!val || val < data.min) { display.innerText = "Rp0"; selectedProduct = ""; return; }
-    
     const total = Math.ceil(val * data.price);
     selectedPrice = `Rp${total.toLocaleString('id-ID')}`;
     selectedProduct = `${val} ${document.getElementById('order-title').innerText}`;
     display.innerHTML = `<span style="color: #2ecc71;">Total: ${selectedPrice}</span>`;
-    
     document.querySelectorAll('.product-card').forEach(c => c.classList.remove('selected'));
 }
 
@@ -211,8 +219,27 @@ function selectItem(item, harga, el) {
     if(calcInput) { calcInput.value = ""; document.getElementById('hasil-kalkulasi').innerText = "Rp0"; }
 }
 
+// FIX MASALAH 2: Validasi LinkGuard / Minimal Karakter
 function tampilkanKonfirmasi() {
-    if (!document.getElementById('user-id').value.trim()) return kustomAlert("Data Kosong", "Data tujuan belum diisi!");
+    const userId = document.getElementById('user-id').value.trim();
+    const zoneId = document.getElementById('zone-id').value.trim();
+    const config = hargaSatuan[currentServiceId] || {};
+
+    if (!userId) return kustomAlert("Data Kosong", "Data tujuan belum diisi!");
+
+    // Validasi PPOB & Pulsa (Min 10 angka)
+    const isPPOB = (['pulsa', 'dana', 'gopay', 'ovo', 'shopeepay'].includes(currentServiceId));
+    if (isPPOB && userId.length < 10) return kustomAlert("Nomor Salah", "Nomor HP minimal 10 digit!");
+
+    // Validasi Game (Min 5 angka)
+    const isGame = (typeof pricelistGame !== 'undefined' && pricelistGame[currentServiceId]);
+    if (isGame && userId.length < 5) return kustomAlert("ID Salah", "ID minimal harus 5 digit!");
+
+    // Validasi ML (ID & Zone)
+    if (currentServiceId === 'ml' && (userId.length < 5 || zoneId.length < 4)) {
+        return kustomAlert("ML Error", "ID atau Zone ML belum lengkap!");
+    }
+
     if (!selectedProduct) return kustomAlert("Belum Pilih", "Silakan pilih produk!");
     document.getElementById('confirm-overlay').style.display = 'flex';
 }
@@ -222,7 +249,6 @@ function prosesKeWA() {
     let tujuan = document.getElementById('user-id').value.trim();
     const zone = document.getElementById('zone-id').value.trim();
     const config = hargaSatuan[currentServiceId] || {};
-
     if (config.isUser && config.urlPrefix) {
         tujuan = `${config.urlPrefix}${tujuan.replace('@', '')}`;
     }
