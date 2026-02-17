@@ -5,19 +5,6 @@ const ADMIN_A = "6289507913948";
 const ADMIN_B = "6285924527083"; 
 const isManualClose = false; 
 
-// --- DATA EWALLET (Admin Flat 1.5k) ---
-const pricelistEwallet = {
-    dana: [
-        { item: 'Dana 10.000', harga: 'Rp11.500' },
-        { item: 'Dana 20.000', harga: 'Rp21.500' },
-        { item: 'Dana 50.000', harga: 'Rp51.500', isPremium: true, label: 'HOT' },
-        { item: 'Dana 100.000', harga: 'Rp101.400', isPremium: true, label: 'HEMAT' }
-    ],
-    gopay: [{ item: 'GoPay 10.000', harga: 'Rp11.500' }, { item: 'GoPay 20.000', harga: 'Rp21.500' }, { item: 'GoPay 50.000', harga: 'Rp51.500' }, { item: 'GoPay 100.000', harga: 'Rp101.400' }],
-    ovo: [{ item: 'OVO 10.000', harga: 'Rp11.500' }, { item: 'OVO 20.000', harga: 'Rp21.500' }, { item: 'OVO 50.000', harga: 'Rp51.500' }, { item: 'OVO 100.000', harga: 'Rp101.400' }],
-    shopeepay: [{ item: 'ShopeePay 10.000', harga: 'Rp11.500' }, { item: 'ShopeePay 20.000', harga: 'Rp21.500' }, { item: 'ShopeePay 50.000', harga: 'Rp51.500' }, { item: 'ShopeePay 100.000', harga: 'Rp101.400' }]
-};
-
 function getCurrentAdmin() {
     const detik = new Date().getSeconds();
     const isAdminA = detik % 2 === 0; 
