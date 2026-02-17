@@ -138,24 +138,23 @@ function openOrder(id, name, label) {
         renderGame(id);
     }
 
-    // 5. SOSMED (Kalkulator & Link Guard)
+    // 5. SOSMED (Kalkulator & Pricelist)
     else {
-        inputMain.placeholder = config.label;
-        inputMain.oninput = null; // Bebas input teks (username/link)
+        inputMain.placeholder = config.label || "Masukkan Link/Username";
+        inputMain.oninput = null;
         
-        // Tampilkan Kalkulator
-        kalkulator.style.display = 'block';
-        kalkulator.innerHTML = `
-            <div style="background:rgba(255,133,179,0.1); padding:15px; border-radius:10px; border:1px dashed #ff85b3;">
-                <label style="font-size:11px; font-weight:bold; color:#ff85b3;">JUMLAH (Min: ${config.min} - Max: ${config.max})</label>
-                <input type="number" id="custom-qty" placeholder="Masukkan jumlah..." style="margin-top:5px; padding:10px; width:100%; border-radius:8px; border:1px solid #ddd;" oninput="hitungSosmed(this.value, '${id}')">
-                <div id="hasil-kalkulasi" style="text-align:right; font-weight:bold; color:#ff85b3; margin-top:10px;">Rp0</div>
-            </div>`;
+        // Cek apakah pakai kalkulator (Manual)
+        if (config.price) {
+            kalkulator.style.display = 'block';
+            renderKalkulatorSosmed(id); // Memanggil fungsi render kalkulator
+        } else {
+            kalkulator.style.display = 'none';
+        }
+
+        // Cek apakah ada pricelist kartu (Otomatis)
+        renderGame(id); 
     }
-
-    switchScreen('screen-order');
-}
-
+    
 // --- RENDER FUNCTIONS ---
 function renderPPOB(id) {
     const grid = document.getElementById('grid-produk');
@@ -168,16 +167,60 @@ function renderPPOB(id) {
 
 function renderGame(id) {
     const grid = document.getElementById('grid-produk');
-    grid.innerHTML = "";
-    // Gabungkan pengecekan dari games.js dan sosmed.js
-    const source = (id.startsWith('tk_') || id.startsWith('ig_') || id.startsWith('shp_')) 
-                   ? (typeof pricelistSosmed !== 'undefined' ? pricelistSosmed : {})
-                   : (typeof pricelistGame !== 'undefined' ? pricelistGame : {});
+    const calcContainer = document.getElementById('kalkulator-sosmed-container');
+    const wrapperGrid = document.getElementById('wrapper-grid');
     
-    if(source[id]) {
-        source[id].forEach(p => cardTemplate(grid, p));
+    grid.innerHTML = "";
+    currentServiceId = id;
+
+    // 1. Cek apakah ini layanan Sosmed yang punya hitungan manual (hargaSatuan)
+    if (typeof hargaSatuan !== 'undefined' && hargaSatuan[id]) {
+        calcContainer.style.display = "block";
+        wrapperGrid.style.display = "none"; // Sembunyikan grid jika manual
+        renderKalkulatorSosmed(id);
+    } 
+    // 2. Jika bukan manual, tampilkan pricelist Card (PENTING!)
+    else {
+        calcContainer.style.display = "none";
+        wrapperGrid.style.display = "block";
+
+        // Ambil data dari pricelistGame atau pricelistSosmed
+        let data = null;
+        if (typeof pricelistGame !== 'undefined' && pricelistGame[id]) {
+            data = pricelistGame[id];
+        } else if (typeof pricelistSosmed !== 'undefined' && pricelistSosmed[id]) {
+            data = pricelistSosmed[id];
+        }
+
+        if (data) {
+            data.forEach(p => cardTemplate(grid, p));
+        } else {
+            grid.innerHTML = "<p class='text-center'>Pricelist belum tersedia.</p>";
+        }
     }
 }
+
+    function renderKalkulatorSosmed(id) {
+    const container = document.getElementById('kalkulator-sosmed-container');
+    const config = hargaSatuan[id];
+    
+    container.innerHTML = `
+        <div style="background:rgba(255,133,179,0.1); padding:15px; border-radius:15px; border:2px dashed #ff85b3; margin-bottom:15px;">
+            <label style="font-size:12px; font-weight:bold; color:#ff85b3; display:block; margin-bottom:8px;">
+                <i class="fas fa-calculator"></i> INPUT JUMLAH MANUAL
+            </label>
+            <input type="number" id="custom-qty" 
+                placeholder="Min: ${config.min} - Max: ${config.max}" 
+                style="width:100%; padding:12px; border-radius:10px; border:1px solid #ffdeed; outline:none; font-size:16px; font-weight:bold;" 
+                oninput="hitungSosmed(this.value, '${id}')">
+            <div id="hasil-kalkulasi" style="text-align:right; font-weight:bold; color:#ff85b3; margin-top:10px; font-size:15px;">
+                Total: Rp0
+            </div>
+            <p style="font-size:10px; color:#999; margin-top:5px;">*Harga per 1 unit: Rp${config.price}</p>
+        </div>
+    `;
+}
+
 function cardTemplate(container, p) {
     const badge = p.label ? `<span class="badge-premium">${p.label}</span>` : '';
     container.innerHTML += `
@@ -208,6 +251,7 @@ function handleDeteksiOperator(nomor) {
     else if (/^0895|0896|0897|0898|0899/.test(prefix)) prov = "three";
     else if (/^0881|0882|0883|0884|0885|0886|0887|0888/.test(prefix)) prov = "smartfren";
     else if (/^0859|0878/.test(prefix)) prov = "xl_axis"; // Tambahan XL
+    else if (/^0851/.test(prefix)) prov = "byu";
 
     if (prov && typeof pricelistPPOB !== 'undefined' && pricelistPPOB[prov]) {
         logoImg.src = `images/${prov}.jfif`;
