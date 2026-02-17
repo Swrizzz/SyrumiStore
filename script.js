@@ -7,22 +7,27 @@ const ADMIN_B = "6285924527083";
 const LINK_QRIS_A = "https://whatsapp.com/channel/0029VbB9bWGLNSa9K95BId3P/504";
 
 function getCurrentAdmin() {
-    // Logika Lempar Koin (50% peluang)
     const lemparKoin = Math.random(); 
-    
+    const footerCara = `----------------------------\n[ CARA PENYELESAIAN ]\n1. Transfer sesuai total di atas.\n2. Kirim Bukti Bayar di chat ini.\n3. Pesanan akan segera Diproses.\n----------------------------`;
+    const catatanAdmin = `----------------------------\n[ CATATAN ADMIN ]\nMohon bersabar jika admin belum membalas karena proses 100% Manual. Pesanan diproses sesuai antrean ya!\n----------------------------\n\n_Silakan kirim bukti transfer agar segera diproses._`;
+
     if (lemparKoin < 0.5) {
-        // HASIL: ADMIN A
+        // SETTING UNTUK ADMIN A
         return { 
             nomor: ADMIN_A, 
-            label: "ADMIN A", 
-            note: `- DANA: 089507913948\n- QRIS: ${LINK_QRIS_A}` 
+            header: "*ORDER SYRUMI STORE [ADMIN A]*", 
+            metode: `[ METODE PEMBAYARAN ]\n- DANA: 089507913948\n- QRIS: ${LINK_QRIS_A}`,
+            footer: footerCara,
+            catatan: catatanAdmin
         };
     } else {
-        // HASIL: ADMIN B
+        // SETTING UNTUK ADMIN B
         return { 
             nomor: ADMIN_B, 
-            label: "ADMIN B", 
-            note: `- DANA: 085924527083\n- QRIS: Minta ke Admin\n- (admin 0 - 1.500)` 
+            header: "*ORDER SYRUMI STORE [ADMIN B]*", 
+            metode: `[ METODE PEMBAYARAN ]\n- DANA: 085924527083\n- QRIS: Minta ke Admin\n(Pajak 0 - 1.500)`,
+            footer: footerCara,
+            catatan: catatanAdmin
         };
     }
 }
@@ -90,7 +95,7 @@ function openSubSosmed(appId) {
     });
 }
 
-// --- ORDER LOGIC (DENGAN LINKGUARD KETAT) ---
+// --- ORDER LOGIC (LINKGUARD KETAT) ---
 function openOrder(id, name, label) {
     currentServiceId = id;
     selectedProduct = ""; selectedPrice = "";
@@ -116,18 +121,18 @@ function openOrder(id, name, label) {
 
     const isSosmed = (id.includes('fol') || id.includes('view') || id.includes('like') || config.price);
     
-    // Validasi Real-time (LinkGuard)
+    // LinkGuard: Proteksi Angka & Limit
     inputMain.oninput = function() {
         if (!isSosmed) {
-            this.value = this.value.replace(/[^0-9]/g, ''); // Hanya Angka
-            if (this.value.length > 13) this.value = this.value.slice(0, 13); // Max 13 digit
+            this.value = this.value.replace(/[^0-9]/g, ''); 
+            if (this.value.length > 13) this.value = this.value.slice(0, 13);
         }
         if (id === 'pulsa') handleDeteksiOperator(this.value);
     };
 
     inputZone.oninput = function() {
-        this.value = this.value.replace(/[^0-9]/g, ''); // Hanya Angka
-        if (this.value.length > 5) this.value = this.value.slice(0, 5); // Max 5 digit
+        this.value = this.value.replace(/[^0-9]/g, ''); 
+        if (this.value.length > 5) this.value = this.value.slice(0, 5);
     };
 
     if (id === 'pulsa') {
@@ -225,17 +230,14 @@ function hitungSosmed(qty, id) {
     const data = hargaSatuan[id];
     const display = document.getElementById('hasil-kalkulasi');
     const val = parseInt(qty);
-    
     if (!val || val < data.min) { 
         display.innerHTML = `<span style="color:#aaa;">Min: ${data.min}</span>`; 
         selectedProduct = ""; return; 
     }
-    
     if (val > data.max) {
         display.innerHTML = `<span style="color:red;">Maksimal ${data.max}!</span>`;
         selectedProduct = ""; return;
     }
-
     const total = Math.ceil(val * data.price);
     selectedPrice = `Rp${total.toLocaleString('id-ID')}`;
     selectedProduct = `${val} ${document.getElementById('order-title').innerText}`;
@@ -251,44 +253,46 @@ function selectItem(item, harga, el) {
     if(calcInput) { calcInput.value = ""; document.getElementById('hasil-kalkulasi').innerText = "Rp0"; }
 }
 
-// --- VALIDASI KONFIRMASI (LINKGUARD) ---
+// --- VALIDASI & PROSES PESAN (FORMAT BARU) ---
 function tampilkanKonfirmasi() {
     const userId = document.getElementById('user-id').value.trim();
     const zoneId = document.getElementById('zone-id').value.trim();
     const isSosmed = (currentServiceId.includes('fol') || currentServiceId.includes('view') || currentServiceId.includes('like') || hargaSatuan[currentServiceId]?.price);
 
     if (!userId) return kustomAlert("Data Kosong", "Data tujuan belum diisi!");
-
     if (!isSosmed) {
-        // Validasi ID Game/Topup
         if (userId.length < 5) return kustomAlert("ID Salah", "ID minimal 5 digit!");
-        
-        // Validasi PPOB (Nomor HP)
         const isPPOB = (['pulsa', 'dana', 'gopay', 'ovo', 'shopeepay'].includes(currentServiceId));
         if (isPPOB && userId.length < 10) return kustomAlert("Nomor Salah", "Nomor HP minimal 10 digit!");
     } else {
-        // Validasi Link/Username
         if (userId.length < 3) return kustomAlert("Target Salah", "Username/Link minimal 3 karakter!");
     }
-
-    // Validasi Khusus Mobile Legends
-    if (currentServiceId === 'ml' && (userId.length < 5 || zoneId.length < 4)) {
-        return kustomAlert("ML Error", "ID (min 5) atau Zone (min 4) belum lengkap!");
+    if (currentServiceId === 'ml' && (userId.length < 5 || zoneId.length < 3)) {
+        return kustomAlert("ML Error", "ID atau Zone belum lengkap!");
     }
-
     if (!selectedProduct) return kustomAlert("Belum Pilih", "Silakan pilih produk/jumlah!");
     document.getElementById('confirm-overlay').style.display = 'flex';
 }
 
 function prosesKeWA() {
     const admin = getCurrentAdmin();
+    const serviceName = document.getElementById('order-title').innerText; 
     let tujuan = document.getElementById('user-id').value.trim();
     const zone = document.getElementById('zone-id').value.trim();
-    const config = hargaSatuan[currentServiceId] || {};
-    if (config.isUser && config.urlPrefix) {
-        tujuan = `${config.urlPrefix}${tujuan.replace('@', '')}`;
-    }
+    
+    // Format Tujuan (Khusus ML tambah Zone)
     const finalTujuan = (currentServiceId === 'ml') ? `${tujuan} (${zone})` : tujuan;
-    const textWA = `*ORDER SYRUMI STORE*\n\n*Layanan:* ${selectedProduct}\n*Target:* ${finalTujuan}\n*Harga:* ${selectedPrice}\n\n${admin.note}`;
+
+    // Rakit Pesan Akhir
+    const textWA = `${admin.header}
+
+*Produk:* ${selectedProduct} (${serviceName})
+*Tujuan:* ${finalTujuan}
+*Harga: ${selectedPrice}*
+
+${admin.footer}
+${admin.metode}
+${admin.catatan}`;
+
     window.location.href = `https://wa.me/${admin.nomor}?text=${encodeURIComponent(textWA)}`;
 }
