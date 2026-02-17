@@ -24,14 +24,14 @@ const databaseLayanan = {
     ppob: [
         { id: 'pulsa', name: 'Pulsa', icon: 'https://cdn-icons-png.flaticon.com/512/3059/3059502.png', label: 'NOMOR HP' },
         // --- TAMBAHAN MENU E-WALLET DI SINI ---
-        { id: 'sub_ewallet', name: 'Top Up E-Wallet', icon: 'https://cdn-icons-png.flaticon.com/512/4341/4341764.png', label: 'PILIH DOMPET' }
+        { id: 'sub_ewallet', name: 'Top Up E-Wallet', icon: 'wallet.jfif', label: 'PILIH DOMPET' }
     ],
     // --- DAFTAR VENDOR DI DALAM E-WALLET ---
     sub_ewallet: [
-        { id: 'dana', name: 'DANA', icon: 'https://cdn-icons-png.flaticon.com/512/10363/10363248.png', label: 'NOMOR DANA' },
-        { id: 'gopay', name: 'GoPay', icon: 'https://cdn-icons-png.flaticon.com/512/10363/10363229.png', label: 'NOMOR GOPAY' },
-        { id: 'ovo', name: 'OVO', icon: 'https://cdn-icons-png.flaticon.com/512/10363/10363273.png', label: 'NOMOR OVO' },
-        { id: 'shopeepay', name: 'ShopeePay', icon: 'https://cdn-icons-png.flaticon.com/512/10363/10363311.png', label: 'NOMOR SHOPEEPAY' }
+        { id: 'dana', name: 'DANA', icon: 'dana.jfif', label: 'NOMOR DANA' },
+        { id: 'gopay', name: 'GoPay', icon: 'gopay.jfif', label: 'NOMOR GOPAY' },
+        { id: 'ovo', name: 'OVO', icon: 'ovo.jfif', label: 'NOMOR OVO' },
+        { id: 'shopeepay', name: 'ShopeePay', icon: 'spay.jfif', label: 'NOMOR SHOPEEPAY' }
     ],
     sosmed_apps: {
         tiktok: [
