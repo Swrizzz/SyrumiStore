@@ -159,14 +159,24 @@ function openOrder(id, name, label) {
 // --- RENDER FUNCTIONS ---
 function renderPPOB(id) {
     const grid = document.getElementById('grid-produk');
-    if(window.pricelistPPOB && window.pricelistPPOB[id]) {
-        window.pricelistPPOB[id].forEach(p => cardTemplate(grid, p));
+    grid.innerHTML = "";
+    // Pastikan memanggil variabel pricelistPPOB dari ppob.js
+    if(typeof pricelistPPOB !== 'undefined' && pricelistPPOB[id]) {
+        pricelistPPOB[id].forEach(p => cardTemplate(grid, p));
     }
 }
+
 function renderGame(id) {
     const grid = document.getElementById('grid-produk');
-    const all = { ...(window.pricelistGame || {}), ...(window.pricelistSosmed || {}) };
-    if(all[id]) all[id].forEach(p => cardTemplate(grid, p));
+    grid.innerHTML = "";
+    // Gabungkan pengecekan dari games.js dan sosmed.js
+    const source = (id.startsWith('tk_') || id.startsWith('ig_') || id.startsWith('shp_')) 
+                   ? (typeof pricelistSosmed !== 'undefined' ? pricelistSosmed : {})
+                   : (typeof pricelistGame !== 'undefined' ? pricelistGame : {});
+    
+    if(source[id]) {
+        source[id].forEach(p => cardTemplate(grid, p));
+    }
 }
 function cardTemplate(container, p) {
     const badge = p.label ? `<span class="badge-premium">${p.label}</span>` : '';
@@ -179,7 +189,16 @@ function cardTemplate(container, p) {
 
 // --- LOGIC DETEKSI PULSA ---
 function handleDeteksiOperator(nomor) {
-    if (nomor.length < 4) return;
+    const logoArea = document.getElementById('operator-logo-container');
+    const logoImg = document.getElementById('operator-logo');
+    const grid = document.getElementById('grid-produk');
+
+    if (nomor.length < 4) {
+        logoArea.style.display = 'none';
+        grid.innerHTML = "<p style='text-align:center; padding:20px; color:#aaa;'>Masukkan nomor...</p>";
+        return;
+    }
+
     const prefix = nomor.slice(0, 4);
     let prov = "";
     
@@ -188,16 +207,13 @@ function handleDeteksiOperator(nomor) {
     else if (/^0817|0818|0819|0877|0878|0831|0838/.test(prefix)) prov = "xl_axis";
     else if (/^0895|0896|0897|0898|0899/.test(prefix)) prov = "three";
     else if (/^0881|0882|0883|0884|0885|0886|0887|0888/.test(prefix)) prov = "smartfren";
+    else if (/^0859|0878/.test(prefix)) prov = "xl_axis"; // Tambahan XL
 
-    const logo = document.getElementById('operator-logo');
-    const area = document.getElementById('operator-logo-container');
-    const grid = document.getElementById('grid-produk');
-
-    if (prov && window.pricelistPPOB[prov]) {
-        logo.src = `images/${prov}.jfif`;
-        area.style.display = 'block';
+    if (prov && typeof pricelistPPOB !== 'undefined' && pricelistPPOB[prov]) {
+        logoImg.src = `images/${prov}.jfif`;
+        logoArea.style.display = 'block'; // Pastikan container muncul
         grid.innerHTML = "";
-        window.pricelistPPOB[prov].forEach(p => cardTemplate(grid, p));
+        pricelistPPOB[prov].forEach(p => cardTemplate(grid, p));
     }
 }
 
@@ -208,21 +224,25 @@ function hitungSosmed(qty, id) {
     const val = parseInt(qty);
 
     if (!val || val <= 0) {
-        display.innerText = "Rp0"; selectedProduct = ""; return;
+        display.innerText = "Rp0";
+        selectedProduct = "";
+        return;
     }
-    if (val < data.min) {
-        display.innerHTML = `<span style="color:red; font-size:11px;">Minimal: ${data.min}</span>`; selectedProduct = ""; return;
-    }
-    if (val > data.max) {
-        display.innerHTML = `<span style="color:red; font-size:11px;">Maksimal: ${data.max}</span>`; selectedProduct = ""; return;
+
+    if (val < data.min || val > data.max) {
+        display.innerHTML = `<span style="color: #ff4d4d; font-size: 11px;">Min: ${data.min} - Max: ${data.max}</span>`;
+        selectedProduct = "";
+        return;
     }
 
     const total = Math.ceil(val * data.price);
     selectedPrice = `Rp${total.toLocaleString('id-ID')}`;
-    // Format nama produk yang cantik
-    const niceName = id.replace('tk_', 'TikTok ').replace('ig_', 'IG ').replace('shp_', 'Shopee ').replace('_', ' ').toUpperCase();
-    selectedProduct = `${val} ${niceName}`;
-    display.innerText = `Total: ${selectedPrice}`;
+    
+    // Format Nama Produk
+    let namaLayanan = document.getElementById('order-title').innerText;
+    selectedProduct = `${val} ${namaLayanan}`;
+    
+    display.innerHTML = `<span style="color: #2ecc71;">Total: ${selectedPrice}</span>`;
 }
 
 function selectItem(item, harga, el) {
