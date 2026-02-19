@@ -279,6 +279,19 @@ function prosesKeWA() {
     const serviceName = document.getElementById('order-title').innerText; 
     let tujuan = document.getElementById('user-id').value.trim();
     const zone = document.getElementById('zone-id').value.trim();
+
+    // --- SISIPAN FUNGSI LINKGUARD & CONVERT ---
+    const config = hargaSatuan[currentServiceId]; 
+    if (config) {
+        // LinkGuard: Cek kata kunci (seperti tiktok.com)
+        if (config.pattern && !new RegExp(config.pattern, 'i').test(tujuan)) {
+            return kustomAlert("Link Salah", `Wajib Link valid (${config.pattern.split('|')[0]})!`);
+        }
+        // Auto-Convert: Username jadi Link (Isinya masuk ke variabel tujuan)
+        if (config.isUser) {
+            tujuan = config.urlPrefix + tujuan.replace('@', '');
+        }
+    }
     
     // Format Tujuan (Khusus ML tambah Zone)
     const finalTujuan = (currentServiceId === 'ml') ? `${tujuan} (${zone})` : tujuan;
@@ -331,11 +344,14 @@ function kirimRekberWA() {
     const pembeli = document.getElementById('rekber-pembeli').value;
     const penjual = document.getElementById('rekber-penjual').value;
     const nominal = document.getElementById('rekber-nominal').value;
-    const fee = document.getElementById('fee-tampil').innerText;
-    const total = document.getElementById('total-rekber').innerText;
 
-    if (!pembeli || !penjual || !nominal) {
-        return kustomAlert("Data Kurang", "Mohon isi semua data rekber!");
+    // LinkGuard Rekber: Minimal 10, Maksimal 13 angka
+    if (pembeli.length < 10 || pembeli.length > 13 || penjual.length < 10 || penjual.length > 13) {
+        return kustomAlert("Nomor Salah", "Nomor Pembeli/Penjual harus 10-13 digit!");
+    }
+
+    if (!nominal || nominal <= 0) {
+        return kustomAlert("Data Kurang", "Mohon isi nominal transaksi!");
     }
 
     const admin = getCurrentAdmin(); // Menggunakan fungsi admin 50:50 punyamu
