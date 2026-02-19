@@ -341,30 +341,34 @@ function hitungFeeRekber() {
 }
 
 function kirimRekberWA() {
-    const pembeli = document.getElementById('rekber-pembeli').value;
-    const penjual = document.getElementById('rekber-penjual').value;
+    // Ambil value dan pastikan hanya angka yang masuk
+    let pembeli = document.getElementById('rekber-pembeli').value.replace(/[^0-9]/g, '');
+    let penjual = document.getElementById('rekber-penjual').value.replace(/[^0-9]/g, '');
     const nominal = document.getElementById('rekber-nominal').value;
+    const fee = document.getElementById('fee-tampil').innerText;
+    const total = document.getElementById('total-rekber').innerText;
 
-    // LinkGuard Rekber: Minimal 10, Maksimal 13 angka
-    if (pembeli.length < 10 || pembeli.length > 13 || penjual.length < 10 || penjual.length > 13) {
-        return kustomAlert("Nomor Salah", "Nomor Pembeli/Penjual harus 10-13 digit!");
+    // --- LINKGUARD REKBER (Minimal 10, Maksimal 13) ---
+    if (pembeli.length < 10 || pembeli.length > 13) {
+        return kustomAlert("Nomor Salah", "Nomor Pembeli harus 10 - 13 digit!");
+    }
+    if (penjual.length < 10 || penjual.length > 13) {
+        return kustomAlert("Nomor Salah", "Nomor Penjual harus 10 - 13 digit!");
     }
 
     if (!nominal || nominal <= 0) {
         return kustomAlert("Data Kurang", "Mohon isi nominal transaksi!");
     }
 
-    const admin = getCurrentAdmin(); // Menggunakan fungsi admin 50:50 punyamu
-    const textWA = `*GROUP REKBER SYRUMI STORE*\n\n` +
-                   `📱 No. Pembeli: ${pembeli}\n` +
-                   `📱 No. Penjual: ${penjual}\n` +
-                   `💰 Nominal: Rp${parseInt(nominal).toLocaleString()}\n` +
-                   `💸 Fee Rekber: ${fee}\n` +
-                   `----------------------------\n` +
-                   `*TOTAL BAYAR: ${total}*\n` +
-                   `----------------------------\n` +
-                   `_Mohon admin segera buatkan grup._`;
+    const admin = getCurrentAdmin();
+    const textWA = `*GROUP REKBER SYRUMI STORE*
 
-    window.open(`https://wa.me/${admin.nomor}?text=${encodeURIComponent(textWA)}`, '_blank');
+*No. Pembeli:* ${pembeli}
+*No. Penjual:* ${penjual}
+*Nominal:* Rp${parseInt(nominal).toLocaleString()}
+*Fee Rekber:* ${fee}
+*Total Bayar: ${total}*`;
+
+    window.location.href = `https://wa.me/${admin.nomor}?text=${encodeURIComponent(textWA)}`;
     tutupRekber();
 }
