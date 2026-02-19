@@ -366,7 +366,7 @@ function kirimRekberWA() {
     const admin = getCurrentAdmin();
     
     // RAKIT PESAN DENGAN EMOJI
-    const textWA = `🤝 *NEW REKBER GROUP* 🤝
+    const textWA = `🤝 *REKBER SYRUMI STORE* 🤝
 
 📱 *No. Pembeli:* ${pembeli}
 📱 *No. Penjual:* ${penjual}
