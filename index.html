@@ -115,13 +115,13 @@
         <h2 style="color: #ff85b3; margin-bottom: 15px;">🤝 Menu Rekber Syrumi</h2>
         <div style="text-align: left; display: flex; flex-direction: column; gap: 10px;">
             <div>
-                <label class="input-label">NOMOR PEMBELI</label>
-                <input type="number" id="rekber-pembeli" placeholder="08xxx" class="glass" style="padding: 10px; border: 1px solid #ddd;">
-            </div>
-            <div>
-                <label class="input-label">NOMOR PENJUAL</label>
-                <input type="number" id="rekber-penjual" placeholder="08xxx" class="glass" style="padding: 10px; border: 1px solid #ddd;">
-            </div>
+    <label class="input-label">NOMOR PEMBELI</label>
+    <input type="text" id="rekber-pembeli" maxlength="13" placeholder="08xxx" class="glass" style="padding: 10px; border: 1px solid #ddd;">
+</div>
+<div>
+    <label class="input-label">NOMOR PENJUAL</label>
+    <input type="text" id="rekber-penjual" maxlength="13" placeholder="08xxx" class="glass" style="padding: 10px; border: 1px solid #ddd;">
+</div>
             <div>
                 <label class="input-label">NOMINAL TRANSAKSI (Rp)</label>
                 <input type="number" id="rekber-nominal" oninput="hitungFeeRekber()" placeholder="Contoh: 50000" class="glass" style="padding: 10px; border: 1px solid #ddd;">
