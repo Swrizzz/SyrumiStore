@@ -188,3 +188,34 @@ input { width: 100%; padding: 14px; border-radius: 15px; border: 1px solid #ddd;
 .chat-bubble span {
     color: #eee;
 }
+
+/* --- DARK MODE --- */
+body.dark-mode {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    color: #ffffff;
+}
+.dark-mode .glass { background: rgba(255, 255, 255, 0.1) !important; color: white !important; }
+.dark-mode .menu-item { background: rgba(255, 255, 255, 0.05); color: white; border-color: #2e2e4a; }
+.dark-mode .menu-item span { color: white; }
+.dark-mode input { background: #0f3460 !important; color: white !important; border-color: #533483; }
+
+/* --- FLOATING CART --- */
+.floating-cart {
+    position: fixed; bottom: 30px; right: 20px;
+    background: var(--accent-pink); width: 60px; height: 60px;
+    border-radius: 50%; display: flex; justify-content: center; align-items: center;
+    color: white; font-size: 24px; cursor: pointer; z-index: 999;
+    box-shadow: 0 8px 20px rgba(255, 133, 179, 0.4);
+}
+.cart-badge {
+    position: absolute; top: 0; right: 0; background: #ff4d4d;
+    font-size: 11px; padding: 2px 6px; border-radius: 10px; border: 2px solid white;
+}
+
+/* --- REKBER CARD --- */
+.rekber-card {
+    margin: 15px 0; padding: 15px; border-radius: 20px;
+    background: rgba(255, 133, 179, 0.1); border: 2px dashed var(--accent-pink);
+    display: flex; align-items: center; gap: 15px; cursor: pointer; transition: 0.3s;
+}
+.rekber-card:hover { transform: scale(1.02); background: rgba(255, 133, 179, 0.2); }
