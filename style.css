@@ -14,20 +14,10 @@ body {
     background: linear-gradient(135deg, var(--primary-pink) 0%, var(--soft-blue) 100%);
     background-attachment: fixed; 
     min-height: 100vh;
-    display: flex; justify-content: center; padding: 20px;
-    transition: background 0.3s ease;
+    display: flex; 
+    justify-content: center; 
+    padding: 20px;
 }
-
-/* --- DARK MODE --- */
-body.dark-mode {
-    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-    color: #ffffff;
-}
-.dark-mode .glass { background: rgba(0, 0, 0, 0.3) !important; color: white !important; border-color: rgba(255,255,255,0.1); }
-.dark-mode .menu-item { background: rgba(255, 255, 255, 0.05); color: white; border: 1px solid #2e2e4a; }
-.dark-mode .menu-item span { color: white; }
-.dark-mode input { background: #0f3460 !important; color: white !important; border-color: #533483 !important; }
-.dark-mode .product-card { background: rgba(255, 255, 255, 0.08); color: white; }
 
 #app-container { width: 100%; max-width: 800px; position: relative; }
 
@@ -39,66 +29,162 @@ body.dark-mode {
     to { opacity: 1; transform: translateY(0); }
 }
 
+.text-center { text-align: center; margin-bottom: 25px; }
+
+.logo-wrapper {
+    display: inline-flex; padding: 5px; background: white; border-radius: 50%; 
+    box-shadow: 0 8px 20px rgba(255, 133, 179, 0.2); border: 3px solid white;
+    width: 120px; height: 120px; overflow: hidden; margin-bottom: 15px;
+}
+.profile-img { width: 100%; height: 100%; object-fit: cover; }
+.brand-name { color: #ff85b3; font-size: 28px; font-weight: 700; }
+.brand-tagline { font-size: 14px; color: #777; margin-bottom: 30px; }
+
 .glass {
-    background: var(--glass-white);
-    backdrop-filter: blur(10px);
-    border-radius: 25px;
-    border: 1px solid var(--glass-border);
-    padding: 25px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    background: var(--glass-white); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+    border: 1px solid var(--glass-border); border-radius: 25px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.05);
 }
 
-/* --- REKBER CARD --- */
-.rekber-card {
-    margin: 15px 0; padding: 15px; border-radius: 20px;
-    background: rgba(255, 133, 179, 0.1); border: 2px dashed var(--accent-pink);
-    display: flex; align-items: center; gap: 15px; cursor: pointer; transition: 0.3s;
-}
-.rekber-card:hover { transform: scale(1.02); }
-
-/* --- GRID & CARDS --- */
-.menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 15px; margin-top: 20px; }
 .menu-item {
-    background: white; border-radius: 20px; padding: 15px; text-align: center;
-    cursor: pointer; transition: 0.3s; border: 1px solid #eee;
+    display: flex; align-items: center; padding: 18px 25px; background: white;
+    border-radius: 20px; margin-bottom: 15px; cursor: pointer; transition: all 0.3s ease; border: 1px solid transparent;
 }
-.menu-item:hover { transform: translateY(-5px); box-shadow: 0 5px 15px rgba(255,133,179,0.3); }
-.menu-item img { width: 50px; height: 50px; border-radius: 12px; margin-bottom: 8px; }
-.menu-item span { font-size: 12px; font-weight: 600; color: #444; display: block; }
+.menu-item:hover { transform: scale(1.02); box-shadow: 0 8px 20px rgba(255, 133, 179, 0.15); border-color: var(--accent-pink); }
+.menu-item img { width: 45px; height: 45px; border-radius: 12px; margin-right: 20px; object-fit: cover; }
+.menu-item span { font-weight: 600; color: #444; font-size: 16px; }
 
-.product-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 10px; }
+.product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; margin-top: 20px; }
+
 .product-card {
-    background: white; border-radius: 15px; padding: 15px; text-align: center;
-    cursor: pointer; border: 2px solid transparent; transition: 0.3s;
-}
-.product-card.active { border-color: var(--accent-pink); background: #fff0f6; }
-.product-card .price { color: var(--accent-pink); font-weight: 700; font-size: 14px; }
-
-/* --- BUTTONS --- */
-.btn-order {
-    width: 100%; background: var(--accent-pink); color: white; border: none;
-    padding: 15px; border-radius: 15px; font-weight: 700; font-size: 16px;
-    cursor: pointer; margin-top: 20px; box-shadow: 0 5px 15px rgba(255,133,179,0.4);
-}
-.btn-back { background: none; border: none; color: var(--accent-pink); font-weight: 700; cursor: pointer; margin-bottom: 15px; }
-
-/* --- FLOATING CART --- */
-.floating-cart {
-    position: fixed; bottom: 30px; right: 20px;
-    background: var(--accent-pink); width: 60px; height: 60px;
-    border-radius: 50%; display: flex; justify-content: center; align-items: center;
-    color: white; font-size: 24px; cursor: pointer; z-index: 999;
-    box-shadow: 0 8px 20px rgba(255, 133, 179, 0.4);
-}
-.cart-badge {
-    position: absolute; top: 0; right: 0; background: #ff4d4d;
-    font-size: 11px; padding: 2px 6px; border-radius: 10px; border: 2px solid white;
+    background: white; border: 2px solid #f0f0f0; border-radius: 18px; padding: 20px 10px; 
+    text-align: center; cursor: pointer; transition: 0.3s ease; display: flex;
+    flex-direction: column; justify-content: center; align-items: center; min-height: 100px; position: relative;
+    overflow: visible;
 }
 
-.overlay {
-    display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.5); backdrop-filter: blur(5px); z-index: 1000;
-    justify-content: center; align-items: center;
+.product-card.selected { border-color: var(--accent-pink); background: #fffafa; transform: translateY(-5px); box-shadow: 0 8px 15px rgba(255, 133, 179, 0.2); }
+
+.item-name { display: block; font-size: 14px; font-weight: 600; color: #444; margin-bottom: 8px; line-height: 1.4; }
+
+.item-price { font-weight: 700; color: var(--accent-pink); font-size: 13px; background: #fff0f6; padding: 4px 12px; border-radius: 10px; }
+
+/* MODIFIKASI: Styling Badge Baru */
+.badge-premium {
+    background: linear-gradient(45deg, var(--accent-pink), #ff4d94);
+    color: white;
+    font-size: 8px;
+    padding: 2px 6px;
+    border-radius: 6px;
+    margin-left: 5px;
+    font-weight: 800;
+    display: inline-block;
+    vertical-align: middle;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 5px rgba(255, 133, 179, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    animation: pulseBadge 2s infinite;
 }
-.modal-box { background: white; padding: 30px; border-radius: 25px; width: 90%; max-width: 450px; text-align: center; }
-input { width: 100%; padding: 14px; border-radius: 15px; border: 1px solid #ddd; outline: none; margin-bottom: 10px; }
+
+@keyframes pulseBadge {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.08); opacity: 0.9; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+/* KARTU PREMIUM: Glowing Pink (Anti-Dobel) */
+.product-card.premium { 
+    background: linear-gradient(145deg, #ffffff, #fff0f6); 
+    border: 2px solid var(--accent-pink) !important;
+}
+
+.product-card.premium .item-name { color: #ff4d94 !important; }
+
+.product-card.premium .item-price { 
+    background: #ff4d94 !important; 
+    color: white !important; 
+}
+
+/* Badge khusus Emas jika ada di kartu premium */
+.product-card.premium .badge-premium {
+    background: linear-gradient(45deg, #FFD700, #FFA500);
+    color: #333;
+    border-color: #ffd700;
+}
+
+@media (max-width: 480px) {
+    .product-grid { grid-template-columns: 1fr 1fr !important; gap: 15px 12px !important; }
+    .product-card { padding: 25px 10px !important; min-height: 110px !important; }
+}
+
+.btn-order { width: 100%; background: var(--accent-pink); color: white; padding: 18px; border-radius: 20px; border: none; font-weight: 700; font-size: 18px; margin-top: 25px; cursor: pointer; }
+
+.btn-back { background: white; border: none; color: var(--accent-pink); font-weight: 700; padding: 10px 20px; border-radius: 12px; cursor: pointer; margin-bottom: 20px; display: inline-flex; align-items: center; gap: 8px; }
+
+.overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(8px); z-index: 9999; justify-content: center; align-items: center; padding: 20px; }
+
+.modal-box { background: white; padding: 30px; border-radius: 30px; text-align: center; width: 100%; max-width: 380px; animation: popIn 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); }
+
+@keyframes popIn { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
+
+.btn-confirm { background: var(--accent-pink); color: white; border: none; padding: 12px 25px; border-radius: 12px; font-weight: 700; cursor: pointer; margin: 5px; }
+
+.btn-cancel { background: #f0f0f0; color: #777; border: none; padding: 12px 25px; border-radius: 12px; font-weight: 700; cursor: pointer; margin: 5px; }
+
+input { width: 100%; padding: 14px; border-radius: 15px; border: 1px solid #ddd; outline: none; font-size: 15px; background: white; }
+
+.input-label { font-size: 12px; font-weight: 700; color: #ff85b3; display: block; margin-bottom: 5px; }
+
+/* --- PERBAIKAN LOGO OPERATOR --- */
+
+#operator-logo-container {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    line-height: 0;
+    display: none; /* Muncul otomatis lewat script nanti */
+}
+
+#operator-logo {
+    width: 35px !important;
+    height: 35px !important;
+    object-fit: contain;
+    border-radius: 5px;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+}
+
+/* Pastikan input tidak tertutup logo */
+#user-id {
+    padding-right: 55px !important;
+}
+
+.chat-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 15px 0;
+    text-align: left;
+}
+
+.chat-bubble {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 10px 15px;
+    border-radius: 15px 15px 15px 0;
+    font-size: 13px;
+    line-height: 1.4;
+    position: relative;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.chat-bubble b {
+    display: block;
+    color: #ff85b3; /* Warna tema toko kamu */
+    font-size: 11px;
+    margin-bottom: 4px;
+}
+
+.chat-bubble span {
+    color: #eee;
+}
