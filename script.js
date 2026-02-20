@@ -289,28 +289,28 @@ function tampilkanKonfirmasi() {
 }
 
 function prosesKeWA() {
-    const admin = getCurrentAdmin();
+    // 1. Ambil data admin dari fungsi saklar yang baru
+    const admin = getCurrentAdmin(); 
+    
     const serviceName = document.getElementById('order-title').innerText; 
     let tujuan = document.getElementById('user-id').value.trim();
     const zone = document.getElementById('zone-id').value.trim();
 
-    // --- SISIPAN FUNGSI LINKGUARD & CONVERT ---
+    // 2. Cek LinkGuard & Validasi
     const config = hargaSatuan[currentServiceId]; 
     if (config) {
-        // LinkGuard: Cek kata kunci (seperti tiktok.com)
         if (config.pattern && !new RegExp(config.pattern, 'i').test(tujuan)) {
             return kustomAlert("Link Salah", `Wajib Link valid (${config.pattern.split('|')[0]})!`);
         }
-        // Auto-Convert: Username jadi Link (Isinya masuk ke variabel tujuan)
         if (config.isUser) {
             tujuan = config.urlPrefix + tujuan.replace('@', '');
         }
     }
     
-    // Format Tujuan (Khusus ML tambah Zone)
+    // 3. Gabungkan ID & Zone untuk Mobile Legends
     const finalTujuan = (currentServiceId === 'ml') ? `${tujuan} (${zone})` : tujuan;
 
-    // Rakit Pesan Akhir
+    // 4. Rakit Pesan Akhir menggunakan variabel dari 'admin'
     const textWA = `${admin.header}
 
 *Produk:* ${selectedProduct} (${serviceName})
@@ -321,6 +321,7 @@ ${admin.footer}
 ${admin.metode}
 ${admin.catatan}`;
 
+    // 5. Eksekusi kirim ke WhatsApp nomor admin yang terpilih
     window.location.href = `https://wa.me/${admin.nomor}?text=${encodeURIComponent(textWA)}`;
 }
 
