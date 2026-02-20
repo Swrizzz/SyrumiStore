@@ -7,7 +7,7 @@ const ADMIN_B = "6285924527083";
 const LINK_QRIS_A = "https://whatsapp.com/channel/0029VbB9bWGLNSa9K95BId3P/504";
 
 function getCurrentAdmin() {
-    const lemparKoin = Math.random(); 
+     
     const footerCara = `----------------------------\n[ CARA PENYELESAIAN ]\n1. Transfer sesuai total di atas.\n2. Kirim Bukti Bayar di chat ini.\n3. Pesanan akan segera Diproses.\n----------------------------`;
     const catatanAdmin = `----------------------------\n[ CATATAN ADMIN ]\nMohon bersabar jika admin belum membalas karena proses 100% Manual. Pesanan diproses sesuai antrean ya!\n----------------------------\n\n_Silakan kirim bukti transfer agar segera diproses._`;
 
