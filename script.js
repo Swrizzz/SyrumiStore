@@ -356,7 +356,7 @@ function hitungFeeRekber() {
 }
 
 function kirimRekberWA() {
-    // Ambil data dari input
+    // 1. Ambil data dari input
     const pembeli = document.getElementById('rekber-pembeli').value;
     const penjual = document.getElementById('rekber-penjual').value;
     const nominal = document.getElementById('rekber-nominal').value;
@@ -364,7 +364,7 @@ function kirimRekberWA() {
     const fee = document.getElementById('fee-tampil').innerText;
     const total = document.getElementById('total-rekber').innerText;
 
-    // --- LINKGUARD REKBER ---
+    // 2. Validasi LinkGuard Rekber
     if (pembeli.length < 10 || pembeli.length > 13) {
         return kustomAlert("Nomor Salah", "Nomor Pembeli harus 10 - 13 digit angka!");
     }
@@ -375,12 +375,12 @@ function kirimRekberWA() {
         return kustomAlert("Data Kurang", "Mohon isi nominal transaksi!");
     }
 
-    // Cek Deskripsi (Jika kosong kasih tanda -)
     const infoDeskripsi = deskripsi ? deskripsi : "-";
 
-    const admin = getCurrentAdmin();
+    // 3. AMBIL DATA ADMIN DARI FUNGSI SAKLAR (PENTING!)
+    const admin = getCurrentAdmin(); 
     
-    // RAKIT PESAN DENGAN EMOJI
+    // 4. Rakit Pesan WA
     const textWA = `🤝 *REKBER SYRUMI STORE* 🤝
 
 📱 *No. Pembeli:* ${pembeli}
@@ -395,6 +395,7 @@ function kirimRekberWA() {
 
 _Mohon admin segera buatkan grup transaksi ya!_`;
 
+    // 5. Kirim ke nomor admin yang aktif (Admin A atau B sesuai saklar)
     window.location.href = `https://wa.me/${admin.nomor}?text=${encodeURIComponent(textWA)}`;
     tutupRekber();
 }
