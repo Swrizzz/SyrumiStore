@@ -1,37 +1,51 @@
 let selectedProduct = "", selectedPrice = "", currentServiceId = "";
 let currentValidation = {}; 
 
-// --- KONFIGURASI ADMIN & SISTEM LEMPAR KOIN 50:50 ---
+// --- KONFIGURASI ADMIN ---
 const ADMIN_A = "6289507913948"; 
 const ADMIN_B = "6285924527083"; 
 const LINK_QRIS_A = "https://whatsapp.com/channel/0029VbB9bWGLNSa9K95BId3P/504";
 
+// >>> LETAK ON/OFF DI SINI <<<
+// Ubah ke 'true' untuk aktifkan 50:50 (Admin A & B)
+// Ubah ke 'false' untuk hanya ke Admin A saja
+const MODE_BAGI_HASIL = false; 
+
 function getCurrentAdmin() {
-     
     const footerCara = `----------------------------\n[ CARA PENYELESAIAN ]\n1. Transfer sesuai total di atas.\n2. Kirim Bukti Bayar di chat ini.\n3. Pesanan akan segera Diproses.\n----------------------------`;
     const catatanAdmin = `----------------------------\n[ CATATAN ADMIN ]\nMohon bersabar jika admin belum membalas karena proses 100% Manual. Pesanan diproses sesuai antrean ya!\n----------------------------\n\n_Silakan kirim bukti transfer agar segera diproses._`;
 
-    if (lemparKoin < 0.5) {
-        // SETTING UNTUK ADMIN A
+    // Cek apakah mode bagi hasil aktif
+    if (MODE_BAGI_HASIL) {
+        const lemparKoin = Math.random(); 
+        if (lemparKoin < 0.5) {
+            return { 
+                nomor: ADMIN_A, 
+                header: "*ORDER SYRUMI STORE [ADMIN A]*", 
+                metode: `[ METODE PEMBAYARAN ]\n- DANA: 089507913948\n- QRIS: ${LINK_QRIS_A}`,
+                footer: footerCara,
+                catatan: catatanAdmin
+            };
+        } else {
+            return { 
+                nomor: ADMIN_B, 
+                header: "*ORDER SYRUMI STORE [ADMIN B]*", 
+                metode: `[ METODE PEMBAYARAN ]\n- DANA: 085924527083\n- QRIS: Minta ke Admin\n(Pajak 0 - 1.500)`,
+                footer: footerCara,
+                catatan: catatanAdmin
+            };
+        }
+    } else {
+        // JIKA OFF, LANGSUNG KE ADMIN A
         return { 
             nomor: ADMIN_A, 
-            header: "*ORDER SYRUMI STORE [ADMIN A]*", 
+            header: "*ORDER SYRUMI STORE*", 
             metode: `[ METODE PEMBAYARAN ]\n- DANA: 089507913948\n- QRIS: ${LINK_QRIS_A}`,
-            footer: footerCara,
-            catatan: catatanAdmin
-        };
-    } else {
-        // SETTING UNTUK ADMIN B
-        return { 
-            nomor: ADMIN_B, 
-            header: "*ORDER SYRUMI STORE [ADMIN B]*", 
-            metode: `[ METODE PEMBAYARAN ]\n- DANA: 085924527083\n- QRIS: Minta ke Admin\n(Pajak 0 - 1.500)`,
             footer: footerCara,
             catatan: catatanAdmin
         };
     }
 }
-
 // --- UI NAVIGATION ---
 function switchScreen(id) {
     document.querySelectorAll('.screen').forEach(s => { s.classList.remove('active'); s.style.display = 'none'; });
